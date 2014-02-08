@@ -20,7 +20,7 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
  */
 package indrora.atomic.activity;
 
-import indrora.atomic.Yaaic;
+import indrora.atomic.Atomic;
 import indrora.atomic.adapter.ConversationPagerAdapter;
 import indrora.atomic.adapter.MessageListAdapter;
 import indrora.atomic.command.CommandParser;
@@ -184,7 +184,7 @@ public class ConversationActivity extends SherlockActivity implements ServiceCon
         super.onCreate(savedInstanceState);
 
         serverId = getIntent().getExtras().getInt("serverId");
-        server = Yaaic.getInstance().getServerById(serverId);
+        server = Atomic.getInstance().getServerById(serverId);
         Settings settings = new Settings(this);
 
         // Finish activity if server does not exist anymore - See #55

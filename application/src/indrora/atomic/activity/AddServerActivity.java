@@ -20,7 +20,7 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
  */
 package indrora.atomic.activity;
 
-import indrora.atomic.Yaaic;
+import indrora.atomic.Atomic;
 import indrora.atomic.db.Database;
 import indrora.atomic.exception.ValidationException;
 import indrora.atomic.model.Authentication;
@@ -318,7 +318,7 @@ public class AddServerActivity extends SherlockActivity implements OnClickListen
         server.setAutoJoinChannels(channels);
         server.setConnectCommands(commands);
 
-        Yaaic.getInstance().addServer(server);
+        Atomic.getInstance().addServer(server);
     }
 
     /**
@@ -354,7 +354,7 @@ public class AddServerActivity extends SherlockActivity implements OnClickListen
         server.setAutoJoinChannels(channels);
         server.setConnectCommands(commands);
 
-        Yaaic.getInstance().updateServer(server);
+        Atomic.getInstance().updateServer(server);
     }
 
     /**

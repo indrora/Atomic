@@ -33,11 +33,13 @@ import android.content.Context;
 /**
  * Global Master Class :)
  * 
+ * Renamed to avoid clashes with yaaic.
+ * 
  * @author Sebastian Kaspari <sebastian@yaaic.org>
  */
-public class Yaaic
+public class Atomic
 {
-    public static Yaaic              instance;
+    public static Atomic              instance;
 
     private HashMap<Integer, Server> servers;
     private boolean                  serversLoaded = false;
@@ -45,7 +47,7 @@ public class Yaaic
     /**
      * Private constructor, you may want to use static getInstance()
      */
-    private Yaaic()
+    private Atomic()
     {
         servers = new HashMap<Integer, Server>();
     }
@@ -72,10 +74,10 @@ public class Yaaic
      * 
      * @return the global Yaaic instance
      */
-    public static Yaaic getInstance()
+    public static Atomic getInstance()
     {
         if (instance == null) {
-            instance = new Yaaic();
+            instance = new Atomic();
         }
 
         return instance;

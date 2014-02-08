@@ -21,7 +21,7 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
  */
 package indrora.atomic.irc;
 
-import indrora.atomic.Yaaic;
+import indrora.atomic.Atomic;
 import indrora.atomic.command.CommandParser;
 import indrora.atomic.model.Broadcast;
 import indrora.atomic.model.Channel;
@@ -73,7 +73,7 @@ public class IRCConnection extends PircBot
      */
     public IRCConnection(IRCService service, int serverId)
     {
-        this.server = Yaaic.getInstance().getServerById(serverId);
+        this.server = Atomic.getInstance().getServerById(serverId);
         this.service = service;
 
         this.debugTraffic = service.getSettings().debugTraffic();

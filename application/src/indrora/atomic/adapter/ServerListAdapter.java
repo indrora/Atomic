@@ -20,7 +20,7 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
  */
 package indrora.atomic.adapter;
 
-import indrora.atomic.Yaaic;
+import indrora.atomic.Atomic;
 import indrora.atomic.model.Server;
 
 import java.util.ArrayList;
@@ -62,7 +62,7 @@ public class ServerListAdapter extends BaseAdapter
      */
     public void loadServers()
     {
-        servers = Yaaic.getInstance().getServersAsArrayList();
+        servers = Atomic.getInstance().getServersAsArrayList();
         notifyDataSetChanged();
     }
 

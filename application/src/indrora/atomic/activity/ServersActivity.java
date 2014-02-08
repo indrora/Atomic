@@ -20,7 +20,7 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
  */
 package indrora.atomic.activity;
 
-import indrora.atomic.Yaaic;
+import indrora.atomic.Atomic;
 import indrora.atomic.adapter.ServerListAdapter;
 import indrora.atomic.db.Database;
 import indrora.atomic.irc.IRCBinder;
@@ -247,7 +247,7 @@ public class ServersActivity extends SherlockActivity implements ServiceConnecti
      */
     private void editServer(int serverId)
     {
-        Server server = Yaaic.getInstance().getServerById(serverId);
+        Server server = Atomic.getInstance().getServerById(serverId);
 
         if (server.getStatus() != Status.DISCONNECTED) {
             Toast.makeText(this, getResources().getString(R.string.disconnect_before_editing), Toast.LENGTH_SHORT).show();
@@ -291,7 +291,7 @@ public class ServersActivity extends SherlockActivity implements ServiceConnecti
                 startActivity(new Intent(this, SettingsActivity.class));
                 break;
             case R.id.disconnect_all:
-                ArrayList<Server> mServers = Yaaic.getInstance().getServersAsArrayList();
+                ArrayList<Server> mServers = Atomic.getInstance().getServersAsArrayList();
                 for (Server server : mServers) {
                     if (binder.getService().hasConnection(server.getId())) {
                         server.setStatus(Status.DISCONNECTED);
@@ -329,7 +329,7 @@ public class ServersActivity extends SherlockActivity implements ServiceConnecti
         db.removeServerById(serverId);
         db.close();
 
-        Yaaic.getInstance().removeServerById(serverId);
+        Atomic.getInstance().removeServerById(serverId);
         adapter.loadServers();
     }
 

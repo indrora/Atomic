@@ -21,7 +21,7 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
  */
 package indrora.atomic.irc;
 
-import indrora.atomic.Yaaic;
+import indrora.atomic.Atomic;
 import indrora.atomic.activity.ServersActivity;
 import indrora.atomic.db.Database;
 import indrora.atomic.model.Broadcast;
@@ -133,7 +133,7 @@ public class IRCService extends Service
 
         // Load servers from Database
         Database db = new Database(this);
-        Yaaic.getInstance().setServers(db.getServers());
+        Atomic.getInstance().setServers(db.getServers());
         db.close();
 
         // Broadcast changed server list
@@ -563,7 +563,7 @@ public class IRCService extends Service
     public void checkServiceStatus()
     {
         boolean shutDown = true;
-        ArrayList<Server> mServers = Yaaic.getInstance().getServersAsArrayList();
+        ArrayList<Server> mServers = Atomic.getInstance().getServersAsArrayList();
         int mSize = mServers.size();
         Server server;
 
