@@ -135,6 +135,13 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
             android:summary="@string/settings_sound_highlight_desc"
             android:key="@string/key_sound_highlight"
             android:defaultValue="@string/default_sound_highlight" />
+        <RingtonePreference
+            android:title="@string/settings_sound_tone_title"
+            android:summary="@string/settings_sound_tone_desc"
+            android:key="@string/key_sound_ring"
+            android:ringtoneType="notification"
+            android:defaultValue="content://settings/system/notification_sound"
+            android:dependency="@string/key_sound_highlight"/>
         <CheckBoxPreference
             android:title="@string/settings_vibrate_highlight_title"
             android:summary="@string/settings_vibrate_highlight_desc"

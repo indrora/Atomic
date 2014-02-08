@@ -57,7 +57,7 @@
     <string name="channel_add_description">These channels will be automatically joined after connect.</string>
     <string name="command_add_description">These commands will be executed after connect.</string>
 
-    <string name="auth_description">Yaaic will authenticate you with these services after connect.</string>
+    <string name="auth_description">Atomic will authenticate you with these services after connect.</string>
     <string name="auth_nickserv">Authenticate with Nickserv</string>
     <string name="auth_nickserv_password">Nickserv password</string>
     <string name="auth_sasl">Authenticate via SASL</string>
@@ -123,7 +123,7 @@
     <string name="command_desc_voice">Give a user voice status</string>
     <string name="command_desc_whois">Get information about a user</string>
 
-    <string name="notification_running">Yaaic is running</string>
+    <string name="notification_running">Atomic is running</string>
     <string name="notification_not_connected">Not connected</string>
     <string name="notification_connected">Connected to %1$s</string>
     <string name="notification_disconnected">Disconnected from %1$s</string>
@@ -205,6 +205,8 @@
     <string name="settings_highlight">Highlight</string>
     <string name="settings_sound_highlight_title">Play sound on highlight</string>
     <string name="settings_sound_highlight_desc">Play sound when your nick is mentioned</string>
+    <string name="settings_sound_tone_title">Select sound</string>
+    <string name="settings_sound_tone_desc">Sound to play when your nick is mentioned</string>    
     <string name="settings_vibrate_highlight_title">Vibrate on highlight</string>
     <string name="settings_vibrate_highlight_desc">Vibrate when your nick is mentioned</string>
     <string name="settings_led_highlight_title">Flash LED on highlight</string>

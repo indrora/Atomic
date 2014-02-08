@@ -1,36 +1,46 @@
 
-Yaaic - Yet Another Android IRC Client
+Atomic - a Fork of Yaaic
 
-Yaaic is as the full name already says an Internet Relay Chat (IRC)
-client for Android devices.
+Atomic scratches an itch I (@indrora) had: A sexy IRC client that worked.
+After trying HoloIRC, AndChat, yaaic, and several others, yaaic came the
+closest and after pressure from friends, I decided to go ahead and
+fork yaaic.
+
+I'm changing the name to prevent clashes with yaaic, and to preserve
+Sebastian's honour. 
+
+The last bit of the original yaaic readme is kept below;
+
+Newer icons used within are from the Android core icon pack, from Google.
+Ostensibly, they are (C) Google, inc. They are provided free of charge
+to Android developers. I claim no exclusive usage of them other than to say
+I use them.
+
+Things that I have changed/added:
+
+* Icons now match the Holo style (predominantly)
+* Highlight notification sound can be chosen from the settings
+* Out of pure, blinding laziness, I have cleaned house on the translations.
+
+
+Current/future features/changes:
+
+* Option to not hide the soft keyboard on SEND
+* Changing the size of the font in dp not in px
+* Update of all the icons
+* Selecting a message copies it to the clipboard
+* Option to not scroll when a new message appears in a channel
+
 
 --------------------------------------------------------------------
 
-This is the source code distribution of Yaaic. If you are looking
-for a compiled 'ready to use' version (APK), see the official
-homepage at:
+Atomic is based off of yaaic: Yet Another Android IRC Client.
 
- http://www.yaaic.org
-
-Yaaic is also avaiable at the Google Play Store.
-
-If you are a developer and want to contribute to Yaaic, checkout
-our repository at GitHub:
+View the original project on GitHub:
 
  http://github.com/pocmo/Yaaic
 
-The application project is located in application/ while the test/
-folder contains unit and scenario tests. (Both folders are two
-separate Eclipse projects!)
-
-Drop me a line for questions regarding Yaaic or use one of the
-following resources:
-
-IRC:           irc.epd-me.net #yaaic
-Homepage:      http://www.yaaic.org
-Google Group:  http://groups.google.com/group/yaaic
-Twitter:       http://twitter.com/Yaaic
-Facebook:      http://www.facebook.com/pages/Yaaic/359902798214
+Check if there' a bug there, too!
 
 --------------------------------------------------------------------
 
@@ -55,17 +65,18 @@ Licence. http://www.famfamfam.com
 --------------------------------------------------------------------
 
 Copyright 2009-2013 Sebastian Kaspari
+Copyright 2014-     Morgan `Indrora' Gangwere
 
-Yaaic is free software: you can redistribute it and/or modify
+Yaaic/Atomic is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-Yaaic is distributed in the hope that it will be useful,
+Yaaic/Atomic is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with Yaaic. If not, see http://www.gnu.org/licenses/
+along with this software. If not, see http://www.gnu.org/licenses/
 

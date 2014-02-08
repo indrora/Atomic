@@ -14,6 +14,9 @@ Modified by: Sebastian Kaspari <sebastian@yaaic.org>
  */
 package org.jibble.pircbot;
 
+import indrora.atomic.ssl.NaiveTrustManager;
+import indrora.atomic.tools.Base64;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -38,8 +41,6 @@ import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.X509TrustManager;
 
-import org.yaaic.ssl.NaiveTrustManager;
-import org.yaaic.tools.Base64;
 
 /**
  * PircBot is a Java framework for writing IRC bots quickly and easily.

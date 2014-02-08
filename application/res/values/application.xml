@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">Yaaic</string>
-    <string name="app_full_name" translatable="false">Yet Another Android IRC Client</string>
+    <string name="app_name" translatable="false">Atomic</string>
+    <string name="app_full_name" translatable="false">Atomic: A radioactive IRC client</string>
     <string name="app_version" translatable="false">1.1-SNAPSHOT</string>
-    <string name="app_homepage" translatable="false">http://www.yaaic.org</string>
+    <string name="app_homepage" translatable="false">https://github.com/indora/atomic</string>
     <string name="app_irc" translatable="false">irc://irc.epd-me.net/yaaic</string>
-    <string name="app_copyright" translatable="false">&#169; 2009-2013 Sebastian Kaspari</string>
+    <string name="app_copyright" translatable="false">&#169; 2014 Morgan &quot;Indrora&quot; Gangwere,</string>
     
     <string name="licence_info" translatable="false">
-        Yaaic is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-        Yaaic is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+        Atomic is a fork of Yaaic, Yet Another Android IRC client, intended to work on some of the problems that haven\'t been touched in yaaic for a good long while.
+        Atomic (nee Yaaic) is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+        Atomic (nee Yaaic) is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
     </string>
 </resources>
