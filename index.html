@@ -1,33 +1,43 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
-    <meta charset='utf-8'>
+    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
-
     <title>Atomic by indrora</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
   </head>
-
   <body>
+      <div id="header">
+        <nav>
+          <li class="fork"><a href="https://github.com/indrora/Atomic">View On GitHub</a></li>
+          <li class="downloads"><a href="https://github.com/indrora/Atomic/zipball/master">ZIP</a></li>
+          <li class="downloads"><a href="https://github.com/indrora/Atomic/tarball/master">TAR</a></li>
+          <li class="title">DOWNLOADS</li>
+        </nav>
+      </div><!-- end header -->
 
-    <header>
-      <div class="container">
-        <h1>Atomic</h1>
-        <h2>Atomic: A fork of yaaic</h2>
+    <div class="wrapper">
 
-        <section id="downloads">
-          <a href="https://github.com/indrora/Atomic/zipball/master" class="btn">Download as .zip</a>
-          <a href="https://github.com/indrora/Atomic/tarball/master" class="btn">Download as .tar.gz</a>
-          <a href="https://github.com/indrora/Atomic" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
-        </section>
-      </div>
-    </header>
+      <section>
+        <div id="title">
+          <h1>Atomic</h1>
+          <p>Atomic: A fork of yaaic</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href="https://github.com/indrora">indrora</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
+        </div>
 
-    <div class="container">
-      <section id="main_content">
         <h1>
 <a name="atomic---a-fork-of-yaaic" class="anchor" href="#atomic---a-fork-of-yaaic"><span class="octicon octicon-link"></span></a>Atomic - a Fork of Yaaic</h1>
 
@@ -38,13 +48,6 @@ fork yaaic.</p>
 
 <p>I'm changing the name to prevent clashes with yaaic, and to preserve
 Sebastian's honour. </p>
-
-<p>The last bit of the original yaaic readme is kept below;</p>
-
-<p>Newer icons used within are from the Android core icon pack, from Google.
-Ostensibly, they are (C) Google, inc. They are provided free of charge
-to Android developers. I claim no exclusive usage of them other than to say
-I use them.</p>
 
 <h2>
 <a name="things-that-i-have-changedadded" class="anchor" href="#things-that-i-have-changedadded"><span class="octicon octicon-link"></span></a>Things that I have changed/added:</h2>
@@ -70,8 +73,9 @@ I use them.</p>
 
 <p>Check if there' a bug there, too!</p>
       </section>
-    </div>
 
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
     
   </body>
 </html>
