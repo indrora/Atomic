@@ -32,6 +32,7 @@ import indrora.atomic.R;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 
 /**
  * Command: /query <nickname>
@@ -69,7 +70,7 @@ public class QueryHandler extends BaseHandler
                 server.getId(),
                 query.getName()
             );
-            service.sendBroadcast(intent);
+            LocalBroadcastManager.getInstance(service).sendBroadcast(intent);
         } else {
             throw new CommandException(service.getString(R.string.invalid_number_of_params));
         }

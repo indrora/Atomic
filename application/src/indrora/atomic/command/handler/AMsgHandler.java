@@ -34,6 +34,7 @@ import indrora.atomic.R;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 
 /**
  * Command: /amsg <message>
@@ -66,7 +67,7 @@ public class AMsgHandler extends BaseHandler
                         currentConversation.getName()
                     );
 
-                    service.sendBroadcast(intent);
+                    LocalBroadcastManager.getInstance(service).sendBroadcast(intent);
 
                     service.getConnection(server.getId()).sendMessage(currentConversation.getName(), text);
                 }
