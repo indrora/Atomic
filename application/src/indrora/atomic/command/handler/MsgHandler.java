@@ -32,7 +32,6 @@ import indrora.atomic.R;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.content.LocalBroadcastManager;
 
 /**
  * Command: /msg <target> <message>
@@ -65,7 +64,7 @@ public class MsgHandler extends BaseHandler
                     targetConversation.getName()
                 );
 
-                LocalBroadcastManager.getInstance(service).sendBroadcast(intent);
+                service.sendBroadcast(intent);
             }
         } else {
             throw new CommandException(service.getString(R.string.invalid_number_of_params));

@@ -32,7 +32,6 @@ import indrora.atomic.R;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.content.LocalBroadcastManager;
 
 /**
  * Command: /me <action>
@@ -64,7 +63,7 @@ public class MeHandler extends BaseHandler
                 server.getId(),
                 conversation.getName()
             );
-            LocalBroadcastManager.getInstance(service).sendBroadcast(intent);
+            service.sendBroadcast(intent);
 
             service.getConnection(server.getId()).sendAction(conversation.getName(), action);
         } else {

@@ -31,7 +31,6 @@ import indrora.atomic.R;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.content.LocalBroadcastManager;
 
 /**
  * Command: /close
@@ -64,8 +63,7 @@ public class CloseHandler extends BaseHandler
                     server.getId(),
                     conversation.getName()
                 );
-
-                LocalBroadcastManager.getInstance(service).sendBroadcast(intent);
+                service.sendBroadcast(intent);
             }
         }
     }

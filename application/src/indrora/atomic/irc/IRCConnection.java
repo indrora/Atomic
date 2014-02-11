@@ -44,7 +44,6 @@ import org.jibble.pircbot.User;
 import indrora.atomic.R;
 
 import android.content.Intent;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 /**
@@ -171,7 +170,7 @@ public class IRCConnection extends PircBot
 
         ignoreMOTD = service.getSettings().isIgnoreMOTDEnabled();
 
-        LocalBroadcastManager.getInstance(service).sendBroadcast(
+        service.sendBroadcast(
             Broadcast.createServerIntent(Broadcast.SERVER_UPDATE, server.getId())
         );
 
@@ -195,7 +194,7 @@ public class IRCConnection extends PircBot
             identify(server.getAuthentication().getNickservPassword());
         }
 
-        LocalBroadcastManager.getInstance(service).sendBroadcast(intent);
+        service.sendBroadcast(intent);
     }
 
     /**
@@ -248,7 +247,7 @@ public class IRCConnection extends PircBot
             ServerInfo.DEFAULT_NAME
         );
 
-        LocalBroadcastManager.getInstance(service).sendBroadcast(intent);
+        service.sendBroadcast(intent);
     }
     /**
      * On channel action
@@ -280,7 +279,7 @@ public class IRCConnection extends PircBot
                 server.getId(),
                 queryNick
             );
-            LocalBroadcastManager.getInstance(service).sendBroadcast(intent);
+            service.sendBroadcast(intent);
         } else {
             conversation.addMessage(message);
 
@@ -289,7 +288,7 @@ public class IRCConnection extends PircBot
                 server.getId(),
                 queryNick
             );
-            LocalBroadcastManager.getInstance(service).sendBroadcast(intent);
+            service.sendBroadcast(intent);
         }
 
         if (sender.equals(this.getNick())) {
@@ -343,7 +342,7 @@ public class IRCConnection extends PircBot
             target
         );
 
-        LocalBroadcastManager.getInstance(service).sendBroadcast(intent);
+        service.sendBroadcast(intent);
     }
 
     /**
@@ -363,7 +362,7 @@ public class IRCConnection extends PircBot
             target
         );
 
-        LocalBroadcastManager.getInstance(service).sendBroadcast(intent);
+        service.sendBroadcast(intent);
     }
 
     /**
@@ -382,7 +381,7 @@ public class IRCConnection extends PircBot
                 server.getId(),
                 server.getSelectedConversation()
             );
-            LocalBroadcastManager.getInstance(service).sendBroadcast(intent);
+            service.sendBroadcast(intent);
         } else {
             // Someone is invited
             Message message = new Message(service.getString(R.string.message_invite_someone, sourceNick, targetNick, target));
@@ -393,7 +392,7 @@ public class IRCConnection extends PircBot
                 server.getId(),
                 target
             );
-            LocalBroadcastManager.getInstance(service).sendBroadcast(intent);
+            service.sendBroadcast(intent);
         }
     }
 
@@ -414,7 +413,7 @@ public class IRCConnection extends PircBot
                 server.getId(),
                 target
             );
-            LocalBroadcastManager.getInstance(service).sendBroadcast(intent);
+            service.sendBroadcast(intent);
         } else if (service.getSettings().showJoinPartAndQuit()) {
             Message message = new Message(
                 service.getString(R.string.message_join, sender),
@@ -430,7 +429,7 @@ public class IRCConnection extends PircBot
                 server.getId(),
                 target
             );
-            LocalBroadcastManager.getInstance(service).sendBroadcast(intent);
+            service.sendBroadcast(intent);
         }
     }
 
@@ -450,7 +449,7 @@ public class IRCConnection extends PircBot
                 server.getId(),
                 target
             );
-            LocalBroadcastManager.getInstance(service).sendBroadcast(intent);
+            service.sendBroadcast(intent);
         } else {
             Message message = new Message(service.getString(R.string.message_kick, kickerNick, recipientNick));
             message.setColor(Message.COLOR_GREEN);
@@ -461,7 +460,7 @@ public class IRCConnection extends PircBot
                 server.getId(),
                 target
             );
-            LocalBroadcastManager.getInstance(service).sendBroadcast(intent);
+            service.sendBroadcast(intent);
         }
     }
 
@@ -498,7 +497,7 @@ public class IRCConnection extends PircBot
             server.getId(),
             target
         );
-        LocalBroadcastManager.getInstance(service).sendBroadcast(intent);
+        service.sendBroadcast(intent);
     }
 
     /**
@@ -516,7 +515,7 @@ public class IRCConnection extends PircBot
         Intent intent = new Intent(Broadcast.CHANNEL_MESSAGE);
         intent.putExtra(Broadcast.EXTRA_SERVER, server.getId());
         intent.putExtra(Broadcast.EXTRA_CHANNEL, target);
-        LocalBroadcastManager.getInstance(service).sendBroadcast(intent);
+        service.sendBroadcast(intent);
          */
     }
 
@@ -540,7 +539,7 @@ public class IRCConnection extends PircBot
                 ServerInfo.DEFAULT_NAME
             );
 
-            LocalBroadcastManager.getInstance(service).sendBroadcast(intent);
+            service.sendBroadcast(intent);
         }
 
         Vector<String> channels = getChannelsByNickname(newNick);
@@ -555,7 +554,7 @@ public class IRCConnection extends PircBot
                 server.getId(),
                 target
             );
-            LocalBroadcastManager.getInstance(service).sendBroadcast(intent);
+            service.sendBroadcast(intent);
         }
     }
 
@@ -588,7 +587,7 @@ public class IRCConnection extends PircBot
             server.getId(),
             conversation.getName()
         );
-        LocalBroadcastManager.getInstance(service).sendBroadcast(intent);
+        service.sendBroadcast(intent);
     }
 
     /**
@@ -607,7 +606,7 @@ public class IRCConnection extends PircBot
             server.getId(),
             target
         );
-        LocalBroadcastManager.getInstance(service).sendBroadcast(intent);
+        service.sendBroadcast(intent);
     }
 
     /**
@@ -626,7 +625,7 @@ public class IRCConnection extends PircBot
                 server.getId(),
                 target
             );
-            LocalBroadcastManager.getInstance(service).sendBroadcast(intent);
+            service.sendBroadcast(intent);
         } else if (service.getSettings().showJoinPartAndQuit()) {
             Message message = new Message(
                 service.getString(R.string.message_part, sender),
@@ -642,7 +641,7 @@ public class IRCConnection extends PircBot
                 server.getId(),
                 target
             );
-            LocalBroadcastManager.getInstance(service).sendBroadcast(intent);
+            service.sendBroadcast(intent);
         }
     }
 
@@ -672,7 +671,7 @@ public class IRCConnection extends PircBot
                 server.getId(),
                 queryNick
             );
-            LocalBroadcastManager.getInstance(service).sendBroadcast(intent);
+            service.sendBroadcast(intent);
         } else {
             conversation.addMessage(message);
 
@@ -681,7 +680,7 @@ public class IRCConnection extends PircBot
                 server.getId(),
                 queryNick
             );
-            LocalBroadcastManager.getInstance(service).sendBroadcast(intent);
+            service.sendBroadcast(intent);
         }
 
         if (sender.equals(this.getNick())) {
@@ -734,7 +733,7 @@ public class IRCConnection extends PircBot
                     server.getId(),
                     target
                 );
-                LocalBroadcastManager.getInstance(service).sendBroadcast(intent);
+                service.sendBroadcast(intent);
             }
 
             // Look if there's a query to update
@@ -755,7 +754,7 @@ public class IRCConnection extends PircBot
                     server.getId(),
                     conversation.getName()
                 );
-                LocalBroadcastManager.getInstance(service).sendBroadcast(intent);
+                service.sendBroadcast(intent);
             }
         }
     }
@@ -784,7 +783,7 @@ public class IRCConnection extends PircBot
             server.getId(),
             target
         );
-        LocalBroadcastManager.getInstance(service).sendBroadcast(intent);
+        service.sendBroadcast(intent);
 
         // update the displayed conversation title if necessary
         intent = Broadcast.createConversationIntent(
@@ -792,7 +791,7 @@ public class IRCConnection extends PircBot
             server.getId(),
             target
         );
-        LocalBroadcastManager.getInstance(service).sendBroadcast(intent);
+        service.sendBroadcast(intent);
     }
 
     /**
@@ -820,7 +819,7 @@ public class IRCConnection extends PircBot
             server.getId(),
             target
         );
-        LocalBroadcastManager.getInstance(service).sendBroadcast(intent);
+        service.sendBroadcast(intent);
     }
 
     /**
@@ -833,7 +832,7 @@ public class IRCConnection extends PircBot
         message.setColor(Message.COLOR_BLUE);
         server.getConversation(target).addMessage(message);
 
-        LocalBroadcastManager.getInstance(service).sendBroadcast(
+        service.sendBroadcast(
             Broadcast.createConversationIntent(Broadcast.CONVERSATION_MESSAGE, server.getId(), target)
         );
     }
@@ -848,7 +847,7 @@ public class IRCConnection extends PircBot
         message.setColor(Message.COLOR_BLUE);
         server.getConversation(target).addMessage(message);
 
-        LocalBroadcastManager.getInstance(service).sendBroadcast(
+        service.sendBroadcast(
             Broadcast.createConversationIntent(Broadcast.CONVERSATION_MESSAGE, server.getId(), target)
         );
     }
@@ -863,7 +862,7 @@ public class IRCConnection extends PircBot
         message.setColor(Message.COLOR_BLUE);
         server.getConversation(target).addMessage(message);
 
-        LocalBroadcastManager.getInstance(service).sendBroadcast(
+        service.sendBroadcast(
             Broadcast.createConversationIntent(Broadcast.CONVERSATION_MESSAGE, server.getId(), target)
         );
     }
@@ -878,7 +877,7 @@ public class IRCConnection extends PircBot
         message.setColor(Message.COLOR_BLUE);
         server.getConversation(target).addMessage(message);
 
-        LocalBroadcastManager.getInstance(service).sendBroadcast(
+        service.sendBroadcast(
             Broadcast.createConversationIntent(Broadcast.CONVERSATION_MESSAGE, server.getId(), target)
         );
     }
@@ -893,7 +892,7 @@ public class IRCConnection extends PircBot
         message.setColor(Message.COLOR_BLUE);
         server.getConversation(target).addMessage(message);
 
-        LocalBroadcastManager.getInstance(service).sendBroadcast(
+        service.sendBroadcast(
             Broadcast.createConversationIntent(Broadcast.CONVERSATION_MESSAGE, server.getId(), target)
         );
     }
@@ -908,7 +907,7 @@ public class IRCConnection extends PircBot
         message.setColor(Message.COLOR_BLUE);
         server.getConversation(target).addMessage(message);
 
-        LocalBroadcastManager.getInstance(service).sendBroadcast(
+        service.sendBroadcast(
             Broadcast.createConversationIntent(Broadcast.CONVERSATION_MESSAGE, server.getId(), target)
         );
     }
@@ -923,7 +922,7 @@ public class IRCConnection extends PircBot
         message.setColor(Message.COLOR_BLUE);
         server.getConversation(target).addMessage(message);
 
-        LocalBroadcastManager.getInstance(service).sendBroadcast(
+        service.sendBroadcast(
             Broadcast.createConversationIntent(Broadcast.CONVERSATION_MESSAGE, server.getId(), target)
         );
     }
@@ -938,7 +937,7 @@ public class IRCConnection extends PircBot
         message.setColor(Message.COLOR_BLUE);
         server.getConversation(target).addMessage(message);
 
-        LocalBroadcastManager.getInstance(service).sendBroadcast(
+        service.sendBroadcast(
             Broadcast.createConversationIntent(Broadcast.CONVERSATION_MESSAGE, server.getId(), target)
         );
     }
@@ -953,7 +952,7 @@ public class IRCConnection extends PircBot
         message.setColor(Message.COLOR_BLUE);
         server.getConversation(target).addMessage(message);
 
-        LocalBroadcastManager.getInstance(service).sendBroadcast(
+        service.sendBroadcast(
             Broadcast.createConversationIntent(Broadcast.CONVERSATION_MESSAGE, server.getId(), target)
         );
     }
@@ -968,7 +967,7 @@ public class IRCConnection extends PircBot
         message.setColor(Message.COLOR_BLUE);
         server.getConversation(target).addMessage(message);
 
-        LocalBroadcastManager.getInstance(service).sendBroadcast(
+        service.sendBroadcast(
             Broadcast.createConversationIntent(Broadcast.CONVERSATION_MESSAGE, server.getId(), target)
         );
     }
@@ -983,7 +982,7 @@ public class IRCConnection extends PircBot
         message.setColor(Message.COLOR_BLUE);
         server.getConversation(target).addMessage(message);
 
-        LocalBroadcastManager.getInstance(service).sendBroadcast(
+        service.sendBroadcast(
             Broadcast.createConversationIntent(Broadcast.CONVERSATION_MESSAGE, server.getId(), target)
         );
     }
@@ -998,7 +997,7 @@ public class IRCConnection extends PircBot
         message.setColor(Message.COLOR_BLUE);
         server.getConversation(target).addMessage(message);
 
-        LocalBroadcastManager.getInstance(service).sendBroadcast(
+        service.sendBroadcast(
             Broadcast.createConversationIntent(Broadcast.CONVERSATION_MESSAGE, server.getId(), target)
         );
     }
@@ -1013,7 +1012,7 @@ public class IRCConnection extends PircBot
         message.setColor(Message.COLOR_BLUE);
         server.getConversation(target).addMessage(message);
 
-        LocalBroadcastManager.getInstance(service).sendBroadcast(
+        service.sendBroadcast(
             Broadcast.createConversationIntent(Broadcast.CONVERSATION_MESSAGE, server.getId(), target)
         );
     }
@@ -1028,7 +1027,7 @@ public class IRCConnection extends PircBot
         message.setColor(Message.COLOR_BLUE);
         server.getConversation(target).addMessage(message);
 
-        LocalBroadcastManager.getInstance(service).sendBroadcast(
+        service.sendBroadcast(
             Broadcast.createConversationIntent(Broadcast.CONVERSATION_MESSAGE, server.getId(), target)
         );
     }
@@ -1043,7 +1042,7 @@ public class IRCConnection extends PircBot
         message.setColor(Message.COLOR_BLUE);
         server.getConversation(target).addMessage(message);
 
-        LocalBroadcastManager.getInstance(service).sendBroadcast(
+        service.sendBroadcast(
             Broadcast.createConversationIntent(Broadcast.CONVERSATION_MESSAGE, server.getId(), target)
         );
     }
@@ -1058,7 +1057,7 @@ public class IRCConnection extends PircBot
         message.setColor(Message.COLOR_BLUE);
         server.getConversation(target).addMessage(message);
 
-        LocalBroadcastManager.getInstance(service).sendBroadcast(
+        service.sendBroadcast(
             Broadcast.createConversationIntent(Broadcast.CONVERSATION_MESSAGE, server.getId(), target)
         );
     }
@@ -1073,7 +1072,7 @@ public class IRCConnection extends PircBot
         message.setColor(Message.COLOR_BLUE);
         server.getConversation(target).addMessage(message);
 
-        LocalBroadcastManager.getInstance(service).sendBroadcast(
+        service.sendBroadcast(
             Broadcast.createConversationIntent(Broadcast.CONVERSATION_MESSAGE, server.getId(), target)
         );
     }
@@ -1088,7 +1087,7 @@ public class IRCConnection extends PircBot
         message.setColor(Message.COLOR_BLUE);
         server.getConversation(target).addMessage(message);
 
-        LocalBroadcastManager.getInstance(service).sendBroadcast(
+        service.sendBroadcast(
             Broadcast.createConversationIntent(Broadcast.CONVERSATION_MESSAGE, server.getId(), target)
         );
     }
@@ -1109,7 +1108,7 @@ public class IRCConnection extends PircBot
             server.getId(),
             ServerInfo.DEFAULT_NAME
         );
-        LocalBroadcastManager.getInstance(service).sendBroadcast(intent);
+        service.sendBroadcast(intent);
     }
 
     /**
@@ -1158,7 +1157,7 @@ public class IRCConnection extends PircBot
             server.getId(),
             ServerInfo.DEFAULT_NAME
         );
-        LocalBroadcastManager.getInstance(service).sendBroadcast(intent);
+        service.sendBroadcast(intent);
     }
 
     /**
@@ -1182,7 +1181,7 @@ public class IRCConnection extends PircBot
         service.notifyDisconnected(server.getTitle());
 
         Intent sIntent = Broadcast.createServerIntent(Broadcast.SERVER_UPDATE, server.getId());
-        LocalBroadcastManager.getInstance(service).sendBroadcast(sIntent);
+        service.sendBroadcast(sIntent);
 
         Collection<Conversation> conversations = server.getConversations();
 
@@ -1197,7 +1196,7 @@ public class IRCConnection extends PircBot
                 server.getId(),
                 conversation.getName()
             );
-            LocalBroadcastManager.getInstance(service).sendBroadcast(cIntent);
+            service.sendBroadcast(cIntent);
         }
 
         synchronized(isQuittingLock) {

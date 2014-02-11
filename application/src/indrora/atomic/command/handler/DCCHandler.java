@@ -33,7 +33,6 @@ import java.io.File;
 import indrora.atomic.R;
 
 import android.content.Context;
-import android.support.v4.content.LocalBroadcastManager;
 
 /**
  * Command: /dcc SEND <nickname> <file>
@@ -65,7 +64,7 @@ public class DCCHandler extends BaseHandler
             message.setColor(Message.COLOR_GREY);
             conversation.addMessage(message);
 
-            LocalBroadcastManager.getInstance(service).sendBroadcast(
+            service.sendBroadcast(
                 Broadcast.createConversationIntent(Broadcast.CONVERSATION_MESSAGE, server.getId(), conversation.getName())
             );
         } else {

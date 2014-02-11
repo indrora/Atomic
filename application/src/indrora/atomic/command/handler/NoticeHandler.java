@@ -32,7 +32,6 @@ import indrora.atomic.R;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.content.LocalBroadcastManager;
 
 /**
  * Command: /notice <nickname> <message>
@@ -61,7 +60,7 @@ public class NoticeHandler extends BaseHandler
                 server.getId(),
                 conversation.getName()
             );
-            LocalBroadcastManager.getInstance(service).sendBroadcast(intent);
+            service.sendBroadcast(intent);
 
             service.getConnection(server.getId()).sendNotice(params[1], text);
         } else {

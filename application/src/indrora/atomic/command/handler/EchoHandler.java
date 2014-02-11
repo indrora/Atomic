@@ -32,7 +32,6 @@ import indrora.atomic.R;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.content.LocalBroadcastManager;
 
 /**
  * Command: /echo <text>
@@ -56,7 +55,7 @@ public class EchoHandler extends BaseHandler
                 server.getId(),
                 conversation.getName()
             );
-            LocalBroadcastManager.getInstance(service).sendBroadcast(intent);
+            service.sendBroadcast(intent);
         } else {
             throw new CommandException(service.getString(R.string.text_missing));
         }

@@ -66,7 +66,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.speech.RecognizerIntent;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.text.InputType;
 import android.text.method.TextKeyListener;
@@ -723,8 +722,7 @@ public class ConversationActivity extends SherlockActivity implements ServiceCon
                                         server.getId(),
                                         nicknameWithoutPrefix
                                     );
-
-                                    LocalBroadcastManager.getInstance(binder.getService()).sendBroadcast(intent);
+                                    binder.getService().sendBroadcast(intent);
                                 }
                                 break;
                             case User.ACTION_OP:
