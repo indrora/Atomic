@@ -209,6 +209,13 @@ public class ConversationActivity extends SherlockActivity implements ServiceCon
 
         EditText input = (EditText) findViewById(R.id.input);
         input.setOnKeyListener(inputKeyListener);
+        
+        // Fix from https://groups.google.com/forum/#!topic/yaaic/Z4bXZXvW7UM
+        
+        input.setOnClickListener(new EditText.OnClickListener() {
+        	   public void onClick(View v) { openSoftKeyboard(v); }
+        	  });
+
 
         pager = (ViewPager) findViewById(R.id.pager);
 
