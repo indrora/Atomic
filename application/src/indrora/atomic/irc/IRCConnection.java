@@ -177,11 +177,11 @@ public class IRCConnection extends PircBot
         service.notifyConnected(server.getTitle());
 
         Message message = new Message(service.getString(R.string.message_connected, server.getTitle()));
-        message.setColor(Message.COLOR_GREEN);
+        message.setColor(Message.MessageColor.USER_EVENT);
         server.getConversation(ServerInfo.DEFAULT_NAME).addMessage(message);
 
         Message infoMessage = new Message(service.getString(R.string.message_now_login));
-        infoMessage.setColor(Message.COLOR_GREY);
+        infoMessage.setColor(Message.MessageColor.SERVER_EVENT);
         server.getConversation(ServerInfo.DEFAULT_NAME).addMessage(infoMessage);
 
         Intent intent = Broadcast.createConversationIntent(
@@ -238,7 +238,7 @@ public class IRCConnection extends PircBot
         }
 
         Message infoMessage = new Message(service.getString(R.string.message_login_done));
-        infoMessage.setColor(Message.COLOR_GREY);
+        infoMessage.setColor(Message.MessageColor.SERVER_EVENT);
         server.getConversation(ServerInfo.DEFAULT_NAME).addMessage(infoMessage);
 
         Intent intent = Broadcast.createConversationIntent(
@@ -312,7 +312,7 @@ public class IRCConnection extends PircBot
 
         if (mentioned) {
             // highlight
-            message.setColor(Message.COLOR_RED);
+            message.setColor(Message.MessageColor.ERROR);
             conversation.setStatus(Conversation.STATUS_HIGHLIGHT);
         }
     }
@@ -333,7 +333,7 @@ public class IRCConnection extends PircBot
     {
         Message message = new Message(service.getString(R.string.message_deop, sourceNick, recipient));
         message.setIcon(R.drawable.op);
-        message.setColor(Message.COLOR_BLUE);
+        message.setColor(Message.MessageColor.CHANNEL_EVENT);
         server.getConversation(target).addMessage(message);
 
         Intent intent = Broadcast.createConversationIntent(
@@ -352,7 +352,7 @@ public class IRCConnection extends PircBot
     protected void onDeVoice(String target, String sourceNick, String sourceLogin, String sourceHostname, String recipient)
     {
         Message message = new Message(service.getString(R.string.message_devoice, sourceNick, recipient));
-        message.setColor(Message.COLOR_BLUE);
+        message.setColor(Message.MessageColor.CHANNEL_EVENT);
         message.setIcon(R.drawable.voice);
         server.getConversation(target).addMessage(message);
 
@@ -421,7 +421,7 @@ public class IRCConnection extends PircBot
             );
 
             message.setIcon(R.drawable.join);
-            message.setColor(Message.COLOR_GREEN);
+            message.setColor(Message.MessageColor.USER_EVENT);
             server.getConversation(target).addMessage(message);
 
             Intent intent = Broadcast.createConversationIntent(
@@ -452,7 +452,7 @@ public class IRCConnection extends PircBot
             service.sendBroadcast(intent);
         } else {
             Message message = new Message(service.getString(R.string.message_kick, kickerNick, recipientNick));
-            message.setColor(Message.COLOR_GREEN);
+            message.setColor(Message.MessageColor.USER_EVENT);
             server.getConversation(target).addMessage(message);
 
             Intent intent = Broadcast.createConversationIntent(
@@ -475,7 +475,7 @@ public class IRCConnection extends PircBot
 
         if (isMentioned(text)) {
             // highlight
-            message.setColor(Message.COLOR_RED);
+            message.setColor(Message.MessageColor.ERROR);
             if (conversation.getStatus() != Conversation.STATUS_SELECTED || !server.getIsForeground()) {
                 service.addNewMention(
                     server.getId(),
@@ -530,7 +530,7 @@ public class IRCConnection extends PircBot
 
             // Send message about own change to server info window
             Message message = new Message(service.getString(R.string.message_self_rename, newNick));
-            message.setColor(Message.COLOR_GREEN);
+            message.setColor(Message.MessageColor.USER_EVENT);
             server.getConversation(ServerInfo.DEFAULT_NAME).addMessage(message);
 
             Intent intent = Broadcast.createConversationIntent(
@@ -546,7 +546,7 @@ public class IRCConnection extends PircBot
 
         for (String target : channels) {
             Message message = new Message(service.getString(R.string.message_rename, oldNick, newNick));
-            message.setColor(Message.COLOR_GREEN);
+            message.setColor(Message.MessageColor.USER_EVENT);
             server.getConversation(target).addMessage(message);
 
             Intent intent = Broadcast.createConversationIntent(
@@ -597,7 +597,7 @@ public class IRCConnection extends PircBot
     protected void onOp(String target, String sourceNick, String sourceLogin, String sourceHostname, String recipient)
     {
         Message message = new Message(service.getString(R.string.message_op, sourceNick, recipient));
-        message.setColor(Message.COLOR_BLUE);
+        message.setColor(Message.MessageColor.CHANNEL_EVENT);
         message.setIcon(R.drawable.op);
         server.getConversation(target).addMessage(message);
 
@@ -632,7 +632,7 @@ public class IRCConnection extends PircBot
                 Message.TYPE_MISC
             );
 
-            message.setColor(Message.COLOR_GREEN);
+            message.setColor(Message.MessageColor.USER_EVENT);
             message.setIcon(R.drawable.part);
             server.getConversation(target).addMessage(message);
 
@@ -700,7 +700,7 @@ public class IRCConnection extends PircBot
         }
 
         if (isMentioned(text)) {
-            message.setColor(Message.COLOR_RED);
+            message.setColor(Message.MessageColor.ERROR);
             conversation.setStatus(Conversation.STATUS_HIGHLIGHT);
         }
     }
@@ -724,7 +724,7 @@ public class IRCConnection extends PircBot
                     Message.TYPE_MISC
                 );
 
-                message.setColor(Message.COLOR_GREEN);
+                message.setColor(Message.MessageColor.USER_EVENT);
                 message.setIcon(R.drawable.quit);
                 server.getConversation(target).addMessage(message);
 
@@ -745,7 +745,7 @@ public class IRCConnection extends PircBot
                     Message.TYPE_MISC
                 );
 
-                message.setColor(Message.COLOR_GREEN);
+                message.setColor(Message.MessageColor.USER_EVENT);
                 message.setIcon(R.drawable.quit);
                 conversation.addMessage(message);
 
@@ -767,11 +767,11 @@ public class IRCConnection extends PircBot
     {
         if (changed) {
             Message message = new Message(service.getString(R.string.message_topic_set, setBy, topic));
-            message.setColor(Message.COLOR_YELLOW);
+            message.setColor(Message.MessageColor.TOPIC);
             server.getConversation(target).addMessage(message);
         } else {
             Message message = new Message(service.getString(R.string.message_topic, topic));
-            message.setColor(Message.COLOR_YELLOW);
+            message.setColor(Message.MessageColor.TOPIC);
             server.getConversation(target).addMessage(message);
         }
 
@@ -811,7 +811,7 @@ public class IRCConnection extends PircBot
     {
         Message message = new Message(service.getString(R.string.message_voice, sourceNick, recipient));
         message.setIcon(R.drawable.voice);
-        message.setColor(Message.COLOR_BLUE);
+        message.setColor(Message.MessageColor.CHANNEL_EVENT);
         server.getConversation(target).addMessage(message);
 
         Intent intent = Broadcast.createConversationIntent(
@@ -829,7 +829,7 @@ public class IRCConnection extends PircBot
     protected void onRemoveChannelKey(String target, String sourceNick, String sourceLogin, String sourceHostname, String key)
     {
         Message message = new Message(service.getString(R.string.message_remove_channel_key, sourceNick));
-        message.setColor(Message.COLOR_BLUE);
+        message.setColor(Message.MessageColor.CHANNEL_EVENT);
         server.getConversation(target).addMessage(message);
 
         service.sendBroadcast(
@@ -844,7 +844,7 @@ public class IRCConnection extends PircBot
     protected void onSetChannelKey(String target, String sourceNick, String sourceLogin, String sourceHostname, String key)
     {
         Message message = new Message(service.getString(R.string.message_set_channel_key, sourceNick, key));
-        message.setColor(Message.COLOR_BLUE);
+        message.setColor(Message.MessageColor.CHANNEL_EVENT);
         server.getConversation(target).addMessage(message);
 
         service.sendBroadcast(
@@ -859,7 +859,7 @@ public class IRCConnection extends PircBot
     protected void onSetSecret(String target, String sourceNick, String sourceLogin, String sourceHostname)
     {
         Message message = new Message(service.getString(R.string.message_set_channel_secret, sourceNick));
-        message.setColor(Message.COLOR_BLUE);
+        message.setColor(Message.MessageColor.CHANNEL_EVENT);
         server.getConversation(target).addMessage(message);
 
         service.sendBroadcast(
@@ -874,7 +874,7 @@ public class IRCConnection extends PircBot
     protected void onRemoveSecret(String target, String sourceNick, String sourceLogin, String sourceHostname)
     {
         Message message = new Message(service.getString(R.string.message_set_channel_public, sourceNick));
-        message.setColor(Message.COLOR_BLUE);
+        message.setColor(Message.MessageColor.CHANNEL_EVENT);
         server.getConversation(target).addMessage(message);
 
         service.sendBroadcast(
@@ -889,7 +889,7 @@ public class IRCConnection extends PircBot
     protected void onSetChannelLimit(String target, String sourceNick, String sourceLogin, String sourceHostname, int limit)
     {
         Message message = new Message(service.getString(R.string.message_set_channel_limit, sourceNick, limit));
-        message.setColor(Message.COLOR_BLUE);
+        message.setColor(Message.MessageColor.CHANNEL_EVENT);
         server.getConversation(target).addMessage(message);
 
         service.sendBroadcast(
@@ -904,7 +904,7 @@ public class IRCConnection extends PircBot
     protected void onRemoveChannelLimit(String target, String sourceNick, String sourceLogin, String sourceHostname)
     {
         Message message = new Message(service.getString(R.string.message_remove_channel_limit, sourceNick));
-        message.setColor(Message.COLOR_BLUE);
+        message.setColor(Message.MessageColor.CHANNEL_EVENT);
         server.getConversation(target).addMessage(message);
 
         service.sendBroadcast(
@@ -919,7 +919,7 @@ public class IRCConnection extends PircBot
     protected void onSetChannelBan(String target, String sourceNick, String sourceLogin, String sourceHostname, String hostmask)
     {
         Message message = new Message(service.getString(R.string.message_set_ban, sourceNick, hostmask));
-        message.setColor(Message.COLOR_BLUE);
+        message.setColor(Message.MessageColor.CHANNEL_EVENT);
         server.getConversation(target).addMessage(message);
 
         service.sendBroadcast(
@@ -934,7 +934,7 @@ public class IRCConnection extends PircBot
     protected void onRemoveChannelBan(String target, String sourceNick, String sourceLogin, String sourceHostname, String hostmask)
     {
         Message message = new Message(service.getString(R.string.message_remove_ban, sourceNick, hostmask));
-        message.setColor(Message.COLOR_BLUE);
+        message.setColor(Message.MessageColor.CHANNEL_EVENT);
         server.getConversation(target).addMessage(message);
 
         service.sendBroadcast(
@@ -949,7 +949,7 @@ public class IRCConnection extends PircBot
     protected void onSetTopicProtection(String target, String sourceNick, String sourceLogin, String sourceHostname)
     {
         Message message = new Message(service.getString(R.string.message_set_topic_protection, sourceNick));
-        message.setColor(Message.COLOR_BLUE);
+        message.setColor(Message.MessageColor.CHANNEL_EVENT);
         server.getConversation(target).addMessage(message);
 
         service.sendBroadcast(
@@ -964,7 +964,7 @@ public class IRCConnection extends PircBot
     protected void onRemoveTopicProtection(String target, String sourceNick, String sourceLogin, String sourceHostname)
     {
         Message message = new Message(service.getString(R.string.message_remove_topic_protection, sourceNick));
-        message.setColor(Message.COLOR_BLUE);
+        message.setColor(Message.MessageColor.CHANNEL_EVENT);
         server.getConversation(target).addMessage(message);
 
         service.sendBroadcast(
@@ -979,7 +979,7 @@ public class IRCConnection extends PircBot
     protected void onSetNoExternalMessages(String target, String sourceNick, String sourceLogin, String sourceHostname)
     {
         Message message = new Message(service.getString(R.string.message_disable_external, sourceNick));
-        message.setColor(Message.COLOR_BLUE);
+        message.setColor(Message.MessageColor.CHANNEL_EVENT);
         server.getConversation(target).addMessage(message);
 
         service.sendBroadcast(
@@ -994,7 +994,7 @@ public class IRCConnection extends PircBot
     protected void onRemoveNoExternalMessages(String target, String sourceNick, String sourceLogin, String sourceHostname)
     {
         Message message = new Message(service.getString(R.string.message_enable_external, sourceNick));
-        message.setColor(Message.COLOR_BLUE);
+        message.setColor(Message.MessageColor.CHANNEL_EVENT);
         server.getConversation(target).addMessage(message);
 
         service.sendBroadcast(
@@ -1009,7 +1009,7 @@ public class IRCConnection extends PircBot
     protected void onSetInviteOnly(String target, String sourceNick, String sourceLogin, String sourceHostname)
     {
         Message message = new Message(service.getString(R.string.message_set_invite_only, sourceNick));
-        message.setColor(Message.COLOR_BLUE);
+        message.setColor(Message.MessageColor.CHANNEL_EVENT);
         server.getConversation(target).addMessage(message);
 
         service.sendBroadcast(
@@ -1024,7 +1024,7 @@ public class IRCConnection extends PircBot
     protected void onRemoveInviteOnly(String target, String sourceNick, String sourceLogin, String sourceHostname)
     {
         Message message = new Message(service.getString(R.string.message_remove_invite_only, sourceNick));
-        message.setColor(Message.COLOR_BLUE);
+        message.setColor(Message.MessageColor.CHANNEL_EVENT);
         server.getConversation(target).addMessage(message);
 
         service.sendBroadcast(
@@ -1039,7 +1039,7 @@ public class IRCConnection extends PircBot
     protected void onSetModerated(String target, String sourceNick, String sourceLogin, String sourceHostname)
     {
         Message message = new Message(service.getString(R.string.message_set_moderated, sourceNick));
-        message.setColor(Message.COLOR_BLUE);
+        message.setColor(Message.MessageColor.CHANNEL_EVENT);
         server.getConversation(target).addMessage(message);
 
         service.sendBroadcast(
@@ -1054,7 +1054,7 @@ public class IRCConnection extends PircBot
     protected void onRemoveModerated(String target, String sourceNick, String sourceLogin, String sourceHostname)
     {
         Message message = new Message(service.getString(R.string.message_remove_moderated, sourceNick));
-        message.setColor(Message.COLOR_BLUE);
+        message.setColor(Message.MessageColor.CHANNEL_EVENT);
         server.getConversation(target).addMessage(message);
 
         service.sendBroadcast(
@@ -1069,7 +1069,7 @@ public class IRCConnection extends PircBot
     protected void onSetPrivate(String target, String sourceNick, String sourceLogin, String sourceHostname)
     {
         Message message = new Message(service.getString(R.string.message_set_channel_private, sourceNick));
-        message.setColor(Message.COLOR_BLUE);
+        message.setColor(Message.MessageColor.CHANNEL_EVENT);
         server.getConversation(target).addMessage(message);
 
         service.sendBroadcast(
@@ -1084,7 +1084,7 @@ public class IRCConnection extends PircBot
     protected void onRemovePrivate(String target, String sourceNick, String sourceLogin, String sourceHostname)
     {
         Message message = new Message(service.getString(R.string.message_set_channel_public, sourceNick));
-        message.setColor(Message.COLOR_BLUE);
+        message.setColor(Message.MessageColor.CHANNEL_EVENT);
         server.getConversation(target).addMessage(message);
 
         service.sendBroadcast(
@@ -1100,7 +1100,7 @@ public class IRCConnection extends PircBot
     {
         Message message = new Message(line);
         message.setIcon(R.drawable.action);
-        message.setColor(Message.COLOR_GREY);
+        message.setColor(Message.MessageColor.SERVER_EVENT);
         server.getConversation(ServerInfo.DEFAULT_NAME).addMessage(message);
 
         Intent intent = Broadcast.createConversationIntent(
@@ -1127,7 +1127,7 @@ public class IRCConnection extends PircBot
         }
         if (code == 376 && ignoreMOTD) {
             Message motdMessage = new Message(service.getString(R.string.message_motd_suppressed));
-            motdMessage.setColor(Message.COLOR_GREY);
+            motdMessage.setColor(Message.MessageColor.SERVER_EVENT);
             server.getConversation(ServerInfo.DEFAULT_NAME).addMessage(motdMessage);
             ignoreMOTD = false;
             return;
@@ -1149,7 +1149,7 @@ public class IRCConnection extends PircBot
 
         // Currently disabled... to much text
         Message message = new Message(response);
-        message.setColor(Message.COLOR_GREY);
+        message.setColor(Message.MessageColor.SERVER_EVENT);
         server.getConversation(ServerInfo.DEFAULT_NAME).addMessage(message);
 
         Intent intent = Broadcast.createConversationIntent(
@@ -1188,7 +1188,7 @@ public class IRCConnection extends PircBot
         for (Conversation conversation : conversations) {
             Message message = new Message(service.getString(R.string.message_disconnected));
             message.setIcon(R.drawable.error);
-            message.setColor(Message.COLOR_RED);
+            message.setColor(Message.MessageColor.ERROR);
             server.getConversation(conversation.getName()).addMessage(message);
 
             Intent cIntent = Broadcast.createConversationIntent(

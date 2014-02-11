@@ -61,7 +61,7 @@ public class DCCHandler extends BaseHandler
             service.getConnection(server.getId()).dccSendFile(file, params[2], 60000);
 
             Message message = new Message(service.getString(R.string.dcc_waiting_accept, params[2]));
-            message.setColor(Message.COLOR_GREY);
+            message.setColor(Message.MessageColor.SERVER_EVENT);
             conversation.addMessage(message);
 
             service.sendBroadcast(

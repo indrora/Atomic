@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<colorscheme>
+	<foreground>#ffffffff</foreground>
+	<background>#ff000000</background>
+	<userevent>#ff458509</userevent>
+	<error>#ffcc0000</error>
+	<channelevent>#ff729fcf</channelevent>
+	<topic>#ffbe9b01</topic>
+	<serverevent>#ffaaaaaa</serverevent>
+	<highlight>#ffcc0000</highlight>
+	<url>#FF00007F</url>
+	<color>#FFFFFFFF</color>
+	<color>#FF000000</color>
+	<color>#FF00007F</color>
+	<color>#FF009300</color>
+	<color>#FFFC0000</color>
+	<color>#FF7F0000</color>
+	<color>#FF9C009C</color>
+	<color>#FFFC7F00</color>
+	<color>#FFFFFF00</color>
+	<color>#FF00FC00</color>
+	<color>#FF008080</color>
+	<color>#FF00FFFF</color>
+	<color>#FF0000FF</color>
+	<color>#FFFF00FF</color>
+	<color>#FF7F7F7F</color>
+	<color>#FFD2D2D2</color>
+</colorscheme>

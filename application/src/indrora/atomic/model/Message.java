@@ -20,6 +20,7 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
  */
 package indrora.atomic.model;
 
+import indrora.atomic.activity.ConversationActivity;
 import indrora.atomic.utils.MircColors;
 import indrora.atomic.utils.Smilies;
 
@@ -37,6 +38,7 @@ import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
 import android.text.util.Linkify;
+import android.util.Log;
 import android.widget.TextView;
 
 /**
@@ -46,12 +48,28 @@ import android.widget.TextView;
  */
 public class Message
 {
-    public static final int COLOR_GREEN   = 0xFF458509;
-    public static final int COLOR_RED     = 0xFFcc0000;
-    public static final int COLOR_BLUE    = 0xFF729fcf;
-    public static final int COLOR_YELLOW  = 0xFFbe9b01;
-    public static final int COLOR_GREY    = 0xFFaaaaaa;
-    public static final int COLOR_DEFAULT = 0xFFeeeeee;
+	public enum MessageColor
+	{
+		USER_EVENT,
+		CHANNEL_EVENT,
+		SERVER_EVENT,
+		TOPIC,
+		HIGHLIGHT,
+		ERROR,
+		DEFAULT,
+		NO_COLOR
+	}
+	/*
+    public static final int COLOR_USER_EVENT     = 0xDEADBEEF;
+    public static final int COLOR_ERROR          = 0xFACEBEEF;
+    public static final int COLOR_CHANNEL_EVENT  = 0xBEEFBEEF;
+    public static final int COLOR_TOPIC          = 0xCAFEBEEF;
+    public static final int COLOR_SERVER_EVENT   = 0xBEEFCAFE;
+    public static final int COLOR_HIGHLIGHT      = 0xBEEFBABE;
+    public static final int COLOR_DEFAULT        = 0xFEEDBEEF;
+    */
+	
+    ColorScheme _scheme;
 
     /* normal message, this is the default */
     public static final int TYPE_MESSAGE = 0;
@@ -89,7 +107,7 @@ public class Message
     private SpannableString canvas;
     private long timestamp;
 
-    private int color = NO_COLOR;
+    private MessageColor color = MessageColor.DEFAULT;
     private int type  = NO_ICON;
     private int icon  = NO_TYPE;
 
@@ -182,11 +200,37 @@ public class Message
     /**
      * Set the color of this message
      */
-    public void setColor(int color)
-    {
-        this.color = color;
+	public void setColor(MessageColor color) {
+		this.color = color;
+        //this.color = color;
     }
 
+	private int translateColor(MessageColor c)
+	{
+		assert (_scheme != null);
+		Log.d("Message", "Assertion PASS: _scheme is not null.");
+		Log.d("Message", "Message color is:"+color);
+		switch(c)
+		{
+		case CHANNEL_EVENT:
+			return _scheme.getChannelEvent();
+		case DEFAULT: return _scheme.getForeground();
+		case ERROR:
+			 return _scheme.getError();
+		case HIGHLIGHT:
+			 return _scheme.getHighlight();
+		case SERVER_EVENT:
+			return _scheme.getServerEvent();
+		case TOPIC:
+			return _scheme.getTopic();
+		case USER_EVENT:
+			return _scheme.getUserEvent();
+		default:
+			return _scheme.getForeground();
+		}
+
+	}
+	
     /**
      * Set the timestamp of the message
      *
@@ -206,7 +250,7 @@ public class Message
     {
         /* It might be worth to use some hash table here */
         if (sender == null) {
-            return COLOR_DEFAULT;
+            return _scheme.getForeground();
         }
 
         int color = 0;
@@ -216,9 +260,10 @@ public class Message
         }
 
         /* we dont want color[colors.length-1] which is black */
-        color = color % (colors.length - 1);
+        //color = color % (colors.length - 1);
 
-        return colors[color];
+        
+        return _scheme.getColor(color % 16); //colors[color];
     }
 
     /**
@@ -229,7 +274,14 @@ public class Message
     public SpannableString render(Context context)
     {
         Settings settings = new Settings(context);
+        if(_scheme == null)
+        	{
+        		_scheme = ConversationActivity.getScheme();
+        	}
+        
 
+		MircColors.setColorScheme(_scheme);
+		
         if (canvas == null) {
             String prefix    = hasIcon() && settings.showIcons() ? "  " : "";
             String nick      = hasSender() ? "<" + sender + "> " : "";
@@ -238,6 +290,7 @@ public class Message
             canvas = new SpannableString(prefix + timestamp + nick);
             SpannableString renderedText;
 
+            
             if (settings.showMircColors()) {
                 renderedText = MircColors.toSpannable(text);
             } else {
@@ -273,11 +326,11 @@ public class Message
                 int start = 0;
 
                 for (int i = 0; i < spans.length; i++) {
-                    canvas.setSpan(new ForegroundColorSpan(color), start, canvas.getSpanStart(spans[i]), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    canvas.setSpan(new ForegroundColorSpan( translateColor(color)), start, canvas.getSpanStart(spans[i]), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     start = canvas.getSpanEnd(spans[i]);
                 }
 
-                canvas.setSpan(new ForegroundColorSpan(color), start, canvas.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                canvas.setSpan(new ForegroundColorSpan(translateColor(color)), start, canvas.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
         }
 
@@ -301,7 +354,7 @@ public class Message
      */
     private boolean hasColor()
     {
-        return color != NO_COLOR;
+        return color != MessageColor.NO_COLOR;
     }
 
     /**
@@ -325,16 +378,27 @@ public class Message
         // XXX: We should not read settings here ALWAYS for EVERY textview
         Settings settings = new Settings(context);
 
+        if(_scheme == null)
+        	{
+        		_scheme = new ColorScheme(context);
+        	}
+
+        
         TextView canvas = new TextView(context);
 
         canvas.setAutoLinkMask(Linkify.ALL);
         canvas.setLinksClickable(true);
-        canvas.setLinkTextColor(COLOR_BLUE);
+        canvas.setLinkTextColor(_scheme.getUrl());
 
         canvas.setText(this.render(context));
         canvas.setTextSize(settings.getFontSize());
         canvas.setTypeface(Typeface.MONOSPACE);
-        canvas.setTextColor(COLOR_DEFAULT);
+        canvas.setTextColor(_scheme.getForeground());
+        
+        
+        assert(_scheme.getForeground() != _scheme.getBackground());
+        
+        //canvas.setBackgroundColor(_scheme.getBackground());
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             setupViewForHoneycombAndLater(canvas);

@@ -20,6 +20,8 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
  */
 package indrora.atomic.utils;
 
+import indrora.atomic.model.ColorScheme;
+
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -70,6 +72,13 @@ public abstract class MircColors
     private static final Pattern colorPattern = Pattern.compile("\\x03(\\d{1,2})(?:,(\\d{1,2}))?([^\\x03\\x0F]*)(\\x03|\\x0F)?");
     private static final Pattern cleanupPattern = Pattern.compile("(?:\\x02|\\x1F|\\x1D|\\x0F|\\x16|\\x03(?:(?:\\d{1,2})(?:,\\d{1,2})?)?)");
 
+    private static ColorScheme _cScheme;
+    
+    public static void setColorScheme(ColorScheme scheme)
+    {
+    	_cScheme = scheme;
+    }
+    
     /**
      * Converts a string with mIRC style and color codes to a SpannableString with
      * all the style and color codes applied.
@@ -89,10 +98,10 @@ public abstract class MircColors
          * We apply the background color first and then apply the foreground color
          * to all the parts where BackgroundColorSpans are found.
          */
-        replaceControlCodes(inversePattern.matcher(ssb), ssb, new BackgroundColorSpan(colors[0] | 0xFF000000));
+        replaceControlCodes(inversePattern.matcher(ssb), ssb, new BackgroundColorSpan(_cScheme.getBackground()));
         BackgroundColorSpan[] inverseSpans = ssb.getSpans(0, ssb.length(), BackgroundColorSpan.class);
         for (int i = 0; i < inverseSpans.length; i++) {
-            ssb.setSpan(new ForegroundColorSpan(colors[1] | 0xFF000000), ssb.getSpanStart(inverseSpans[i]),ssb.getSpanEnd(inverseSpans[i]), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            ssb.setSpan(new ForegroundColorSpan( _cScheme.getForeground() /*colors[1] | 0xFF000000*/), ssb.getSpanStart(inverseSpans[i]),ssb.getSpanEnd(inverseSpans[i]), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
 
         Matcher m = colorPattern.matcher(ssb);
@@ -105,13 +114,13 @@ public abstract class MircColors
             int codelength = m.group(1).length()+1;
 
             if (color <= 15 && color >= 0) {
-                ssb.setSpan(new ForegroundColorSpan(colors[color] | 0xFF000000), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                ssb.setSpan(new ForegroundColorSpan(_cScheme.getColor(color)), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
             if (m.group(2) != null) {
                 color = Integer.parseInt(m.group(2));
                 if (color <= 15 && color >= 0) {
-                    ssb.setSpan(new BackgroundColorSpan(colors[color] | 0xFF000000), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    ssb.setSpan(new BackgroundColorSpan(_cScheme.getColor(color)), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 }
                 codelength = codelength + m.group(2).length() + 1;
             }

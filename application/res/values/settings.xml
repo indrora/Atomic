@@ -56,7 +56,10 @@
     
     <string name="key_mirc_colors" translatable="false">mirc_colors</string>
     <string name="default_mirc_colors" translatable="false">true</string>
-
+    
+    <string name="key_colorscheme" translatable="false">colorscheme</string>
+	<string name="default_colorscheme" translatable="false">default</string>
+    
     <string name="key_graphical_smilies" translatable="false">graphical_smilies</string>
     <string name="default_graphical_smilies" translatable="false">true</string>
 

@@ -514,7 +514,7 @@ public class IRCService extends Service
                         }
                     }
 
-                    message.setColor(Message.COLOR_RED);
+                    message.setColor(Message.MessageColor.ERROR);
                     message.setIcon(R.drawable.error);
                     server.getConversation(ServerInfo.DEFAULT_NAME).addMessage(message);
 

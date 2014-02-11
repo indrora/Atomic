@@ -63,7 +63,7 @@ public class NamesHandler extends BaseHandler
         }
 
         Message message = new Message(userList.toString());
-        message.setColor(Message.COLOR_YELLOW);
+        message.setColor(Message.MessageColor.TOPIC);
         conversation.addMessage(message);
 
         Intent intent = Broadcast.createConversationIntent(

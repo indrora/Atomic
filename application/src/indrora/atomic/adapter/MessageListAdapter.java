@@ -57,7 +57,7 @@ public class MessageListAdapter extends BaseAdapter
         // Render channel name as first message in channel
         if (conversation.getType() != Conversation.TYPE_SERVER) {
             Message header = new Message(conversation.getName());
-            header.setColor(Message.COLOR_RED);
+            header.setColor(Message.MessageColor.ERROR);
             messages.add(header.renderTextView(context));
         }
 

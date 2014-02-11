@@ -54,6 +54,15 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
             android:entryValues="@array/fontsize_values"
             android:key="@string/key_fontsize"
             android:defaultValue="@string/default_fontsize" />
+        <ListPreference
+            android:title="Color scheme"
+            android:summary="May not look right until restart"
+            android:dialogTitle="Choose color scheme"
+            android:entries="@array/theme_labels"
+            android:entryValues="@array/theme_values"
+            android:defaultValue="@string/default_colorscheme"
+            android:key="@string/key_colorscheme"
+            />
         <CheckBoxPreference
             android:title="@string/settings_icons_title"
             android:summary="@string/settings_icons_desc"

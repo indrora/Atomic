@@ -92,7 +92,7 @@ public class HelpHandler extends BaseHandler
         }
 
         Message message = new Message(commandList.toString());
-        message.setColor(Message.COLOR_YELLOW);
+        message.setColor(Message.MessageColor.TOPIC);
         conversation.addMessage(message);
 
         Intent intent = Broadcast.createConversationIntent(
@@ -121,7 +121,7 @@ public class HelpHandler extends BaseHandler
         if (commands.containsKey(command)) {
             // XXX:I18N - String building salad :)
             Message message = new Message("Help of /" + command + "\n" + commands.get(command).getUsage() + "\n" + commands.get(command).getDescription(service) + "\n");
-            message.setColor(Message.COLOR_YELLOW);
+            message.setColor(Message.MessageColor.TOPIC);
             conversation.addMessage(message);
 
             Intent intent = Broadcast.createConversationIntent(

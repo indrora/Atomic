@@ -317,6 +317,11 @@ public class Settings
             Boolean.parseBoolean(resources.getString(R.string.default_graphical_smilies))
         );
     }
+    
+    public String getColorScheme()
+    {
+    	return preferences.getString("colorscheme", "default");
+    }
 
     /**
      * Whether message text should be autocorrected.

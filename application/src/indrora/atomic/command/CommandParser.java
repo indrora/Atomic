@@ -183,7 +183,7 @@ public class CommandParser
             // Command could not be executed
             if (conversation != null) {
                 Message errorMessage = new Message(type + ": " + e.getMessage());
-                errorMessage.setColor(Message.COLOR_RED);
+                errorMessage.setColor(Message.MessageColor.ERROR);
                 conversation.addMessage(errorMessage);
 
                 // XXX:I18N - How to get a context here? (command_syntax)

@@ -20,8 +20,10 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
  */
 package indrora.atomic.view;
 
+import indrora.atomic.activity.ConversationActivity;
 import indrora.atomic.adapter.MessageListAdapter;
 import indrora.atomic.listener.MessageClickListener;
+import indrora.atomic.model.ColorScheme;
 
 import indrora.atomic.R;
 
@@ -35,6 +37,9 @@ import android.widget.ListView;
  */
 public class MessageListView extends ListView
 {
+	
+	ColorScheme _scheme;
+	
     /**
      * Create a new MessageListView
      *
@@ -44,15 +49,19 @@ public class MessageListView extends ListView
     {
         super(context);
 
+        _scheme = ConversationActivity.getScheme();
+        
         setOnItemClickListener(MessageClickListener.getInstance());
 
         setDivider(null);
 
         setCacheColorHint(0x000000);
         setVerticalFadingEdgeEnabled(false);
-        setBackgroundResource(R.drawable.conversation_background);
+        //setBackgroundResource(R.drawable.conversation_background);
         setScrollBarStyle(SCROLLBARS_OUTSIDE_INSET);
 
+        setBackgroundColor(_scheme.getBackground());
+        
         // Scale padding by screen density
         float density = context.getResources().getDisplayMetrics().density;
         int padding = (int) (5 * density);

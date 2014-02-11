@@ -46,4 +46,13 @@
         <item>20</item>
         <item>30</item>
     </string-array>
+    
+    <string-array name="theme_labels">
+        <item>Default</item>
+        <item>Monokai</item>
+    </string-array>
+    <string-array name="theme_values">
+        <item>default</item>
+        <item>monokai</item>
+    </string-array>
 </resources>

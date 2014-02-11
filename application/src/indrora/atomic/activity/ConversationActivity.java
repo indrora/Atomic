@@ -33,6 +33,7 @@ import indrora.atomic.listener.ConversationListener;
 import indrora.atomic.listener.ServerListener;
 import indrora.atomic.listener.SpeechClickListener;
 import indrora.atomic.model.Broadcast;
+import indrora.atomic.model.ColorScheme;
 import indrora.atomic.model.Conversation;
 import indrora.atomic.model.Extra;
 import indrora.atomic.model.Message;
@@ -98,6 +99,9 @@ public class ConversationActivity extends SherlockActivity implements ServiceCon
     private static final int REQUEST_CODE_USER = 3;
     private static final int REQUEST_CODE_NICK_COMPLETION= 4;
 
+    private static ColorScheme _scheme;
+    public static ColorScheme getScheme() { return _scheme; }
+    
     private int serverId;
     private Server server;
     private IRCBinder binder;
@@ -183,6 +187,8 @@ public class ConversationActivity extends SherlockActivity implements ServiceCon
     {
         super.onCreate(savedInstanceState);
 
+        _scheme = new ColorScheme(this);
+        
         serverId = getIntent().getExtras().getInt("serverId");
         server = Atomic.getInstance().getServerById(serverId);
         Settings settings = new Settings(this);
@@ -764,7 +770,7 @@ public class ConversationActivity extends SherlockActivity implements ServiceCon
 
         if (!server.isConnected()) {
             Message message = new Message(getString(R.string.message_not_connected));
-            message.setColor(Message.COLOR_RED);
+            message.setColor(Message.MessageColor.ERROR);
             message.setIcon(R.drawable.error);
             server.getConversation(server.getSelectedConversation()).addMessage(message);
             onConversationMessage(server.getSelectedConversation());
@@ -783,7 +789,7 @@ public class ConversationActivity extends SherlockActivity implements ServiceCon
                     binder.getService().getConnection(serverId).sendMessage(conversation.getName(), text);
                 } else {
                     Message message = new Message(getString(R.string.chat_only_form_channel));
-                    message.setColor(Message.COLOR_YELLOW);
+                    message.setColor(Message.MessageColor.TOPIC);
                     message.setIcon(R.drawable.warning);
                     conversation.addMessage(message);
                 }
