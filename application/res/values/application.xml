@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name" translatable="false">Atomic</string>
     <string name="app_full_name" translatable="false">Atomic: A radioactive IRC client</string>
-    <string name="app_version" translatable="false">1.1-SNAPSHOT</string>
+    <string name="app_version" translatable="false">1.1-hydrogen-git</string>
     <string name="app_homepage" translatable="false">https://github.com/indora/atomic</string>
     <string name="app_irc" translatable="false">irc://irc.epd-me.net/yaaic</string>
     <string name="app_copyright" translatable="false">&#169; 2014 Morgan &quot;Indrora&quot; Gangwere,</string>
