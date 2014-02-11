@@ -259,11 +259,14 @@ public class Message
             color += sender.charAt(i);
         }
 
-        /* we dont want color[colors.length-1] which is black */
-        //color = color % (colors.length - 1);
-
+        // We don't want the color to be the background color.
+        int tmpColor = _scheme.getColor(color % 16);
+        while(tmpColor == _scheme.getBackground())
+        {
+        	tmpColor = _scheme.getColor(color*color % 16);
+        }
         
-        return _scheme.getColor(color % 16); //colors[color];
+        return tmpColor; //colors[color];
     }
 
     /**
