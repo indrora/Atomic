@@ -141,13 +141,16 @@ hr {
 /* Images */
 
 img {
-  position: relative;
-  margin: 0 auto;
+  /*position: relative;*/
+    display: block;
+
   max-width: 650px;
   padding: 5px;
-  margin: 10px 0 32px 0;
-  border: 1px solid #ccc;
+      margin-left: auto;
+    margin-right: auto;
+
 }
+
 
 p img {
   display: inline;
