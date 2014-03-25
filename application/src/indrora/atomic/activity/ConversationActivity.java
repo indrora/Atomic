@@ -49,6 +49,7 @@ import indrora.atomic.receiver.ServerReceiver;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
 import indrora.atomic.R;
@@ -56,6 +57,7 @@ import indrora.atomic.R;
 import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
@@ -494,6 +496,36 @@ public class ConversationActivity extends SherlockActivity implements ServiceCon
                     Toast.makeText(this, getResources().getString(R.string.only_usable_from_channel), Toast.LENGTH_SHORT).show();
                 }
                 break;
+            case R.id.chooseConversation:
+            	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            	builder.setTitle("Choose channel");
+            	String[] conversationsArr = new String[pagerAdapter.getCount()];
+            	for( int i=0; i < pagerAdapter.getCount(); i++)
+            	{
+            		conversationsArr[i] = pagerAdapter.getPageTitle(i);
+            	}
+            	
+            	OnClickListener listener = new OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// Change the page here.
+						Toast.makeText(getBaseContext(),
+								String.format("Got %d, which is %s",
+										which,
+										pagerAdapter.getPageTitle(which)),
+								Toast.LENGTH_LONG).show();
+						pager.setCurrentItem(which);
+					}
+				};
+            	
+            	builder.setItems(conversationsArr, 
+            			listener
+            			);
+            	builder.show();
+            	
+            	break;
+                
         }
 
         return true;
