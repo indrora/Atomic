@@ -51,6 +51,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.SystemClock;
+import android.support.v4.app.NotificationCompat;
 
 /**
  * The background service for managing the irc connections
@@ -197,7 +198,13 @@ public class IRCService extends Service
             foreground = true;
 
             // Set the icon, scrolling text and timestamp
-            notification = new Notification(R.drawable.ic_service_icon, getText(R.string.notification_running), System.currentTimeMillis());
+            // now using NotificationCompat for Linter happiness
+            notification = new NotificationCompat.Builder(getBaseContext())
+            	.setSmallIcon(R.drawable.ic_service_icon)
+            	.setWhen(System.currentTimeMillis())
+            	.setContentText(getText(R.string.notification_running))
+            	.build();
+            //notification = new Notification(R.drawable.ic_service_icon, getText(R.string.notification_running), System.currentTimeMillis());
 
             // The PendingIntent to launch our activity if the user selects this notification
             Intent notifyIntent = new Intent(this, ServersActivity.class);
@@ -205,7 +212,10 @@ public class IRCService extends Service
             PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notifyIntent, 0);
 
             // Set the info for the views that show in the notification panel.
-            notification.setLatestEventInfo(this, getText(R.string.app_name), getText(R.string.notification_not_connected), contentIntent);
+            notification.setLatestEventInfo(this,
+            		getText(R.string.app_name),
+            		getText(R.string.notification_not_connected),
+            		contentIntent);
 
             startForegroundCompat(FOREGROUND_NOTIFICATION, notification);
         } else if (ACTION_BACKGROUND.equals(intent.getAction()) && !foreground) {
@@ -227,6 +237,7 @@ public class IRCService extends Service
     private void updateNotification(String text, String contentText, boolean vibrate, boolean sound, boolean light)
     {
         if (foreground) {
+        	// I give up. Android changed how this works -- Hope it never goes away. 
             notification = new Notification(R.drawable.ic_service_icon, text, System.currentTimeMillis());
             Intent notifyIntent = new Intent(this, ServersActivity.class);
             notifyIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
