@@ -294,11 +294,10 @@ public class ConversationActivity extends SherlockActivity implements ServiceCon
     {        
     	EditText input = (EditText) findViewById(R.id.input);
         LinearLayout lll = (LinearLayout)(input.getParent());
-        lll.setBackgroundColor(0xFF000000 + ( 0xFFFFFF - (0xFFFFFF & _scheme.getBackground() ) ) );
+        lll.setBackgroundColor( _scheme.getBackground());
         
-        input.setBackgroundColor(_scheme.getBackground());
         input.setTextColor(_scheme.getForeground());
-
+        
     }
     
     /**

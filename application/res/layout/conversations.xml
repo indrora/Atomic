@@ -53,7 +53,6 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
             android:imeOptions="actionSend"
             android:inputType="textImeMultiLine"
             android:singleLine="true"
-            android:padding="3dp"
             android:textIsSelectable="true" />
 
         <Button

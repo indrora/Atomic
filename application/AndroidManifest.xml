@@ -36,7 +36,7 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
     <application
         android:icon="@drawable/ic_launcher"
         android:label="Atomic"
-        android:theme="@style/Theme.Sherlock"
+        android:theme="@style/AppTheme"
         android:allowBackup="true">
         <activity
             android:name="indrora.atomic.activity.ServersActivity"
