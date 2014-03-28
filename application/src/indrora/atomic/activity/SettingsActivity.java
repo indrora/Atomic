@@ -23,6 +23,9 @@ package indrora.atomic.activity;
 import indrora.atomic.R;
 
 import android.os.Bundle;
+import android.preference.Preference;
+import android.preference.PreferenceActivity;
+import android.preference.PreferenceScreen;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockPreferenceActivity;
@@ -33,7 +36,7 @@ import com.actionbarsherlock.view.MenuItem;
  *
  * @author Sebastian Kaspari <sebastian@yaaic.org>
  */
-public class SettingsActivity extends SherlockPreferenceActivity
+public class SettingsActivity extends PreferenceActivity // SherlockPreferenceActivity
 {
     /**
      * On create
@@ -43,22 +46,11 @@ public class SettingsActivity extends SherlockPreferenceActivity
     {
         super.onCreate(savedInstanceState);
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        //ActionBar actionBar = getSupportActionBar();
+        //actionBar.setDisplayHomeAsUpEnabled(true);
 
         addPreferencesFromResource(R.xml.preferences);
     }
 
-    /**
-     * On menu item selected.
-     */
-    @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item)
-    {
-        if (item.getItemId() ==  android.R.id.home) {
-            finish();
-        }
 
-        return true;
-    }
 }

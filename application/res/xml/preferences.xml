@@ -22,7 +22,7 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory
+    <PreferenceScreen
         android:title="@string/settings_connection">
         <CheckBoxPreference
             android:title="@string/settings_reconnect_title"
@@ -43,9 +43,10 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
             android:summary="@string/settings_ignore_motd_desc"
             android:key="@string/key_ignore_motd"
             android:defaultValue="@string/default_ignore_motd" />
-    </PreferenceCategory>
-    <PreferenceCategory
-        android:title="@string/settings_chat">
+    </PreferenceScreen>
+    <PreferenceScreen
+        android:title="@string/settings_chat"
+        >
         <ListPreference
             android:title="@string/settings_fontsize_title"
             android:summary="@string/settings_fontsize_desc"
@@ -136,8 +137,8 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
             android:key="@string/key_history_size"
             android:defaultValue="@string/default_history_size"
             android:inputType="number" />
-    </PreferenceCategory>
-    <PreferenceCategory
+    </PreferenceScreen>
+    <PreferenceScreen
         android:title="@string/settings_highlight">
         <CheckBoxPreference
             android:title="@string/settings_sound_highlight_title"
@@ -161,8 +162,8 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
             android:summary="@string/settings_led_highlight_desc"
             android:key="@string/key_led_highlight"
             android:defaultValue="@string/default_led_highlight" />
-    </PreferenceCategory>
-    <PreferenceCategory
+    </PreferenceScreen>
+    <PreferenceScreen
         android:title="@string/settings_misc">
         <CheckBoxPreference
             android:title="@string/settings_voice_recognition_title"
@@ -181,5 +182,5 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
             android:summary="@string/settings_debug_traffic_desc"
             android:key="@string/key_debug_traffic"
             android:defaultValue="@string/default_debug_traffic" />
-    </PreferenceCategory>
+    </PreferenceScreen>
 </PreferenceScreen>
