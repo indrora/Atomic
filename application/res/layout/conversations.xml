@@ -37,18 +37,25 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
        android:layout_margin="0px"
        android:unselectedAlpha="100"
        android:padding="0dp" />
+
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        
+        android:padding="5dp" >
+
         <EditText
             android:id="@+id/input"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:imeOptions="actionSend"
             android:inputType="textImeMultiLine"
-            android:textIsSelectable="true"
-            android:imeOptions="actionSend" />
+            android:singleLine="true"
+            android:padding="3dp"
+            android:textIsSelectable="true" />
+
         <Button
             android:id="@+id/speech"
             android:layout_width="wrap_content"

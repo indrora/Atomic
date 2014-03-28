@@ -21,6 +21,7 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
 package indrora.atomic.activity;
 
 import indrora.atomic.Atomic;
+import indrora.atomic.R;
 import indrora.atomic.adapter.ConversationPagerAdapter;
 import indrora.atomic.adapter.MessageListAdapter;
 import indrora.atomic.command.CommandParser;
@@ -43,19 +44,17 @@ import indrora.atomic.model.Server;
 import indrora.atomic.model.ServerInfo;
 import indrora.atomic.model.Settings;
 import indrora.atomic.model.Status;
-import indrora.atomic.model.User;
 import indrora.atomic.receiver.ConversationReceiver;
 import indrora.atomic.receiver.ServerReceiver;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 
-import indrora.atomic.R;
-
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
@@ -66,7 +65,6 @@ import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
 import android.speech.RecognizerIntent;
 import android.support.v4.view.ViewPager;
@@ -79,6 +77,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -282,11 +281,26 @@ public class ConversationActivity extends SherlockActivity implements ServiceCon
         }
 
         input.setInputType(input.getInputType() | setInputTypeFlags);
-
+        
+        //lll.setBackgroundColor(0xFF181818);
+        
+        setupColors();
+        
         // Create a new scrollback history
         scrollback = new Scrollback();
     }
 
+    private void setupColors()
+    {        
+    	EditText input = (EditText) findViewById(R.id.input);
+        LinearLayout lll = (LinearLayout)(input.getParent());
+        lll.setBackgroundColor(0xFF000000 + ( 0xFFFFFF - (0xFFFFFF & _scheme.getBackground() ) ) );
+        
+        input.setBackgroundColor(_scheme.getBackground());
+        input.setTextColor(_scheme.getForeground());
+
+    }
+    
     /**
      * On resume
      */
@@ -380,6 +394,8 @@ public class ConversationActivity extends SherlockActivity implements ServiceCon
             }.start();
         }
 
+        setupColors();
+        
         server.setIsForeground(true);
     }
 
@@ -481,24 +497,120 @@ public class ConversationActivity extends SherlockActivity implements ServiceCon
                 startActivityForResult(new Intent(this, JoinActivity.class), REQUEST_CODE_JOIN);
                 break;
 
+            /* Get users in the channel. */
             case R.id.users:
                 Conversation conversationForUserList = pagerAdapter.getItem(pager.getCurrentItem());
                 if (conversationForUserList.getType() == Conversation.TYPE_CHANNEL) {
-                    Intent intent = new Intent(this, UsersActivity.class);
-                    intent.putExtra(
-                            Extra.USERS,
-                            binder.getService().getConnection(server.getId()).getUsersAsStringArray(
-                                    conversationForUserList.getName()
-                                    )
+                    
+                	final String[] nicks = binder.getService().getConnection(server.getId()).getUsersAsStringArray(
+                            conversationForUserList.getName()
                             );
-                    startActivityForResult(intent, REQUEST_CODE_USERS);
+                	
+                	final Context _tContext = (Context)this;
+                	
+                	AlertDialog.Builder userlistBuilder = new AlertDialog.Builder(_tContext);
+                	
+                	userlistBuilder.setTitle("Users");
+                	
+                	
+                	OnClickListener NickSelectorListener = new OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							final String nick = nicks[which];
+							// This is the OnClickListener to actually do something.
+							
+		                	OnClickListener NickActionListener = new OnClickListener() {
+								
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									
+									/* ********************* */
+									
+			                        String nicknameWithoutPrefix =  removeStatusChar(nick);
+			                        
+			                        final IRCConnection connection = binder.getService().getConnection(server.getId());
+			                        final String conversation = server.getSelectedConversation();
+			                        
+			                        switch (which) {
+			                            case 0:
+			                                final String replyText = nicknameWithoutPrefix + ": ";
+/*			                                handler.post(new Runnable() {
+			                                    @Override
+			                                    public void run() { */
+			                                        EditText input = (EditText) findViewById(R.id.input);
+			                                        input.setText(replyText);
+			                                        input.setSelection(replyText.length());
+			                                        openSoftKeyboard(input);
+			                                        input.requestFocus();
+			                                        
+			                             //       }
+			                               // });
+			                                break;
+			                            case 1:
+			                                Conversation query = server.getConversation(nicknameWithoutPrefix);
+			                                if (query == null) {
+			                                    // Open a query if there's none yet
+			                                    query = new Query(nicknameWithoutPrefix);
+			                                    query.setHistorySize(binder.getService().getSettings().getHistorySize());
+			                                    server.addConversation(query);
+
+			                                    Intent intent = Broadcast.createConversationIntent(
+			                                        Broadcast.CONVERSATION_NEW,
+			                                        server.getId(),
+			                                        nicknameWithoutPrefix
+			                                    );
+			                                    binder.getService().sendBroadcast(intent);
+			                                }
+			                                break;
+			                            case 2:
+			                                connection.op(conversation, nicknameWithoutPrefix);
+			                                break;
+			                            case 3:
+			                                connection.deOp(conversation, nicknameWithoutPrefix);
+			                                break;
+			                            case 4:
+			                                connection.voice(conversation, nicknameWithoutPrefix);
+			                                break;
+			                            case 5:
+			                                connection.deVoice(conversation, nicknameWithoutPrefix);
+			                                break;
+			                            case 6:
+			                                connection.kick(conversation, nicknameWithoutPrefix);
+			                                break;
+			                            case 7:
+			                                connection.ban(conversation, nicknameWithoutPrefix + "!*@*");
+			                                break;
+			                        }
+
+									
+									/* ********************* */
+									
+									
+								}
+							}; // <-- Thats all for the actions listener.
+							
+							AlertDialog.Builder ActionMenuBuilder = new Builder(_tContext);
+							
+							ActionMenuBuilder.setItems(R.array.user_actions, NickActionListener);
+							
+							ActionMenuBuilder.show();
+							
+						}
+					};
+                	
+                	userlistBuilder.setItems(nicks, NickSelectorListener);
+                	userlistBuilder.show();
+                	
+                
                 } else {
                     Toast.makeText(this, getResources().getString(R.string.only_usable_from_channel), Toast.LENGTH_SHORT).show();
                 }
                 break;
+            /* Choose a conversation option. */
             case R.id.chooseConversation:
             	AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            	builder.setTitle("Choose channel");
+            	builder.setTitle("Choose Conversation");
             	String[] conversationsArr = new String[pagerAdapter.getCount()];
             	for( int i=0; i < pagerAdapter.getCount(); i++)
             	{
@@ -702,96 +814,8 @@ public class ConversationActivity extends SherlockActivity implements ServiceCon
             case REQUEST_CODE_JOIN:
                 joinChannelBuffer = data.getExtras().getString("channel");
                 break;
-            case REQUEST_CODE_USERS:
-                Intent intent = new Intent(this, UserActivity.class);
-                intent.putExtra(Extra.USER, data.getStringExtra(Extra.USER));
-                startActivityForResult(intent, REQUEST_CODE_USER);
-                break;
             case REQUEST_CODE_NICK_COMPLETION:
                 insertNickCompletion((EditText) findViewById(R.id.input), data.getExtras().getString(Extra.USER));
-                break;
-            case REQUEST_CODE_USER:
-                final int actionId = data.getExtras().getInt(Extra.ACTION);
-                final String nickname = data.getExtras().getString(Extra.USER);
-                final IRCConnection connection = binder.getService().getConnection(server.getId());
-                final String conversation = server.getSelectedConversation();
-                final Handler handler = new Handler();
-
-                // XXX: Implement me - The action should be handled after onResume()
-                //                     to catch the broadcasts... now we just wait a second
-                // Yes .. that's very ugly - we need some kind of queue that is handled after onResume()
-
-                new Thread() {
-                    @Override
-                    public void run() {
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException e) {
-                            // Do nothing
-                        }
-
-                        String nicknameWithoutPrefix = nickname;
-
-                        while (
-                                nicknameWithoutPrefix.startsWith("@") ||
-                                nicknameWithoutPrefix.startsWith("+") ||
-                                nicknameWithoutPrefix.startsWith(".") ||
-                                nicknameWithoutPrefix.startsWith("%")
-                                ) {
-                            // Strip prefix(es) now
-                            nicknameWithoutPrefix = nicknameWithoutPrefix.substring(1);
-                        }
-
-                        switch (actionId) {
-                            case User.ACTION_REPLY:
-                                final String replyText = nicknameWithoutPrefix + ": ";
-                                handler.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        EditText input = (EditText) findViewById(R.id.input);
-                                        input.setText(replyText);
-                                        input.setSelection(replyText.length());
-                                    }
-                                });
-                                break;
-                            case User.ACTION_QUERY:
-                                Conversation query = server.getConversation(nicknameWithoutPrefix);
-                                if (query == null) {
-                                    // Open a query if there's none yet
-                                    query = new Query(nicknameWithoutPrefix);
-                                    query.setHistorySize(binder.getService().getSettings().getHistorySize());
-                                    server.addConversation(query);
-
-                                    Intent intent = Broadcast.createConversationIntent(
-                                        Broadcast.CONVERSATION_NEW,
-                                        server.getId(),
-                                        nicknameWithoutPrefix
-                                    );
-                                    binder.getService().sendBroadcast(intent);
-                                }
-                                break;
-                            case User.ACTION_OP:
-                                connection.op(conversation, nicknameWithoutPrefix);
-                                break;
-                            case User.ACTION_DEOP:
-                                connection.deOp(conversation, nicknameWithoutPrefix);
-                                break;
-                            case User.ACTION_VOICE:
-                                connection.voice(conversation, nicknameWithoutPrefix);
-                                break;
-                            case User.ACTION_DEVOICE:
-                                connection.deVoice(conversation, nicknameWithoutPrefix);
-                                break;
-                            case User.ACTION_KICK:
-                                connection.kick(conversation, nicknameWithoutPrefix);
-                                break;
-                            case User.ACTION_BAN:
-                                connection.ban(conversation, nicknameWithoutPrefix + "!*@*");
-                                break;
-                        }
-                    }
-                }.start();
-
                 break;
         }
     }
@@ -979,13 +1003,15 @@ public class ConversationActivity extends SherlockActivity implements ServiceCon
      * @param nick
      * @return nick without statuschar
      */
-    private String removeStatusChar(String nick)
+    private static String removeStatusChar(String nick)
     {
-        /* Discard status characters */
-        if (nick.startsWith("@") || nick.startsWith("+")
-                || nick.startsWith("%")) {
-            nick = nick.substring(1);
-        }
+    	
+    	if(nick.startsWith("@") ||
+    			nick.startsWith("%") ||
+    			nick.startsWith("&") ||
+    			nick.startsWith("~") ||
+    			nick.startsWith("+"))
+    		 return nick.substring(1);
         return nick;
     }
 }

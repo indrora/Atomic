@@ -55,4 +55,16 @@
         <item>default</item>
         <item>monokai</item>
     </string-array>
+    
+    <string-array name="user_actions">
+        <item>@string/user_action_reply</item>
+        <item>@string/user_action_query</item>
+        <item>@string/user_action_op</item>
+        <item>@string/user_action_deop</item>
+        <item>@string/user_action_voice</item>
+        <item>@string/user_action_devoice</item>
+        <item>@string/user_action_ban</item>
+        <item>@string/user_action_kick</item>
+    </string-array>
+    
 </resources>
