@@ -930,7 +930,7 @@ public class ConversationActivity extends SherlockActivity implements ServiceCon
 
         // go through users and add matches
         if (users != null) {
-            List<Integer> result = new ArrayList<Integer>();
+            final List<Integer> result = new ArrayList<Integer>();
 
             for (int i = 0; i < users.length; i++) {
                 String nick = removeStatusChar(users[i].toLowerCase());
@@ -943,17 +943,36 @@ public class ConversationActivity extends SherlockActivity implements ServiceCon
                 input.setSelection(cursor, sel_end);
                 insertNickCompletion(input, users[result.get(0).intValue()]);
             } else if (result.size() > 0) {
-                Intent intent  = new Intent(this, UsersActivity.class);
-                String[] extra = new String[result.size()];
+            	// There was an ambiguity. Choose who wins.
+            	// in yaaic, this was 80% handled by an external intent.
+            	// I find that inelegant, since we can handle it here and win on low-resource
+            	// devices (e.g. the Moto Triumph).
+            	// This uses more of the android native resources, being a little less break-y.
+            	final EditText finput = input;
+            	final int fCursor = cursor;
+            	final int fSelEnd = sel_end;
+            	AlertDialog.Builder b = new Builder(this);
+            	b.setTitle("Disambiguation");
+            	
+            	// Get the possible users.
+                final String[] extra = new String[result.size()];
                 int i = 0;
-
                 for (Integer n : result) {
                     extra[i++] = users[n.intValue()];
                 }
+            	// Now, take that list of possible user and let someone choose who wins.
+            	b.setItems(extra, new OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+		                finput.setSelection(fCursor, fSelEnd);
+		                insertNickCompletion((EditText) findViewById(R.id.input), extra[which] );
 
-                input.setSelection(cursor, sel_end);
-                intent.putExtra(Extra.USERS, extra);
-                startActivityForResult(intent, REQUEST_CODE_NICK_COMPLETION);
+						
+					}
+				});
+            	// And show that selection.
+            	b.show();
             }
         }
     }
