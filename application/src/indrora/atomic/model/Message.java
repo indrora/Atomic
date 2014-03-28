@@ -207,9 +207,6 @@ public class Message
 
 	private int translateColor(MessageColor c)
 	{
-		assert (_scheme != null);
-		Log.d("Message", "Assertion PASS: _scheme is not null.");
-		Log.d("Message", "Message color is:"+color);
 		switch(c)
 		{
 		case CHANNEL_EVENT:
