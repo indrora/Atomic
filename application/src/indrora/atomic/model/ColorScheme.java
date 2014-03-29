@@ -1,152 +1,183 @@
 package indrora.atomic.model;
 
 import indrora.atomic.R;
-import indrora.atomic.R.xml;
-
+import indrora.atomic.R.raw;
+import java.io.InputStream;
 import java.lang.reflect.Field;
-
-import org.xmlpull.v1.XmlPullParser;
-
+import java.util.HashMap;
+import java.util.Properties;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-import android.content.res.XmlResourceParser;
 import android.graphics.Color;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.widget.Toast;
-
 
 public class ColorScheme implements OnSharedPreferenceChangeListener {
 
 	static Context _context;
 	static Settings _settings;
-	
-	private int foreground;
-	private int background;
-	
-	/*
-	 * 
-	 * 	public static final int COLOR_USER_EVENT     = 0xDEADBEEF;
-    public static final int COLOR_ERROR          = 0xDEADCAFE;
-    public static final int COLOR_CHANNEL_EVENT  = 0xBEEFBEEF;
-    public static final int COLOR_TOPIC          = 0xCAFEBEEF;
-    public static final int COLOR_SERVER_EVENT   = 0xBEEFCAFE;
 
-	 * 
-	 */
-	
-	
-	
-	private int user_event;
-	private int error;
-	private int channel_event;
-	private int topic;
-	private int server_event;
-	private int highlight;
-	
-	private int url;
-	
-	private int[] colors = new int[16];
-	
-	
-	public ColorScheme(Context ctx)
-	{
+	private static HashMap<String, Integer> colorCache;
+
+	private static Properties themeProps;
+	private static int[] colors = new int[16];
+	private static String lastScheme = "";
+
+	public ColorScheme(Context ctx) {
 		// initialize ourselves.
-		if(ctx != null) {_context = ctx; }
-		
-		if(_settings == null) _settings = new Settings(_context);
-		refreshColorScheme();
-		
-		PreferenceManager.getDefaultSharedPreferences(_context).registerOnSharedPreferenceChangeListener(this);
-	
-	}
-	
-	
-	
-	private synchronized void refreshColorScheme()
-	{
-		
-		
-		// things!
-		int id = 0;
-		String scheme = _settings.getColorScheme();
-		Class<xml> xml_res = R.xml.class;
-		try {
-			Field scheme_field = xml_res.getField("theme_"+scheme);
-			id = scheme_field.getInt(null);
-		} catch (Throwable e) {
-			id = R.xml.theme_default;
+		if (ctx != null) {
+			_context = ctx;
 		}
-		int color_idx = 0;
-		XmlResourceParser xml_parser = _context.getResources().getXml(id);
-		try {
-			
-			while(xml_parser.getEventType() != XmlPullParser.END_DOCUMENT)
-			{
-				if(xml_parser.getEventType() == XmlPullParser.START_TAG)
-				{
-					String TagName = xml_parser.getName();
-					if(TagName.equals("colorscheme")) { /* Do do dooo */}
-					// Foreground and background
-					else if(TagName.equals("foreground")) {foreground = Color.parseColor(xml_parser.nextText());}
-					else if(TagName.equals("background")){background = Color.parseColor(xml_parser.nextText());}
-					// Events that can happen
-				    else if(TagName.equals("userevent")){user_event = Color.parseColor(xml_parser.nextText());}
-				    else if(TagName.equals("channelevent")){channel_event = Color.parseColor(xml_parser.nextText());}
-				    else if(TagName.equals("serverevent")){server_event = Color.parseColor(xml_parser.nextText());}
-				    else if(TagName.equals("error")) {error = Color.parseColor(xml_parser.nextText());}
-				    else if(TagName.equals("topic")){topic = Color.parseColor(xml_parser.nextText());}
-				    else if(TagName.equals("highlight")){highlight = Color.parseColor(xml_parser.nextText());}
-					// URLs.
-				    else if(TagName.equals("url")){url=Color.parseColor(xml_parser.nextText());}
-					// The 16 standard colors.
-					else if(TagName.equals("color")){
-						colors[color_idx] = Color.parseColor(xml_parser.nextText());
-						color_idx++;
-					
-					}
-				}
-				xml_parser.next();
+
+		if (_settings == null) {
+			_settings = new Settings(_context);
+			refreshColorScheme();
+
+		}
+		PreferenceManager.getDefaultSharedPreferences(_context)
+				.registerOnSharedPreferenceChangeListener(this);
+	}
+
+	private synchronized void loadScheme(String scheme) {
+		// Load the given scheme.
+		if(scheme.equals(lastScheme)) return;
+		lastScheme = scheme;
+		
+		synchronized (colors) {
+			// Clean up the properties file
+			themeProps = new Properties();
+			// Load the default theme; This will later be set to whatever theme
+			// we
+			// really want to load later.
+			int id = R.raw.theme_default;
+			// Attempt to load the default...
+			try {
+				themeProps.load(_context.getResources().openRawResource(id));
+			} catch (Throwable e) {
+				Log.e("ColorScheme",
+						"Failure loading default theme: " + e.toString());
 			}
-			xml_parser.close();
-		} catch (Throwable e) {
-			Toast.makeText(_context, "So, a bad thing happened.",Toast.LENGTH_LONG).show();
-			Log.e("ColorScheme", e.toString());
-			e.printStackTrace();
+			// Now, find the real scheme.
+			Class<raw> raw_resources = R.raw.class;
+			try {
+				// get the id of the given scheme.
+				Field scheme_field = raw_resources.getField("theme_" + scheme);
+				id = scheme_field.getInt(null);
+			} catch (Throwable e) {
+				// If the given theme was wrong, use the default theme (which
+				// means
+				// we'll skip over the next bit)
+				Log.e("ColorScheme","Failure loading theme in preferences: "+e.toString());
+				id = R.raw.theme_default;
+			}
+
+			// If we are really loading a theme that isn't the default,
+			if (id != R.raw.theme_default) {
+				// Get the real theme.
+				InputStream themeStream = _context.getResources()
+						.openRawResource(id);
+				try {
+					themeProps.load(themeStream);
+				} catch (Throwable e) {
+					Log.d("ColorScheme", e.toString());
+				}
+			}
+
+			// Now, clean up the colors.
+			String[] colors_tmp = themeProps.getProperty("mirc").split(";");
+
+			colors = new int[colors_tmp.length];
+
+			Log.d("ColorScheme", themeProps.getProperty("mirc"));
+
+			for (int i = 0; i < colors_tmp.length; i++) {
+				int c = Color.parseColor(colors_tmp[i]);
+				colors[i] = c;
+			}
+
+			for (int c : colors) {
+				Log.d("ColorScheme:mircColors", String.format("%x", c));
+			}
+
+			if (colorCache == null) {
+				colorCache = new HashMap<String, Integer>();
+			}
+
+			colorCache.clear();
+			
 		}
 		
 	}
 
-	public int getColor(int idx)
-	{
+	private synchronized static int getColorCached(String name) {
+		if (colorCache.containsKey(name)) {
+			return colorCache.get(name);
+		} else {
+
+			int c = Color.parseColor(themeProps.getProperty(name));
+			colorCache.put(name, c);
+			return c;
+		}
+	}
+
+	private synchronized void refreshColorScheme() {
+
+		String scheme = _settings.getColorScheme();
+		if(scheme.equals(lastScheme)) return;
+		loadScheme(scheme);
+
+	}
+
+	public int getMircColor(int idx) {
 		return colors[idx % colors.length];
 	}
-	
-	public int getForeground()
-	{
-		return foreground;
+
+	public int getForeground() {
+		return getColorCached("foreground");
 	}
-	public int getBackground()
-	{
-		return background;
+
+	public int getBackground() {
+		return getColorCached("background");
 	}
-	
-	public int getError() { return error; }
-	public int getTopic() {return topic;  }
-	public int getChannelEvent() {return channel_event; }
-	public int getUserEvent() { return user_event; }
-	public int getServerEvent() {return server_event; }
-	public int getHighlight() { return highlight; }
-	public int getUrl() {return url; }
-	
+
+	public int getError() {
+		return getColorCached("error");
+	}
+
+	public int getTopic() {
+		return getColorCached("topic");
+	}
+
+	public int getChannelEvent() {
+		return getColorCached("channelevent");
+	}
+
+	public int getUserEvent() {
+		return getColorCached("userevent");
+	}
+
+	public int getServerEvent() {
+		return getColorCached("serverevent");
+	}
+
+	public int getHighlight() {
+		return getColorCached("highlight");
+	}
+
+	public int getUrl() {
+		return getColorCached("url");
+	}
+
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
-		if(key == "colorscheme")
-			refreshColorScheme();
-		
+		if (key.equals("colorscheme")) {
+			synchronized (colors) {
+				
+				refreshColorScheme();
+			}
+		}
 	}
-	
-	
+
 }

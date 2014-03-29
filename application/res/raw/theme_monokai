@@ -1,0 +1,11 @@
+# Monokai color scheme
+foreground:#fff9f8f5
+background:#ff141414
+userevent:#ffa1efe4
+channelevent:#ff66d9ef
+serverevent:#fffd971f
+error:#fff92672
+topic:#ffa6e22e
+highlight:#ffae81ff
+url:#fff4bf75
+mirc:#ff272822;#ff383830;#ff49483e;#ff75715e;#ffa59f85;#fff8f8f2;#fff5f4f1;#fff9f8f5;#fff92672;#fffd971f;#fff4bf75;#ffa6e22e;#ffa1efe4;#ff66d9ef;#ffae81ff;#ffcc6633

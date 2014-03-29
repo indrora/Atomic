@@ -114,13 +114,13 @@ public abstract class MircColors
             int codelength = m.group(1).length()+1;
 
             if (color <= 15 && color >= 0) {
-                ssb.setSpan(new ForegroundColorSpan(_cScheme.getColor(color)), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                ssb.setSpan(new ForegroundColorSpan(_cScheme.getMircColor(color)), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
             if (m.group(2) != null) {
                 color = Integer.parseInt(m.group(2));
                 if (color <= 15 && color >= 0) {
-                    ssb.setSpan(new BackgroundColorSpan(_cScheme.getColor(color)), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    ssb.setSpan(new BackgroundColorSpan(_cScheme.getMircColor(color)), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 }
                 codelength = codelength + m.group(2).length() + 1;
             }

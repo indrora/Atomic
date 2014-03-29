@@ -1,0 +1,11 @@
+# default color scheme
+foreground:#ffffffff
+background:#ff000000
+userevent:#ff458509
+error:#ffcc0000
+channelevent:#ff729fcf
+topic:#ffbe9b01
+serverevent:#ffaaaaaa
+highlight:#ffcc0000
+url:#FF22227F
+mirc:#FFFFFFFF;#FF000000;#FF00007F;#FF009300;#FFFC0000;#FF7F0000;#FF9C009C;#FFFC7F00;#FFFFFF00;#FF00FC00;#FF008080;#FF00FFFF;#FF0000FF;#FFFF00FF;#FF7F7F7F;#FFD2D2D2
