@@ -366,6 +366,14 @@ public class Settings
             Boolean.parseBoolean(resources.getString(R.string.default_ime_extract))
         );
     }
+    
+    public boolean showChannelBar()
+    {
+    	return preferences.getBoolean(
+    			resources.getString(R.string.key_show_channelbar),
+    			Boolean.parseBoolean(resources.getString(R.string.default_show_channelbar))
+    			);
+    }
 
     /**
      * Get the conversation history size.

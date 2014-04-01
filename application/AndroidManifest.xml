@@ -38,6 +38,7 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
         android:label="Atomic"
         android:theme="@style/AppTheme"
         android:allowBackup="true">
+        
         <activity
             android:name="indrora.atomic.activity.ServersActivity"
             android:label="@string/app_name"
@@ -79,7 +80,9 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
         </activity>
         <activity
             android:name="indrora.atomic.activity.SettingsActivity"
-            android:label="@string/settings_label" >
+            android:label="@string/settings_label" 
+            android:theme="@android:style/Theme.Dialog">
+            
         </activity>
         <activity
             android:name="indrora.atomic.activity.JoinActivity"

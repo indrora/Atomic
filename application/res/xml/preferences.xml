@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 
+<!--
 Yaaic - Yet Another Android IRC Client
 
 Copyright 2009-2013 Sebastian Kaspari
@@ -20,167 +20,190 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
     <PreferenceScreen
-        android:title="@string/settings_connection">
+        android:icon="@drawable/ic_settings_network"
+        android:title="@string/settings_connection" >
         <CheckBoxPreference
-            android:title="@string/settings_reconnect_title"
-            android:summary="@string/settings_reconnect_desc"
+            android:defaultValue="@string/default_reconnect"
             android:key="@string/key_reconnect"
-            android:defaultValue="@string/default_reconnect" />
+            android:summary="@string/settings_reconnect_desc"
+            android:title="@string/settings_reconnect_title" />
+
         <ListPreference
-            android:title="@string/settings_reconnect_interval_title"
-            android:summary="@string/settings_reconnect_interval_desc"
-            android:dialogTitle="@string/settings_reconnect_interval_dialog_title"
+            android:defaultValue="@string/default_reconnect_interval"
             android:dependency="@string/key_reconnect"
+            android:dialogTitle="@string/settings_reconnect_interval_dialog_title"
             android:entries="@array/reconnect_interval_labels"
             android:entryValues="@array/reconnect_interval_values"
             android:key="@string/key_reconnect_interval"
-            android:defaultValue="@string/default_reconnect_interval" />
+            android:summary="@string/settings_reconnect_interval_desc"
+            android:title="@string/settings_reconnect_interval_title" />
+
         <CheckBoxPreference
-            android:title="@string/settings_ignore_motd_title"
-            android:summary="@string/settings_ignore_motd_desc"
+            android:defaultValue="@string/default_ignore_motd"
             android:key="@string/key_ignore_motd"
-            android:defaultValue="@string/default_ignore_motd" />
+            android:summary="@string/settings_ignore_motd_desc"
+            android:title="@string/settings_ignore_motd_title" />
     </PreferenceScreen>
     <PreferenceScreen
-        android:title="@string/settings_chat"
-        >
-        <ListPreference
-            android:title="@string/settings_fontsize_title"
-            android:summary="@string/settings_fontsize_desc"
-            android:dialogTitle="@string/settings_fontsize_dialog_title"
-            android:entries="@array/fontsize_labels"
-            android:entryValues="@array/fontsize_values"
-            android:key="@string/key_fontsize"
-            android:defaultValue="@string/default_fontsize" />
-        <ListPreference
-            android:title="Color scheme"
-            android:summary="May not look right until restart"
-            android:dialogTitle="Choose color scheme"
-            android:entries="@array/theme_labels"
-            android:entryValues="@array/theme_values"
-            android:defaultValue="@string/default_colorscheme"
-            android:key="@string/key_colorscheme"
-            />
-        <CheckBoxPreference
-            android:title="@string/settings_icons_title"
-            android:summary="@string/settings_icons_desc"
-            android:key="@string/key_show_icons"
-            android:defaultValue="@string/default_show_icons" />
-        <CheckBoxPreference
-            android:title="@string/settings_colors_title"
-            android:summary="@string/settings_colors_desc"
-            android:key="@string/key_show_colors"
-            android:defaultValue="@string/default_show_colors"/>
-        <CheckBoxPreference
-            android:title="@string/settings_colors_nick_title"
-            android:key="@string/key_show_colors_nick"
-            android:summary="@string/settings_colors_nick_desc"
-            android:defaultValue="@string/default_show_colors_nick"/>
-        <CheckBoxPreference
-            android:title="@string/settings_timestamp_title"
-            android:summary="@string/settings_timestamp_desc"
-            android:key="@string/key_show_timestamp"
-            android:defaultValue="@string/default_show_timestamp" />
-        <CheckBoxPreference
-            android:title="@string/settings_24h_title"
-            android:summary="@string/settings_24h_desc"
-            android:key="@string/key_24h_format"
-            android:defaultValue="@string/default_24h_format"
-            android:dependency="@string/key_show_timestamp" />
-        <CheckBoxPreference
-            android:title="@string/settings_include_seconds_title"
-            android:summary="@string/settings_include_seconds_desc"
-            android:key="@string/key_include_seconds"
-            android:defaultValue="@string/default_include_seconds"
-            android:dependency="@string/key_show_timestamp" />
-        <CheckBoxPreference
-            android:title="@string/settings_joinpartquit_title"
-            android:summary="@string/settings_joinpartquit_desc"
-            android:key="@string/key_show_joinpartquit"
-            android:defaultValue="@string/default_show_joinpartquit" />
-        <CheckBoxPreference
-            android:title="@string/settings_noticeserverwindow_title"
-            android:summary="@string/settings_noticeserverwindow_desc"
-            android:key="@string/key_notice_server_window"
-            android:defaultValue="@string/default_notice_server_window" />
-        <CheckBoxPreference
-            android:title="@string/settings_mirc_colors_title"
-            android:summary="@string/settings_mirc_colors_desc"
-            android:key="@string/key_mirc_colors"
-            android:defaultValue="@string/default_mirc_colors" />
-        <CheckBoxPreference
-            android:title="@string/settings_graphical_smilies_title"
-            android:summary="@string/settings_graphical_smilies_desc"
-            android:key="@string/key_graphical_smilies"
-            android:defaultValue="@string/default_graphical_smilies" />
-        <CheckBoxPreference
-            android:title="@string/settings_autocorrect_text_title"
-            android:summary="@string/settings_autocorrect_text_desc"
-            android:key="@string/key_autocorrect_text"
-            android:defaultValue="@string/default_autocorrect_text" />
-        <CheckBoxPreference
-            android:title="@string/settings_autocap_sentences_title"
-            android:summary="@string/settings_autocap_sentences_desc"
-            android:key="@string/key_autocap_sentences"
-            android:defaultValue="@string/default_autocap_sentences" />
-        <CheckBoxPreference
-            android:title="@string/settings_ime_extract_title"
-            android:summary="@string/settings_ime_extract_desc"
-            android:key="@string/key_ime_extract"
-            android:defaultValue="@string/default_ime_extract" />
-        <EditTextPreference
-            android:title="@string/settings_history_size_title"
-            android:summary="@string/settings_history_size_desc"
-            android:key="@string/key_history_size"
-            android:defaultValue="@string/default_history_size"
-            android:inputType="number" />
+        android:icon="@drawable/ic_settings_interface"
+        android:title="@string/settings_chat" >
+        <PreferenceCategory android:title="@string/settings_chat_colors" >
+            <ListPreference
+                android:defaultValue="@string/default_colorscheme"
+                android:dialogTitle="Choose color scheme"
+                android:entries="@array/theme_labels"
+                android:entryValues="@array/theme_values"
+                android:key="@string/key_colorscheme"
+                android:summary="May not look right until restart"
+                android:title="Color scheme" />
+
+            <CheckBoxPreference
+                android:defaultValue="@string/default_mirc_colors"
+                android:key="@string/key_mirc_colors"
+                android:summary="@string/settings_mirc_colors_desc"
+                android:title="@string/settings_mirc_colors_title" />
+            <CheckBoxPreference
+                android:defaultValue="@string/default_show_colors"
+                android:key="@string/key_show_colors"
+                android:summary="@string/settings_colors_desc"
+                android:title="@string/settings_colors_title" />
+            <CheckBoxPreference
+                android:defaultValue="@string/default_show_colors_nick"
+                android:key="@string/key_show_colors_nick"
+                android:summary="@string/settings_colors_nick_desc"
+                android:title="@string/settings_colors_nick_title" />
+        </PreferenceCategory>
+        <PreferenceCategory android:title="@string/settings_chat_visibility" >
+            <CheckBoxPreference
+                android:defaultValue="@string/default_show_channelbar"
+                android:key="@string/key_show_channelbar"
+                android:summary="@string/settings_show_channelbar_desc"
+                android:title="@string/settings_show_channelbar_title" />
+            <CheckBoxPreference
+                android:defaultValue="@string/default_show_icons"
+                android:key="@string/key_show_icons"
+                android:summary="@string/settings_icons_desc"
+                android:title="@string/settings_icons_title" />
+            <CheckBoxPreference
+                android:defaultValue="@string/default_graphical_smilies"
+                android:key="@string/key_graphical_smilies"
+                android:summary="@string/settings_graphical_smilies_desc"
+                android:title="@string/settings_graphical_smilies_title" />
+            <CheckBoxPreference
+                android:defaultValue="@string/default_show_timestamp"
+                android:key="@string/key_show_timestamp"
+                android:summary="@string/settings_timestamp_desc"
+                android:title="@string/settings_timestamp_title" />
+            <CheckBoxPreference
+                android:defaultValue="@string/default_24h_format"
+                android:dependency="@string/key_show_timestamp"
+                android:key="@string/key_24h_format"
+                android:summary="@string/settings_24h_desc"
+                android:title="@string/settings_24h_title" />
+            <CheckBoxPreference
+                android:defaultValue="@string/default_include_seconds"
+                android:dependency="@string/key_show_timestamp"
+                android:key="@string/key_include_seconds"
+                android:summary="@string/settings_include_seconds_desc"
+                android:title="@string/settings_include_seconds_title" />
+            <CheckBoxPreference
+                android:defaultValue="@string/default_show_joinpartquit"
+                android:key="@string/key_show_joinpartquit"
+                android:summary="@string/settings_joinpartquit_desc"
+                android:title="@string/settings_joinpartquit_title" />
+        </PreferenceCategory>
+        <PreferenceCategory android:title="@string/settings_chat_misc" >
+            <ListPreference
+                android:defaultValue="@string/default_fontsize"
+                android:dialogTitle="@string/settings_fontsize_dialog_title"
+                android:entries="@array/fontsize_labels"
+                android:entryValues="@array/fontsize_values"
+                android:key="@string/key_fontsize"
+                android:summary="@string/settings_fontsize_desc"
+                android:title="@string/settings_fontsize_title" />
+
+            <CheckBoxPreference
+                android:defaultValue="@string/default_notice_server_window"
+                android:key="@string/key_notice_server_window"
+                android:summary="@string/settings_noticeserverwindow_desc"
+                android:title="@string/settings_noticeserverwindow_title" />
+            <CheckBoxPreference
+                android:defaultValue="@string/default_autocorrect_text"
+                android:key="@string/key_autocorrect_text"
+                android:summary="@string/settings_autocorrect_text_desc"
+                android:title="@string/settings_autocorrect_text_title" />
+            <CheckBoxPreference
+                android:defaultValue="@string/default_autocap_sentences"
+                android:key="@string/key_autocap_sentences"
+                android:summary="@string/settings_autocap_sentences_desc"
+                android:title="@string/settings_autocap_sentences_title" />
+            <CheckBoxPreference
+                android:defaultValue="@string/default_ime_extract"
+                android:key="@string/key_ime_extract"
+                android:summary="@string/settings_ime_extract_desc"
+                android:title="@string/settings_ime_extract_title" />
+
+            <EditTextPreference
+                android:defaultValue="@string/default_history_size"
+                android:inputType="number"
+                android:key="@string/key_history_size"
+                android:summary="@string/settings_history_size_desc"
+                android:title="@string/settings_history_size_title" />
+        </PreferenceCategory>
     </PreferenceScreen>
     <PreferenceScreen
-        android:title="@string/settings_highlight">
+        android:icon="@drawable/ic_settings_highlight"
+        android:title="@string/settings_highlight" >
         <CheckBoxPreference
-            android:title="@string/settings_sound_highlight_title"
-            android:summary="@string/settings_sound_highlight_desc"
+            android:defaultValue="@string/default_sound_highlight"
             android:key="@string/key_sound_highlight"
-            android:defaultValue="@string/default_sound_highlight" />
+            android:summary="@string/settings_sound_highlight_desc"
+            android:title="@string/settings_sound_highlight_title" />
+
         <RingtonePreference
-            android:title="@string/settings_sound_tone_title"
-            android:summary="@string/settings_sound_tone_desc"
+            android:defaultValue="content://settings/system/notification_sound"
+            android:dependency="@string/key_sound_highlight"
             android:key="@string/key_sound_ring"
             android:ringtoneType="notification"
-            android:defaultValue="content://settings/system/notification_sound"
-            android:dependency="@string/key_sound_highlight"/>
+            android:summary="@string/settings_sound_tone_desc"
+            android:title="@string/settings_sound_tone_title" />
+
         <CheckBoxPreference
-            android:title="@string/settings_vibrate_highlight_title"
-            android:summary="@string/settings_vibrate_highlight_desc"
+            android:defaultValue="@string/default_vibrate_highlight"
             android:key="@string/key_vibrate_highlight"
-            android:defaultValue="@string/default_vibrate_highlight" />
+            android:summary="@string/settings_vibrate_highlight_desc"
+            android:title="@string/settings_vibrate_highlight_title" />
         <CheckBoxPreference
-            android:title="@string/settings_led_highlight_title"
-            android:summary="@string/settings_led_highlight_desc"
+            android:defaultValue="@string/default_led_highlight"
             android:key="@string/key_led_highlight"
-            android:defaultValue="@string/default_led_highlight" />
+            android:summary="@string/settings_led_highlight_desc"
+            android:title="@string/settings_led_highlight_title" />
     </PreferenceScreen>
     <PreferenceScreen
-        android:title="@string/settings_misc">
+        android:icon="@drawable/ic_settings_misc"
+        android:title="@string/settings_misc" >
         <CheckBoxPreference
-            android:title="@string/settings_voice_recognition_title"
-            android:summary="@string/settings_voice_recognition_desc"
+            android:defaultValue="@string/default_voice_recognition"
             android:key="@string/key_voice_recognition"
-            android:defaultValue="@string/default_voice_recognition" />
+            android:summary="@string/settings_voice_recognition_desc"
+            android:title="@string/settings_voice_recognition_title" />
+
         <EditTextPreference
-            android:title="@string/settings_quitmessage_title"
-            android:summary="@string/settings_quitmessage_desc"
-            android:key="@string/key_quitmessage"
             android:defaultValue="@string/default_quitmessage"
+            android:dialogMessage="@string/settings_quitmessage_dialog_desc"
             android:dialogTitle="@string/settings_quitmessage_dialog_title"
-            android:dialogMessage="@string/settings_quitmessage_dialog_desc" />
+            android:key="@string/key_quitmessage"
+            android:summary="@string/settings_quitmessage_desc"
+            android:title="@string/settings_quitmessage_title" />
+
         <CheckBoxPreference
-            android:title="@string/settings_debug_traffic_title"
-            android:summary="@string/settings_debug_traffic_desc"
+            android:defaultValue="@string/default_debug_traffic"
             android:key="@string/key_debug_traffic"
-            android:defaultValue="@string/default_debug_traffic" />
+            android:summary="@string/settings_debug_traffic_desc"
+            android:title="@string/settings_debug_traffic_title" />
     </PreferenceScreen>
+
 </PreferenceScreen>

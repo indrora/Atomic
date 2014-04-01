@@ -54,6 +54,8 @@ public class ConversationIndicator extends FrameLayout implements OnPageChangeLi
 	private ConversationTitlePageIndicator titleIndicator;
 	private ConversationStateProvider stateProvider;
 
+	private OnPageChangeListener pageChangeListener;
+	
 	/**
 	 * Create a new {@link ConversationIndicator} instance for the given context.
 	 *
@@ -65,6 +67,8 @@ public class ConversationIndicator extends FrameLayout implements OnPageChangeLi
 		init();
 	}
 
+	
+	
 	/**
 	 * Create a new {@link ConversationIndicator} instance for the given context
 	 * and attribute set.
@@ -224,12 +228,25 @@ public class ConversationIndicator extends FrameLayout implements OnPageChangeLi
     }
 
     /**
+     * Set the OnPageChangeListener that resides inside (which will pass events down)
+     * @param listener The listener to pass events down to.
+     */
+    public void setOnPageChangeListener(OnPageChangeListener listener)
+    {
+    	pageChangeListener = listener;
+    }
+    
+    /**
      * On page selected: Update states of the indicators.
      */
     @Override
     public void onPageSelected(int page)
     {
         updateStateColors();
+        if(pageChangeListener != null)
+        {
+        	pageChangeListener.onPageSelected(page);
+        }
     }
 
     /**
@@ -289,7 +306,10 @@ public class ConversationIndicator extends FrameLayout implements OnPageChangeLi
     @Override
     public void onPageScrollStateChanged(int page)
     {
-        // Not used.
+        if(pageChangeListener != null)
+        {
+        	pageChangeListener.onPageScrollStateChanged(page);
+        }
     }
 
     /**
@@ -298,6 +318,9 @@ public class ConversationIndicator extends FrameLayout implements OnPageChangeLi
     @Override
     public void onPageScrolled(int arg0, float arg1, int arg2)
     {
-        // Not used.
+        if(pageChangeListener != null)
+        {
+        	pageChangeListener.onPageScrolled(arg0, arg1, arg2);
+        }
     }
 }

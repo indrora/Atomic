@@ -188,7 +188,7 @@
     <string name="settings_ignore_motd_title">Ignore MOTD</string>
     <string name="settings_ignore_motd_desc">Don\'t show the automatic ‘Message of the Day’ sent by the server</string>
 
-    <string name="settings_chat">Chat</string>
+    <string name="settings_chat">Interface</string>
     <string name="settings_icons_title">Show icons</string>
     <string name="settings_icons_desc">Show icons to highlight special events</string>
     <string name="settings_colors_title">Show colors</string>
@@ -201,7 +201,10 @@
     <string name="settings_24h_desc">Use 24 hour format for timestamps</string>
     <string name="settings_include_seconds_title">Show seconds</string>
     <string name="settings_include_seconds_desc">Include seconds in timestamps</string>
-
+    <string name="settings_chat_visibility">Visibility</string>
+	<string name="settings_chat_colors">Colors</string>
+	<string name="settings_chat_misc">Misc</string>
+	
     <string name="settings_highlight">Highlight</string>
     <string name="settings_sound_highlight_title">Play sound on highlight</string>
     <string name="settings_sound_highlight_desc">Play sound when your nick is mentioned</string>
@@ -241,6 +244,12 @@
     <string name="settings_debug_traffic_title">Debug IRC traffic</string>
     <string name="settings_debug_traffic_desc">Log IRC traffic to the verbose log. This may be a security risk!</string>
 
+    <string name="settings_show_channelbar_title">Show channelbar</string>
+    <string name="settings_show_channelbar_desc">Display channel name and unread status in conversation view</string>
+    
+    <string name="subtitle_server">Server window</string>
+    <string name="subtitle_query">Query with %1$s</string>
+    
     <string name="minute_1">1 minute</string>
     <string name="minutes_5">5 minutes</string>
     <string name="minutes_10">10 minutes</string>
