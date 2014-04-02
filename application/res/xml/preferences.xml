@@ -23,7 +23,6 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <PreferenceScreen
-        android:icon="@drawable/ic_settings_network"
         android:title="@string/settings_connection" >
         <CheckBoxPreference
             android:defaultValue="@string/default_reconnect"
@@ -48,7 +47,6 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
             android:title="@string/settings_ignore_motd_title" />
     </PreferenceScreen>
     <PreferenceScreen
-        android:icon="@drawable/ic_settings_interface"
         android:title="@string/settings_chat" >
         <PreferenceCategory android:title="@string/settings_chat_colors" >
             <ListPreference
@@ -155,7 +153,6 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
         </PreferenceCategory>
     </PreferenceScreen>
     <PreferenceScreen
-        android:icon="@drawable/ic_settings_highlight"
         android:title="@string/settings_highlight" >
         <CheckBoxPreference
             android:defaultValue="@string/default_sound_highlight"
@@ -183,7 +180,6 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
             android:title="@string/settings_led_highlight_title" />
     </PreferenceScreen>
     <PreferenceScreen
-        android:icon="@drawable/ic_settings_misc"
         android:title="@string/settings_misc" >
         <CheckBoxPreference
             android:defaultValue="@string/default_voice_recognition"
