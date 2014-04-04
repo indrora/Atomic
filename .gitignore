@@ -1,16 +1,17 @@
 # Git Ignore for Yaaic
 
 # Compiled and generated files
-bin/
-gen/
-R.java
+**/bin/
+**/gen/
+**/R.java
+
+# Ignore the key file.
+
+application/keystore
 
 # Build files
-local.properties
+# local.properties
 ant.properties
-build.xml
+# build.xml
 proguard.cfg
-
-# Maven
-target/
 

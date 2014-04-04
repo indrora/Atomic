@@ -1,3 +1,18 @@
+-------------------------------------------------------------------------------
+Atomic 1.1 - 2014-04-4 - AKA "Hydrogen"
+-------------------------------------------------------------------------------
+
+Atomic is a fork of yaaic. We've changed some things:
+
+* Color schemes!
+* compactness!
+* Auto-complete-y
+
+I cleaned up the translations, mostly because I need to go and change things
+and make sure the translations are correct.
+
+Awesome.
+
 --------------------------------------------------------------------------------
 Yaaic 1.0 - 2012-07-29 - 89 commits, 685 files changed, 7 authors
 --------------------------------------------------------------------------------

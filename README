@@ -35,6 +35,20 @@ Current/future features/changes:
 * Selecting a message copies it to the clipboard
 * Option to not scroll when a new message appears in a channel
 
+-------------------------------------------------------------------
+
+Building Atomic:
+
+You will need to generate a keystore for Atomic:
+
+     keytool -genkey -keystore application/keystore -alias <alias>
+
+and go and add the following to application/ant.properties
+
+    key.store=keystore
+    key.alias=<alias>
+    key.store.password=<password>
+    key.alias.password=<password>
 
 --------------------------------------------------------------------
 
