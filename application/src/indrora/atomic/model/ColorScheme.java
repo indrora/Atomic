@@ -18,7 +18,7 @@ public class ColorScheme implements OnSharedPreferenceChangeListener {
 	static Context _context;
 	static Settings _settings;
 
-	private static HashMap<String, Integer> colorCache;
+	private static HashMap<String, Integer> scheme_colors;
 
 	private static Properties themeProps;
 	private static int[] colors = new int[16];
@@ -100,25 +100,23 @@ public class ColorScheme implements OnSharedPreferenceChangeListener {
 				Log.d("ColorScheme:mircColors", String.format("%x", c));
 			}
 
-			if (colorCache == null) {
-				colorCache = new HashMap<String, Integer>();
+			if (scheme_colors == null) {
+				scheme_colors = new HashMap<String, Integer>();
 			}
 
-			colorCache.clear();
+			scheme_colors.clear();
 			
 		}
 		
 	}
 
 	private synchronized static int getColorCached(String name) {
-		if (colorCache.containsKey(name)) {
-			return colorCache.get(name);
-		} else {
-
-			int c = Color.parseColor(themeProps.getProperty(name));
-			colorCache.put(name, c);
-			return c;
+		if(!scheme_colors.containsKey(name))
+		{
+			scheme_colors.put(name, Color.parseColor(themeProps.getProperty(name)));
 		}
+		int c = scheme_colors.get(name);
+		return c;
 	}
 
 	private synchronized void refreshColorScheme() {
