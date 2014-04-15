@@ -257,10 +257,11 @@ public class Message
         }
 
         // We don't want the color to be the background color.
+        
         int tmpColor = _scheme.getMircColor(color % 16);
         while(tmpColor == _scheme.getBackground())
         {
-        	tmpColor = _scheme.getMircColor(color*color % 16);
+        	tmpColor = _scheme.getMircColor(color++ % 16);
         }
         
         return tmpColor; //colors[color];
