@@ -746,7 +746,6 @@ public class ConversationActivity extends SherlockActivity implements
 	 * On new conversation
 	 */
 	@Override
-	public void onNewConversation(String target) {
 	public synchronized void onNewConversation(String target) {
 		createNewConversation(target);
 		Log.d("ConversationActivity", "new conversation:"+target);
