@@ -37,6 +37,7 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
         android:icon="@drawable/ic_launcher"
         android:label="Atomic"
         android:theme="@style/AppTheme"
+        android:name="indrora.atomic.App"
         android:allowBackup="true">
         
         <activity
@@ -112,10 +113,6 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
         </activity>
         <activity
             android:name="indrora.atomic.activity.UserActivity"
-            android:theme="@android:style/Theme.Dialog" >
-        </activity>
-        <activity
-            android:name="indrora.yak.actiindrora.yak.irc.IRCServicetionActivity"
             android:theme="@android:style/Theme.Dialog" >
         </activity>
 
