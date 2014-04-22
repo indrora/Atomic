@@ -510,7 +510,8 @@ public class IRCService extends Service
                         message = new Message(getString(R.string.irc_login_error, server.getHost(), server.getPort()));
                         server.setMayReconnect(false);
                     } else {
-                        message = new Message(getString(R.string.could_not_connect, server.getHost(), server.getPort()));
+                        message = new Message(getString(R.string.could_not_connect, server.getHost(), server.getPort()) +":\n"+e.getMessage());
+                        
                         if (settings.isReconnectEnabled()) {
                             Intent rIntent = new Intent(Broadcast.SERVER_RECONNECT + serverId);
                             PendingIntent pendingRIntent = PendingIntent.getBroadcast(service, 0, rIntent, 0);
