@@ -878,6 +878,8 @@ public class ConversationActivity extends SherlockActivity implements
 	/**
 	 * Send a message in this conversation
 	 * 
+	 * BUG: This does not handle multiple lines.
+	 * 
 	 * @param text
 	 *            The text of the message
 	 */
