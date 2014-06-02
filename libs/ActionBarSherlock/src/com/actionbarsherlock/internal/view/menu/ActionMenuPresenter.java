@@ -20,6 +20,7 @@ import static com.actionbarsherlock.internal.ResourcesCompat.getResources_getInt
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -118,12 +119,16 @@ public class ActionMenuPresenter extends BaseMenuPresenter
     }
 
     public static boolean reserveOverflow(Context context) {
-    	return true;
+    	// For style sake, we'll always show it on Gingerbread and Honeycomb. 
+    	// This (mostly) fixes things looking ugly as hell on Gingerbread.
+    	if(Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) return true;
+    	else return !HasPermanentMenuKey.get(context) ;
     }
 
     private static class HasPermanentMenuKey {
-        public static boolean get(Context context) {
-            return false;
+        @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+		public static boolean get(Context context) {
+            return ViewConfiguration.get(context).hasPermanentMenuKey();
         }
     }
 
