@@ -875,17 +875,48 @@ public class ConversationActivity extends SherlockActivity implements
 		}
 	}
 
+	private static final int MAX_MESSAGE_LENGTH = 200;
+	
 	/**
 	 * Send a message in this conversation
-	 * 
-	 * BUG: This does not handle multiple lines.
-	 * 
 	 * @param text
 	 *            The text of the message
 	 */
 	private void sendMessage(String text) {
 		if (text.equals("")) {
 			// ignore empty messages
+			return;
+		}
+		// If we've gotten a multiline message,
+		else if(text.contains("\n"))
+		{
+			// Split the multiline message into chunks
+			String lines[] = text.split("\\r?\\n");
+			// And send each line at at time.
+			for(String line : lines)
+			{
+				sendMessage(line);
+			}
+			// Since we don't want to send things twice, return.
+			return;
+		}
+		// The line handed to us is > 200 chars (an arbitrary limit)
+		else if(text.length() > MAX_MESSAGE_LENGTH+2) // arbitrary limit.
+		{
+			for(int idx = 0; idx < text.length(); idx += MAX_MESSAGE_LENGTH)
+			{
+				
+				String real_line = text.substring(idx, Math.min(idx+MAX_MESSAGE_LENGTH, text.length()));
+				if(idx == 0 || idx+MAX_MESSAGE_LENGTH < text.length() )
+				{
+					real_line += "\u2026";
+				}
+				if(idx > 0  )
+				{
+					real_line = "\u2026" + real_line;
+				}
+				sendMessage(real_line);
+			}
 			return;
 		}
 
