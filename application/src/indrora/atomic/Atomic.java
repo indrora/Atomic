@@ -28,7 +28,6 @@ import java.util.HashMap;
 import java.util.Set;
 
 
-import android.app.Application;
 import android.content.Context;
 
 /**
