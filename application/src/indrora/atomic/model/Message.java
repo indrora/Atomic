@@ -326,9 +326,12 @@ public class Message
                 ForegroundColorSpan[] spans = canvas.getSpans(0, canvas.length(), ForegroundColorSpan.class);
                 int start = 0;
 
-                for (int i = 0; i < spans.length; i++) {
-                    canvas.setSpan(new ForegroundColorSpan( translateColor(color)), start, canvas.getSpanStart(spans[i]), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    start = canvas.getSpanEnd(spans[i]);
+                for (ForegroundColorSpan span : spans) {
+                    if (start > canvas.getSpanStart(span)) {
+                        start = canvas.getSpanStart(span);
+                    }
+                    canvas.setSpan(new ForegroundColorSpan( translateColor(color)), start, canvas.getSpanStart(span), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    start = canvas.getSpanEnd(span);
                 }
 
                 canvas.setSpan(new ForegroundColorSpan(translateColor(color)), start, canvas.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
