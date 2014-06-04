@@ -434,12 +434,15 @@ public class ConversationActivity extends SherlockActivity implements
 	public void onPause() {
 		super.onPause();
 
+		// Mark the current visible line.
+		pagerAdapter.getItemAdapter(pager.getCurrentItem()).setMarker();
+		
 		server.setIsForeground(false);
 
 		if (binder != null && binder.getService() != null) {
 			binder.getService().checkServiceStatus();
 		}
-
+		
 		unbindService(this);
 		unregisterReceiver(channelReceiver);
 		unregisterReceiver(serverReceiver);
@@ -1188,10 +1191,17 @@ public class ConversationActivity extends SherlockActivity implements
 
 	@Override
 	public void onPageScrolled(int arg0, float arg1, int arg2) {
+		//oldPage = 0;
 	}
 
+	int oldPage = 0;
+	
 	@Override
 	public void onPageSelected(int arg0) {
+		// Set that we aren't visible anymore.
+		if(oldPage != 0 ) pagerAdapter.getItemAdapter(oldPage).setMarker();
+		//pagerAdapter.getItemAdapter(arg0).setMarker();
+		oldPage = arg0;
 		if (settings.showChannelBar() == false) {
 			showSubtitle();
 		}

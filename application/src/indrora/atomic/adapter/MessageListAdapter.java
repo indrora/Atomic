@@ -20,16 +20,17 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
  */
 package indrora.atomic.adapter;
 
+import indrora.atomic.model.ColorScheme;
 import indrora.atomic.model.Conversation;
 import indrora.atomic.model.Message;
 
 import java.util.LinkedList;
 
-
 import android.content.Context;
 import android.database.DataSetObserver;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
@@ -44,6 +45,11 @@ public class MessageListAdapter extends BaseAdapter
     private final Context context;
     private int historySize;
 
+	private Message _lastRead = new Message(" ~~ Read up to here ~~ ");
+
+    
+    private ColorScheme _colorScheme;
+    
     /**
      * Create a new MessageAdapter
      * 
@@ -53,13 +59,17 @@ public class MessageListAdapter extends BaseAdapter
     public MessageListAdapter(Conversation conversation, Context context)
     {
         LinkedList<TextView> messages = new LinkedList<TextView>();
-
+        
+        
+        
+        /*
         // Render channel name as first message in channel
         if (conversation.getType() != Conversation.TYPE_SERVER) {
             Message header = new Message(conversation.getName());
             header.setColor(Message.MessageColor.ERROR);
             messages.add(header.renderTextView(context));
-        }
+        } */
+        
 
         // Optimization - cache field lookups
         LinkedList<Message> mHistory =  conversation.getHistory();
@@ -76,8 +86,24 @@ public class MessageListAdapter extends BaseAdapter
         this.messages = messages;
         this.context = context;
         historySize = conversation.getHistorySize();
+        tv = new TextView(context);
+        tv.setText("--");
+        tv.setHeight(1);
+        _colorScheme = new ColorScheme(context);
+        tv.setBackgroundColor(_colorScheme.getServerEvent());
     }
+    
+    private TextView tv;
 
+    public void setMarker()
+    {
+    	if(messages.contains(tv))
+    		messages.remove(tv);
+    	messages.add(tv);
+    	
+    	notifyDataSetChanged();
+    }
+    
     /**
      * Add a message to the list
      * 
