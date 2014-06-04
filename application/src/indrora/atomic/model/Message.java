@@ -59,15 +59,6 @@ public class Message
 		DEFAULT,
 		NO_COLOR
 	}
-	/*
-    public static final int COLOR_USER_EVENT     = 0xDEADBEEF;
-    public static final int COLOR_ERROR          = 0xFACEBEEF;
-    public static final int COLOR_CHANNEL_EVENT  = 0xBEEFBEEF;
-    public static final int COLOR_TOPIC          = 0xCAFEBEEF;
-    public static final int COLOR_SERVER_EVENT   = 0xBEEFCAFE;
-    public static final int COLOR_HIGHLIGHT      = 0xBEEFBABE;
-    public static final int COLOR_DEFAULT        = 0xFEEDBEEF;
-    */
 	
     ColorScheme _scheme;
 
@@ -76,27 +67,6 @@ public class Message
 
     /* join, part or quit */
     public static final int TYPE_MISC    = 1;
-
-    /* Some are light versions because dark colors hardly readable on
-     * Yaaic's dark background */
-    public static final int[] colors = {
-        0xFFffffff, // White
-        0xFFffff00, // Yellow
-        0xFFff00ff, // Fuchsia
-        0xFFff0000, // Red
-        0xFFc0c0c0, // Silver
-        0xFF808080, // Gray
-        0xFF808000, // Olive
-        0xFFC040C0, // Light Purple
-        0xFFC04040, // Light Maroon
-        0xFF00ffff, // Agua
-        0xFF80ff80, // Light Lime
-        0xFF008080, // Teal
-        0xFF008000, // Green
-        0xFF8484FF, // Light Blue
-        0xFF6060D0, // Light Navy
-        0xFF000000, // Black
-    };
 
     public static final int NO_ICON  = -1;
     public static final int NO_TYPE  = -1;
@@ -399,11 +369,6 @@ public class Message
         canvas.setTypeface(Typeface.MONOSPACE);
         canvas.setTextColor(_scheme.getForeground());
         
-        
-        assert(_scheme.getForeground() != _scheme.getBackground());
-        
-        //canvas.setBackgroundColor(_scheme.getBackground());
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             setupViewForHoneycombAndLater(canvas);
         }

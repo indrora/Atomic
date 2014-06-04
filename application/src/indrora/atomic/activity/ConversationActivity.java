@@ -672,11 +672,6 @@ public class ConversationActivity extends SherlockActivity implements
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					// Change the page here.
-					Toast.makeText(
-							getBaseContext(),
-							String.format("Got %d, which is %s", which,
-									pagerAdapter.getPageTitle(which)),
-							Toast.LENGTH_LONG).show();
 					pager.setCurrentItem(which);
 				}
 			};
@@ -744,7 +739,7 @@ public class ConversationActivity extends SherlockActivity implements
 	@Override
 	public synchronized void onNewConversation(String target) {
 		createNewConversation(target);
-		Log.d("ConversationActivity", "new conversation:"+target);
+		//Log.d("ConversationActivity", "new conversation:"+target);
 		pager.setCurrentItem(pagerAdapter.getCount() - 1);
 	}
 
