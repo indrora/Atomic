@@ -4,7 +4,23 @@ The great Atomic TODO list
 
 TODOs that would be really helpful:
 
- * Ability to hide join/part messages
+ * Ability to hide join/part messages (for environments with lots of join/part)
  * a DashClock plugin (ooh!)
- * Jellybean type message buttons
- * not breaking all the things.
+ * Jellybean type message buttons inside the service message.
+ 
+ There are plenty of places in the source tree that need to be documented and
+ made less insane. Much of the source takes advantage of the Android Dalvik
+ runtime stack manipulation:
+ 
+ public int foo( )
+ {
+	int r = 5;
+	return r;
+ }
+ 
+ This causes some stack magic: r will be kicked around as a reference until it
+ is used in a function call. Do this when possible.
+ 
+ Bluesky features:
+ 
+* Loading colorschemes from the SD card. 
