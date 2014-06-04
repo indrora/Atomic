@@ -89,16 +89,14 @@ public class ColorScheme implements OnSharedPreferenceChangeListener {
 
 			colors = new int[colors_tmp.length];
 
-			Log.d("ColorScheme", themeProps.getProperty("mirc"));
+			//Log.d("ColorScheme", themeProps.getProperty("mirc"));
 
 			for (int i = 0; i < colors_tmp.length; i++) {
 				int c = Color.parseColor(colors_tmp[i]);
 				colors[i] = c;
 			}
 
-			for (int c : colors) {
-				Log.d("ColorScheme:mircColors", String.format("%x", c));
-			}
+			
 
 			if (scheme_colors == null) {
 				scheme_colors = new HashMap<String, Integer>();
