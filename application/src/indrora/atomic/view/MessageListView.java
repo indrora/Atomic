@@ -24,9 +24,6 @@ import indrora.atomic.activity.ConversationActivity;
 import indrora.atomic.adapter.MessageListAdapter;
 import indrora.atomic.listener.MessageClickListener;
 import indrora.atomic.model.ColorScheme;
-
-import indrora.atomic.R;
-
 import android.content.Context;
 import android.widget.ListView;
 

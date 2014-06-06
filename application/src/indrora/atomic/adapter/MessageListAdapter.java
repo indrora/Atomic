@@ -20,7 +20,6 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
  */
 package indrora.atomic.adapter;
 
-import indrora.atomic.model.ColorScheme;
 import indrora.atomic.model.Conversation;
 import indrora.atomic.model.Message;
 
@@ -30,7 +29,6 @@ import android.content.Context;
 import android.database.DataSetObserver;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 

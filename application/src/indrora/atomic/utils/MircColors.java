@@ -43,27 +43,6 @@ import android.text.style.UnderlineSpan;
  */
 public abstract class MircColors
 {
-    /*
-     * Colors from the "Classic" theme in mIRC.
-     */
-    private static final int[] colors = {
-        0xFFFFFF,  // White
-        0x000000,  // Black
-        0x00007F,  // Blue (navy)
-        0x009300,  // Green
-        0xFC0000,  // Red
-        0x7F0000,  // Brown (maroon)
-        0x9C009C,  // Purple
-        0xFC7F00,  // Orange (olive)
-        0xFFFF00,  // Yellow
-        0x00FC00,  // Light Green (lime)
-        0x008080,  // Teal (a green/blue cyan)
-        0x00FFFF,  // Light Cyan (cyan) (aqua)
-        0x0000FF,  // Light Blue (royal)
-        0xFF00FF,  // Pink (light purple) (fuchsia)
-        0x7F7F7F,  // Grey
-        0xD2D2D2   // Light Grey (silver)
-    };
 
     private static final Pattern boldPattern = Pattern.compile("\\x02([^\\x02\\x0F]*)(\\x02|(\\x0F))?");
     private static final Pattern underlinePattern = Pattern.compile("\\x1F([^\\x1F\\x0F]*)(\\x1F|(\\x0F))?");

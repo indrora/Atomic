@@ -23,13 +23,8 @@ package indrora.atomic.activity;
 import indrora.atomic.R;
 
 import android.os.Bundle;
-import android.preference.Preference;
-import android.preference.PreferenceActivity;
-import android.preference.PreferenceScreen;
 
-import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockPreferenceActivity;
-import com.actionbarsherlock.view.MenuItem;
 
 /**
  * Settings
@@ -45,7 +40,6 @@ public class SettingsActivity extends SherlockPreferenceActivity // SherlockPref
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        
         addPreferencesFromResource(R.xml.preferences);
     }
 
