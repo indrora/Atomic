@@ -118,6 +118,10 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
 
         <service android:name="indrora.atomic.irc.IRCService" >
         </service>
+        
+        <!--  Memorizing Trust manager -->
+         <activity android:name="de.duenndns.ssl.MemorizingActivity" />
+        
     </application>
 
 </manifest>

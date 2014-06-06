@@ -39,10 +39,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
+import javax.net.ssl.X509TrustManager;
+
 import org.jibble.pircbot.IrcException;
 import org.jibble.pircbot.NickAlreadyInUseException;
-import indrora.atomic.R;
 
+import de.duenndns.ssl.MemorizingTrustManager;
+import indrora.atomic.R;
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -475,6 +478,8 @@ public class IRCService extends Service
                     connection.setIdent(server.getIdentity().getIdent());
                     connection.setRealName(server.getIdentity().getRealName());
                     connection.setUseSSL(server.useSSL());
+                    X509TrustManager[] trustMgr = MemorizingTrustManager.getInstanceList(getApplicationContext());
+                    connection.setTrustManagers(trustMgr);
 
                     if (server.getCharset() != null) {
                         connection.setEncoding(server.getCharset());

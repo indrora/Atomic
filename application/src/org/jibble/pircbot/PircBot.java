@@ -27,6 +27,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -163,7 +164,7 @@ public abstract class PircBot implements ReplyConstants {
         if (_useSSL) {
             try {
                 SSLContext context = SSLContext.getInstance("TLS");
-                context.init(null, new X509TrustManager[] { new NaiveTrustManager() }, null);
+                context.init(null, _trustManagers , new SecureRandom());
                 SSLSocketFactory factory = context.getSocketFactory();
                 SSLSocket ssocket = (SSLSocket) factory.createSocket(hostname, port);
                 ssocket.startHandshake();
@@ -3183,4 +3184,21 @@ public abstract class PircBot implements ReplyConstants {
     private String _finger = "You ought to be arrested for fingering a bot!";
 
     private final String _channelPrefixes = "#&+!";
+    
+    // XXX: Better TLS support
+    X509TrustManager[] _trustManagers = new X509TrustManager[] { new NaiveTrustManager() };
+    
+    public void setTrustManagers(X509TrustManager[] tManagers)
+    {
+    	if(tManagers == null)
+    	{
+    		_trustManagers = new X509TrustManager[] { new NaiveTrustManager() };
+    	}
+    	else
+    	{
+    		_trustManagers = tManagers;
+    	}
+    }
+    
+    
 }
