@@ -76,13 +76,12 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
         
         <activity
             android:name="indrora.atomic.activity.AboutActivity"
-            android:label="@string/about_label"
-            android:theme="@android:style/Theme.Dialog" >
+            android:label="@string/about_label">
         </activity>
         <activity
             android:name="indrora.atomic.activity.SettingsActivity"
             android:label="@string/settings_label" 
-            android:theme="@android:style/Theme.Dialog">
+            >
             
         </activity>
         <activity

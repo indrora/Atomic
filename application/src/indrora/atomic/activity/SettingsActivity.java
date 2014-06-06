@@ -36,7 +36,7 @@ import com.actionbarsherlock.view.MenuItem;
  *
  * @author Sebastian Kaspari <sebastian@yaaic.org>
  */
-public class SettingsActivity extends PreferenceActivity // SherlockPreferenceActivity
+public class SettingsActivity extends SherlockPreferenceActivity // SherlockPreferenceActivity
 {
     /**
      * On create
@@ -45,10 +45,7 @@ public class SettingsActivity extends PreferenceActivity // SherlockPreferenceAc
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-
-        //ActionBar actionBar = getSupportActionBar();
-        //actionBar.setDisplayHomeAsUpEnabled(true);
-
+        
         addPreferencesFromResource(R.xml.preferences);
     }
 

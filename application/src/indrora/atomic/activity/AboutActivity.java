@@ -20,17 +20,19 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
  */
 package indrora.atomic.activity;
 
+import com.actionbarsherlock.app.SherlockActivity;
+
 import indrora.atomic.R;
-import android.app.Activity;
 import android.os.Bundle;
-import android.view.Window;
+import android.text.Html;
+import android.widget.TextView;
 
 /**
  * About activity
  *
  * @author Sebastian Kaspari <sebastian@yaaic.org>
  */
-public class AboutActivity extends Activity
+public class AboutActivity extends SherlockActivity
 {
     /**
      * On activity getting created.
@@ -39,19 +41,11 @@ public class AboutActivity extends Activity
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-
         setContentView(R.layout.about);
-/*
-        TextView ircLinkView = (TextView) findViewById(R.id.about_irclink);
-        ircLinkView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(AboutActivity.this, AddServerActivity.class);
-                intent.setData(Uri.parse(getString(R.string.app_irc)));
-                startActivity(intent);
-            }
-        }); */
+        
+        TextView licenseDetails = (TextView) findViewById(R.id.about_license_info);
+        licenseDetails.setText(Html.fromHtml(getString(R.string.licence_info)));
+        
+
     }
 }
