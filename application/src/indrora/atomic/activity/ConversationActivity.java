@@ -50,6 +50,7 @@ import indrora.atomic.receiver.ServerReceiver;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -98,7 +99,9 @@ public class ConversationActivity extends SherlockActivity implements
 	public static final int REQUEST_CODE_SPEECH = 99;
 
 	private static final int REQUEST_CODE_JOIN = 1;
+	@SuppressWarnings("unused")
 	private static final int REQUEST_CODE_USERS = 2;
+	@SuppressWarnings("unused")
 	private static final int REQUEST_CODE_USER = 3;
 	private static final int REQUEST_CODE_NICK_COMPLETION = 4;
 
@@ -968,7 +971,7 @@ public class ConversationActivity extends SherlockActivity implements
 			return;
 		}
 
-		String word = tokens[tokens.length - 1].toLowerCase();
+		String word = tokens[tokens.length - 1].toLowerCase(Locale.US);
 		tokens[tokens.length - 1] = null;
 
 		int begin = input.getSelectionStart();
@@ -1022,8 +1025,8 @@ public class ConversationActivity extends SherlockActivity implements
 			final List<Integer> result = new ArrayList<Integer>();
 
 			for (int i = 0; i < users.length; i++) {
-				String nick = removeStatusChar(users[i].toLowerCase());
-				if (nick.startsWith(word.toLowerCase())) {
+				String nick = removeStatusChar(users[i].toLowerCase(Locale.US));
+				if (nick.startsWith(word.toLowerCase(Locale.US))) {
 					result.add(Integer.valueOf(i));
 				}
 			}
