@@ -820,6 +820,41 @@ section #title .credits.right {
   float: right;
 }
 
+.images {
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+	width: 500px;
+}
+.images .image-link
+{
+	height:100px;
+	width:100px;
+	display:inline-block;
+	margin:2px;
+   -moz-box-shadow:    inset 0 0 10px #000000;
+   -webkit-box-shadow: inset 0 0 10px #000000;
+   box-shadow:         inset 0 0 10px #000000;
+
+	
+}
+
+.images .image_link .image_tumb
+{
+	position:relative;
+	z-index:-1;
+}
+
+img.float-left {
+	float:left;
+	margin:2px;
+}
+
+img.float-right {
+	float:right;
+	margin:2px;
+}
+
 @media print, screen and (max-width: 720px) {
   #title .credits {
     display: block;
