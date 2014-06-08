@@ -3,9 +3,9 @@ The great Atomic TODO list
 ------------------------------------------
 
 TODOs that would be really helpful:
-
- * Ability to hide join/part messages (for environments with lots of join/part)
- * a DashClock plugin (ooh!)
+ 
+ * Prompt for newline management
+ * A firstrun wizard.
  * Jellybean type message buttons inside the service message.
  
  There are plenty of places in the source tree that need to be documented and
@@ -24,3 +24,4 @@ TODOs that would be really helpful:
  Bluesky features:
  
 * Loading colorschemes from the SD card. 
+ * a DashClock plugin (ooh!)
