@@ -34,6 +34,7 @@ import indrora.atomic.model.Status;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Vector;
 import java.util.regex.Pattern;
@@ -41,8 +42,8 @@ import java.util.regex.Pattern;
 import org.jibble.pircbot.NickAlreadyInUseException;
 import org.jibble.pircbot.PircBot;
 import org.jibble.pircbot.User;
-import indrora.atomic.R;
 
+import indrora.atomic.R;
 import android.content.Intent;
 import android.util.Log;
 
@@ -1245,7 +1246,7 @@ public class IRCConnection extends PircBot
         for (int i = 0; i < mLength; i++) {
             users[i] = userArray[i].getPrefix() + userArray[i].getNick();
         }
-
+        Arrays.sort(users);
         return users;
     }
 
