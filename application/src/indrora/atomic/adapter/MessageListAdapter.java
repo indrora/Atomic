@@ -20,13 +20,20 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
  */
 package indrora.atomic.adapter;
 
+import indrora.atomic.model.ColorScheme;
 import indrora.atomic.model.Conversation;
 import indrora.atomic.model.Message;
+import indrora.atomic.model.Settings;
 
 import java.util.LinkedList;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.DataSetObserver;
+import android.graphics.Typeface;
+import android.os.Build;
+import android.text.util.Linkify;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -39,10 +46,12 @@ import android.widget.TextView;
  */
 public class MessageListAdapter extends BaseAdapter
 {
-    private final LinkedList<TextView> messages;
+    private final LinkedList<CharSequence> messages;
     private final Context context;
     private int historySize;
 
+    private ColorScheme _colorScheme;
+    private Settings _settings;
     
     
     /**
@@ -53,26 +62,21 @@ public class MessageListAdapter extends BaseAdapter
      */
     public MessageListAdapter(Conversation conversation, Context context)
     {
-        LinkedList<TextView> messages = new LinkedList<TextView>();
-        
-        
-        
-        /*
-        // Render channel name as first message in channel
-        if (conversation.getType() != Conversation.TYPE_SERVER) {
-            Message header = new Message(conversation.getName());
-            header.setColor(Message.MessageColor.ERROR);
-            messages.add(header.renderTextView(context));
-        } */
-        
+    	
+    	_colorScheme = new ColorScheme(context);
+    	_settings = new Settings(context);
+    	
+        LinkedList<CharSequence> messages = new LinkedList<CharSequence>();        
 
         // Optimization - cache field lookups
         LinkedList<Message> mHistory =  conversation.getHistory();
         int mSize = mHistory.size();
 
         for (int i = 0; i < mSize; i++) {
-            messages.add(mHistory.get(i).renderTextView(context));
+            messages.add(mHistory.get(i).render(context));
         }
+        
+        
 
         // XXX: We don't want to clear the buffer, we want to add only
         //      buffered messages that are not already added (history)
@@ -91,7 +95,7 @@ public class MessageListAdapter extends BaseAdapter
      */
     public void addMessage(Message message)
     {
-        messages.add(message.renderTextView(context));
+        messages.add(message.render(context));
 
         if (messages.size() > historySize) {
             messages.remove(0);
@@ -107,12 +111,12 @@ public class MessageListAdapter extends BaseAdapter
      */
     public void addBulkMessages(LinkedList<Message> messages)
     {
-        LinkedList<TextView> mMessages = this.messages;
+        LinkedList<CharSequence> mMessages = this.messages;
         Context mContext = this.context;
         int mSize = messages.size();
 
         for (int i = mSize - 1; i > -1; i--) {
-            mMessages.add(messages.get(i).renderTextView(mContext));
+            mMessages.add(messages.get(i).render(mContext));
 
             if (mMessages.size() > historySize) {
                 mMessages.remove(0);
@@ -140,7 +144,7 @@ public class MessageListAdapter extends BaseAdapter
      * @return
      */
     @Override
-    public TextView getItem(int position)
+    public CharSequence getItem(int position)
     {
         return messages.get(position);
     }
@@ -168,9 +172,34 @@ public class MessageListAdapter extends BaseAdapter
     @Override
     public View getView(int position, View convertView, ViewGroup parent)
     {
-        return getItem(position);
+
+        TextView view = (TextView)convertView;
+        if (view == null) {
+            view = new TextView(context);
+
+            view.setAutoLinkMask(Linkify.ALL);
+            view.setLinksClickable(true);
+            view.setLinkTextColor(_colorScheme.getUrl());
+            view.setTypeface(Typeface.MONOSPACE);
+            view.setTextColor(_colorScheme.getForeground());
+        }
+
+        view.setText(getItem(position));
+        view.setTextSize(_settings.getFontSize());
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            setupViewForHoneycombAndLater(view);
+        }
+
+        return view;
     }
 
+    @TargetApi(11)
+    private void setupViewForHoneycombAndLater(TextView canvas) {
+        canvas.setTextIsSelectable(true);
+    }
+
+    
     /**
      * XXX This is almost certainly covering up a bug elsewhere -- find it!
      */

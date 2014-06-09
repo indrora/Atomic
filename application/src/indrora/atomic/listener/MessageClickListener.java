@@ -68,7 +68,7 @@ public class MessageClickListener implements OnItemClickListener
         MessageListAdapter adapter = (MessageListAdapter) group.getAdapter();
 
         Intent intent = new Intent(group.getContext(), MessageActivity.class);
-        intent.putExtra(Extra.MESSAGE, adapter.getItem(position).getText().toString());
+        intent.putExtra(Extra.MESSAGE, adapter.getItem(position).toString());
         group.getContext().startActivity(intent);
     }
 }
