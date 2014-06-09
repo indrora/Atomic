@@ -29,7 +29,6 @@ import java.util.LinkedList;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.DataSetObserver;
 import android.graphics.Typeface;
 import android.os.Build;

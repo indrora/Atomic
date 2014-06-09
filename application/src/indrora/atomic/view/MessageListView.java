@@ -46,7 +46,7 @@ public class MessageListView extends ListView
     {
         super(context);
 
-        _scheme = ConversationActivity.getScheme();
+        _scheme = new ColorScheme(context);
         
         setOnItemClickListener(MessageClickListener.getInstance());
 
@@ -55,7 +55,7 @@ public class MessageListView extends ListView
         setCacheColorHint(0x000000);
         setVerticalFadingEdgeEnabled(false);
         //setBackgroundResource(R.drawable.conversation_background);
-        setScrollBarStyle(SCROLLBARS_OUTSIDE_INSET);
+        setScrollBarStyle(SCROLLBARS_INSIDE_OVERLAY);
 
         setBackgroundColor(_scheme.getBackground());
         
