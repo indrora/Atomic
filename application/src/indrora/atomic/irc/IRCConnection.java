@@ -36,6 +36,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Vector;
 import java.util.regex.Pattern;
 
@@ -1246,7 +1247,27 @@ public class IRCConnection extends PircBot
         for (int i = 0; i < mLength; i++) {
             users[i] = userArray[i].getPrefix() + userArray[i].getNick();
         }
-        Arrays.sort(users);
+
+        /* Sort the users by their modes, then their nicknames */
+        Arrays.sort(users, new Comparator<String>() {
+            /* Mode list (order: lowest to highest) */
+            public static final String modes = "+%@&~";
+
+            public int compare(String s1, String s2)
+            {
+                int i1 = modes.indexOf(s1.charAt(0));
+                int i2 = modes.indexOf(s2.charAt(0));
+
+                if (i1 == i2) {
+                    /* Resort to a case-insensitive comparison */
+                    return s1.compareToIgnoreCase(s2);
+                }
+
+                /* Reversed comparison to account for an empty mode */
+                return Integer.valueOf(i2).compareTo(Integer.valueOf(i1));
+            }
+        });
+
         return users;
     }
 
