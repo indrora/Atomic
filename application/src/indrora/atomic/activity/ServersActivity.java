@@ -35,8 +35,8 @@ import indrora.atomic.receiver.ServerReceiver;
 import java.util.ArrayList;
 
 import indrora.atomic.R;
-
 import android.app.AlertDialog;
+import android.app.Notification;
 import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -44,6 +44,7 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.text.format.Time;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -346,4 +347,28 @@ public class ServersActivity extends SherlockActivity implements ServiceConnecti
             list.setBackgroundDrawable(null);
         }
     }
+    
+    long lastBackPress = 0;
+    
+    @Override
+    public void onBackPressed() {
+    	if(lastBackPress + 2000 > System.currentTimeMillis())
+    	{
+            ArrayList<Server> mServers = Atomic.getInstance().getServersAsArrayList();
+            for (Server server : mServers) {
+                if (binder.getService().hasConnection(server.getId())) {
+                    server.setStatus(Status.DISCONNECTED);
+                    server.setMayReconnect(false);
+                    binder.getService().getConnection(server.getId()).quitServer();
+                }
+            }
+            binder.getService().stopForegroundCompat(R.string.app_name);
+    		System.exit(0);
+    	}
+    	else {
+    		Toast.makeText(this, R.string.back_twice_exit, Toast.LENGTH_LONG).show();
+    		lastBackPress = System.currentTimeMillis();
+    		}
+    }
+    
 }

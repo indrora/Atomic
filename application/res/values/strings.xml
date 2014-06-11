@@ -256,4 +256,5 @@
     <string name="minutes_15">15 minutes</string>
     <string name="minutes_20">20 minutes</string>
     <string name="minutes_30">30 minutes</string>
+    <string name="back_twice_exit">Press again to exit</string>
 </resources>
