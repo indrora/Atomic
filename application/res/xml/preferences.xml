@@ -22,8 +22,7 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <PreferenceScreen
-        android:title="@string/settings_connection" >
+    <PreferenceScreen android:title="@string/settings_connection" >
         <CheckBoxPreference
             android:defaultValue="@string/default_reconnect"
             android:key="@string/key_reconnect"
@@ -46,8 +45,7 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
             android:summary="@string/settings_ignore_motd_desc"
             android:title="@string/settings_ignore_motd_title" />
     </PreferenceScreen>
-    <PreferenceScreen
-        android:title="@string/settings_chat" >
+    <PreferenceScreen android:title="@string/settings_chat" >
         <PreferenceCategory android:title="@string/settings_chat_colors" >
             <ListPreference
                 android:defaultValue="@string/default_colorscheme"
@@ -152,8 +150,7 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
                 android:title="@string/settings_history_size_title" />
         </PreferenceCategory>
     </PreferenceScreen>
-    <PreferenceScreen
-        android:title="@string/settings_highlight" >
+    <PreferenceScreen android:title="@string/settings_highlight" >
         <CheckBoxPreference
             android:defaultValue="@string/default_sound_highlight"
             android:key="@string/key_sound_highlight"
@@ -179,8 +176,7 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
             android:summary="@string/settings_led_highlight_desc"
             android:title="@string/settings_led_highlight_title" />
     </PreferenceScreen>
-    <PreferenceScreen
-        android:title="@string/settings_misc" >
+    <PreferenceScreen android:title="@string/settings_misc" >
         <CheckBoxPreference
             android:defaultValue="@string/default_voice_recognition"
             android:key="@string/key_voice_recognition"
@@ -200,6 +196,12 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
             android:key="@string/key_debug_traffic"
             android:summary="@string/settings_debug_traffic_desc"
             android:title="@string/settings_debug_traffic_title" />
+
+        <PreferenceScreen
+            android:summary="@string/settings_forget_certificates_desc"
+            android:title="@string/settings_forget_certificates_title" >
+            <intent android:action="indrora.atomic.activity.ForgetCertificatesActivity" />
+        </PreferenceScreen>
     </PreferenceScreen>
 
 </PreferenceScreen>

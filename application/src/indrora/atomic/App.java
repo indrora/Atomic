@@ -20,8 +20,7 @@ public class App extends Application {
 	{
 		return autoconnectComplete.getValue();
 	}
-	
-@Override
+	@Override
 	public void onCreate() {
 		// Context exists here.
 		ColorScheme _c = new ColorScheme(getApplicationContext());

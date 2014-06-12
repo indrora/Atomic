@@ -49,7 +49,7 @@
 
     <string name="action_remove">Remove</string>
     <string name="action_add">Add</string>
-    <string name="action_ok">Ok</string>
+    <string name="action_ok">OK</string>
     <string name="action_cancel">Cancel</string>
     <string name="negative_button">No</string>
 
@@ -256,5 +256,10 @@
     <string name="minutes_15">15 minutes</string>
     <string name="minutes_20">20 minutes</string>
     <string name="minutes_30">30 minutes</string>
+    
     <string name="back_twice_exit">Press again to exit</string>
+    <string name="settings_forget_certificates_title">Clear known certificate list</string>
+    <string name="settings_forget_certificates_desc">Use when you cannot trust a certificate anymore.</string>
+    <string name="settings_forget_certificates">Forget trusted certificates?</string>
+    <string name="settings_forget_certificates_long">You will have to confirm unknown certificates again later.</string>
 </resources>
