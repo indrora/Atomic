@@ -145,7 +145,7 @@ public class IRCConnection extends PircBot
     {
         this.sendRawLine(
             "NOTICE " + sourceNick + " :\u0001VERSION " +
-            "Yaaic - Yet Another Android IRC Client - http://www.yaaic.org" +
+            "Atomic - An IRC client for Android https://indrora.github.io/Atomic" +
             "\u0001"
         );
     }
