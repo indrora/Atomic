@@ -1,0 +1,17 @@
+# Base16 3024 by Jan T. Sott (http://github.com/idleberg)
+# Based on Base16 by Chris Kempson (http://chriskempson.com)
+
+# Light/Dark differs only in foregroud/background.
+foreground.dark:#a5a2a2
+background.dark:#090300
+foreground.light:#4a4543
+background.light:#f7f7f7
+
+userevent:#e8bbd0
+error:#db2d20
+channelevent:#01a252
+topic:#01a0e4
+serverevent:#b5e4f4
+highlight:#cdab53
+url:#b5e4f4
+mirc:#090300;#3a3432;#4a4543;#5c5855;#807d7c;#a5a2a2;#d6d5d4;#f7f7f7;#db2d20;#e8bbd0;#fded02;#01a252;#b5e4f4;#01a0e4;#a16a94;#cdab53

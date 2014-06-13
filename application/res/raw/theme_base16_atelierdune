@@ -1,0 +1,17 @@
+# Base16 Atelier Dune by Bram de Haan (http://atelierbram.github.io/syntax-highlighting/atelier-schemes/dune)
+# Based on Base16 by Chris Kempson (http://chriskempson.com)
+
+# Light/Dark differs only in foregroud/background.
+foreground.dark:#a6a28c
+background.dark:#20201d
+foreground.light:#6e6b5e
+background.light:#fefbec
+
+userevent:#b65611
+error:#d73737
+channelevent:#60ac39
+topic:#6684e1
+serverevent:#1fad83
+highlight:#d43552
+url:#1fad83
+mirc:#20201d;#292824;#6e6b5e;#7d7a68;#999580;#a6a28c;#e8e4cf;#fefbec;#d73737;#b65611;#cfb017;#60ac39;#1fad83;#6684e1;#b854d4;#d43552

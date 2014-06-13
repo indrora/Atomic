@@ -1,0 +1,17 @@
+# Base16 Default by Chris Kempson (http://chriskempson.com)
+# Based on Base16 by Chris Kempson (http://chriskempson.com)
+
+# Light/Dark differs only in foregroud/background.
+foreground.dark:#d0d0d0
+background.dark:#151515
+foreground.light:#303030
+background.light:#f5f5f5
+
+userevent:#d28445
+error:#ac4142
+channelevent:#90a959
+topic:#6a9fb5
+serverevent:#75b5aa
+highlight:#8f5536
+url:#75b5aa
+mirc:#151515;#202020;#303030;#505050;#b0b0b0;#d0d0d0;#e0e0e0;#f5f5f5;#ac4142;#d28445;#f4bf75;#90a959;#75b5aa;#6a9fb5;#aa759f;#8f5536

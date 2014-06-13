@@ -1,0 +1,17 @@
+# Base16 Atelier Lakeside by Bram de Haan (http://atelierbram.github.io/syntax-highlighting/atelier-schemes/lakeside/)
+# Based on Base16 by Chris Kempson (http://chriskempson.com)
+
+# Light/Dark differs only in foregroud/background.
+foreground.dark:#7ea2b4
+background.dark:#161b1d
+foreground.light:#516d7b
+background.light:#ebf8ff
+
+userevent:#935c25
+error:#d22d72
+channelevent:#568c3b
+topic:#257fad
+serverevent:#2d8f6f
+highlight:#b72dd2
+url:#2d8f6f
+mirc:#161b1d;#1f292e;#516d7b;#5a7b8c;#7195a8;#7ea2b4;#c1e4f6;#ebf8ff;#d22d72;#935c25;#8a8a0f;#568c3b;#2d8f6f;#257fad;#5d5db1;#b72dd2

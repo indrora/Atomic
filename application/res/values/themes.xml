@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="theme_labels">
+        <item>Default</item>
+        <item>base16 Default</item>
+        <item>Base16 3024</item>
+        <item>Base16 Ashes</item>
+        <item>base16 Atlier Dune</item>
+        <item>Base16 Atlier Heath</item>
+        <item>Base16 Atlier Lakeside</item>
+        <item>Base16 Atlier Seaside</item>
+        <item>Base16 Bespin</item>
+        <item>Base16 Brewer</item>
+        <item>Base16 Chalk</item>
+        <item>Base16 Codeschool</item>
+        <item>Base16 Eighties</item>
+        <item>Base16 Embers</item>
+        <item>Base16 Google</item>
+        <item>Base16 Grayscale</item>
+        <item>Base16 Greenscreen</item>
+        <item>Base16 Isotope</item>
+        <item>Base16 London Tube</item>
+        <item>Base16 Marrakesh</item>
+        <item>Base16 Mocha</item>
+        <item>Base16 Monokai</item>
+        <item>Base16 Ocean</item>
+        <item>Base16 Paraiso</item>
+        <item>Base16 Railscasts</item>
+        <item>Base16 Shapeshifter</item>
+        <item>Base16 Solarized</item>
+        <item>Base16 Tomrorrow</item>
+        <item>Base16 Twilight</item>
+    </string-array>
+    <string-array name="theme_values">
+        <item>default</item>
+        <item>base16_default</item>
+        <item>base16_3024</item>
+        <item>base16_ashes</item>
+        <item>base16_atlierdune</item>
+        <item>base16_atlierheath</item>
+        <item>base16_atlierlakeside</item>
+        <item>base16_atlierseaside</item>
+        <item>base16_bespin</item>
+        <item>base16_brewer</item>
+        <item>base16_chalk</item>
+        <item>base16_codeschool</item>
+        <item>base16_eighties</item>
+        <item>base16_embers</item>
+        <item>base16_google</item>
+        <item>base16_grayscale</item>
+        <item>base16_greenscreen</item>
+        <item>base16_isotope</item>
+        <item>base16_londontube</item>
+        <item>base16_marrakesh</item>
+        <item>base16_mocha</item>
+        <item>base16_monokai</item>
+        <item>base16_ocean</item>
+        <item>base16_paraiso</item>
+        <item>base16_railscasts</item>
+        <item>base16_shapeshifter</item>
+        <item>base16_solarized</item>
+        <item>base16_tomorrow</item>
+        <item>base16_twilight</item>
+    </string-array>
+
+</resources>

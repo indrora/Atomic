@@ -1,0 +1,17 @@
+# Base16 Atelier Forest by Bram de Haan (http://atelierbram.github.io/syntax-highlighting/atelier-schemes/forest)
+# Based on Base16 by Chris Kempson (http://chriskempson.com)
+
+# Light/Dark differs only in foregroud/background.
+foreground.dark:#a8a19f
+background.dark:#1b1918
+foreground.light:#68615e
+background.light:#f1efee
+
+userevent:#df5320
+error:#f22c40
+channelevent:#5ab738
+topic:#407ee7
+serverevent:#00ad9c
+highlight:#c33ff3
+url:#00ad9c
+mirc:#1b1918;#2c2421;#68615e;#766e6b;#9c9491;#a8a19f;#e6e2e0;#f1efee;#f22c40;#df5320;#d5911a;#5ab738;#00ad9c;#407ee7;#6666ea;#c33ff3

@@ -1,0 +1,17 @@
+# Base16 Green Screen by Chris Kempson (http://chriskempson.com)
+# Based on Base16 by Chris Kempson (http://chriskempson.com)
+
+# Light/Dark differs only in foregroud/background.
+foreground.dark:#00bb00
+background.dark:#001100
+foreground.light:#005500
+background.light:#00ff00
+
+userevent:#009900
+error:#007700
+channelevent:#00bb00
+topic:#009900
+serverevent:#005500
+highlight:#005500
+url:#005500
+mirc:#001100;#003300;#005500;#007700;#009900;#00bb00;#00dd00;#00ff00;#007700;#009900;#007700;#00bb00;#005500;#009900;#00bb00;#005500

@@ -1,0 +1,17 @@
+# Base16 Chalk by Chris Kempson (http://chriskempson.com)
+# Based on Base16 by Chris Kempson (http://chriskempson.com)
+
+# Light/Dark differs only in foregroud/background.
+foreground.dark:#d0d0d0
+background.dark:#151515
+foreground.light:#303030
+background.light:#f5f5f5
+
+userevent:#eda987
+error:#fb9fb1
+channelevent:#acc267
+topic:#6fc2ef
+serverevent:#12cfc0
+highlight:#deaf8f
+url:#12cfc0
+mirc:#151515;#202020;#303030;#505050;#b0b0b0;#d0d0d0;#e0e0e0;#f5f5f5;#fb9fb1;#eda987;#ddb26f;#acc267;#12cfc0;#6fc2ef;#e1a3ee;#deaf8f

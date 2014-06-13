@@ -1,0 +1,17 @@
+# Base16 Eighties by Chris Kempson (http://chriskempson.com)
+# Based on Base16 by Chris Kempson (http://chriskempson.com)
+
+# Light/Dark differs only in foregroud/background.
+foreground.dark:#d3d0c8
+background.dark:#2d2d2d
+foreground.light:#515151
+background.light:#f2f0ec
+
+userevent:#f99157
+error:#f2777a
+channelevent:#99cc99
+topic:#6699cc
+serverevent:#66cccc
+highlight:#d27b53
+url:#66cccc
+mirc:#2d2d2d;#393939;#515151;#747369;#a09f93;#d3d0c8;#e8e6df;#f2f0ec;#f2777a;#f99157;#ffcc66;#99cc99;#66cccc;#6699cc;#cc99cc;#d27b53

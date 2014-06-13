@@ -1,0 +1,17 @@
+# Base16 shapeshifter by Tyler Benziger (http://tybenz.com)
+# Based on Base16 by Chris Kempson (http://chriskempson.com)
+
+# Light/Dark differs only in foregroud/background.
+foreground.dark:#ababab
+background.dark:#000000
+foreground.light:#102015
+background.light:#f9f9f9
+
+userevent:#e09448
+error:#e92f2f
+channelevent:#0ed839
+topic:#3b48e3
+serverevent:#23edda
+highlight:#69542d
+url:#23edda
+mirc:#000000;#040404;#102015;#343434;#555555;#ababab;#e0e0e0;#f9f9f9;#e92f2f;#e09448;#dddd13;#0ed839;#23edda;#3b48e3;#f996e2;#69542d

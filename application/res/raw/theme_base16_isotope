@@ -1,0 +1,17 @@
+# Base16 Isotope by Jan T. Sott
+# Based on Base16 by Chris Kempson (http://chriskempson.com)
+
+# Light/Dark differs only in foregroud/background.
+foreground.dark:#d0d0d0
+background.dark:#000000
+foreground.light:#606060
+background.light:#ffffff
+
+userevent:#ff9900
+error:#ff0000
+channelevent:#33ff00
+topic:#0066ff
+serverevent:#00ffff
+highlight:#3300ff
+url:#00ffff
+mirc:#000000;#404040;#606060;#808080;#c0c0c0;#d0d0d0;#e0e0e0;#ffffff;#ff0000;#ff9900;#ff0099;#33ff00;#00ffff;#0066ff;#cc00ff;#3300ff

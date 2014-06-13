@@ -1,0 +1,17 @@
+# Base16 Atelier Seaside by Bram de Haan (http://atelierbram.github.io/syntax-highlighting/atelier-schemes/seaside/)
+# Based on Base16 by Chris Kempson (http://chriskempson.com)
+
+# Light/Dark differs only in foregroud/background.
+foreground.dark:#8ca68c
+background.dark:#131513
+foreground.light:#5e6e5e
+background.light:#f0fff0
+
+userevent:#87711d
+error:#e6193c
+channelevent:#29a329
+topic:#3d62f5
+serverevent:#1999b3
+highlight:#e619c3
+url:#1999b3
+mirc:#131513;#242924;#5e6e5e;#687d68;#809980;#8ca68c;#cfe8cf;#f0fff0;#e6193c;#87711d;#c3c322;#29a329;#1999b3;#3d62f5;#ad2bee;#e619c3

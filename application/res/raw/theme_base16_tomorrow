@@ -1,0 +1,17 @@
+# Base16 Tomorrow by Chris Kempson (http://chriskempson.com)
+# Based on Base16 by Chris Kempson (http://chriskempson.com)
+
+# Light/Dark differs only in foregroud/background.
+foreground.dark:#c5c8c6
+background.dark:#1d1f21
+foreground.light:#373b41
+background.light:#ffffff
+
+userevent:#de935f
+error:#cc6666
+channelevent:#b5bd68
+topic:#81a2be
+serverevent:#8abeb7
+highlight:#a3685a
+url:#8abeb7
+mirc:#1d1f21;#282a2e;#373b41;#969896;#b4b7b4;#c5c8c6;#e0e0e0;#ffffff;#cc6666;#de935f;#f0c674;#b5bd68;#8abeb7;#81a2be;#b294bb;#a3685a

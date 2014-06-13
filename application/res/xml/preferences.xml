@@ -49,13 +49,17 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
         <PreferenceCategory android:title="@string/settings_chat_colors" >
             <ListPreference
                 android:defaultValue="@string/default_colorscheme"
-                android:dialogTitle="Choose color scheme"
+                android:dialogTitle="@string/settings_colorscheme_title"
                 android:entries="@array/theme_labels"
                 android:entryValues="@array/theme_values"
                 android:key="@string/key_colorscheme"
-                android:summary="May not look right until restart"
-                android:title="Color scheme" />
-
+                android:summary="@string/settings_colorscheme_desc"
+                android:title="@string/settings_colorscheme_title" />
+			<CheckBoxPreference
+			    android:defaultValue="@string/default_colorscheme_dark"
+			    android:key="@string/key_colorscheme_dark"
+			    android:summary="@string/settings_colorscheme_dark_desc"
+			    android:title="@string/settings_colorscheme_dark_title" />
             <CheckBoxPreference
                 android:defaultValue="@string/default_mirc_colors"
                 android:key="@string/key_mirc_colors"

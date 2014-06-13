@@ -1,0 +1,17 @@
+# Base16 Railscasts by Ryan Bates (http://railscasts.com)
+# Based on Base16 by Chris Kempson (http://chriskempson.com)
+
+# Light/Dark differs only in foregroud/background.
+foreground.dark:#e6e1dc
+background.dark:#2b2b2b
+foreground.light:#3a4055
+background.light:#f9f7f3
+
+userevent:#cc7833
+error:#da4939
+channelevent:#a5c261
+topic:#6d9cbe
+serverevent:#519f50
+highlight:#bc9458
+url:#519f50
+mirc:#2b2b2b;#272935;#3a4055;#5a647e;#d4cfc9;#e6e1dc;#f4f1ed;#f9f7f3;#da4939;#cc7833;#ffc66d;#a5c261;#519f50;#6d9cbe;#b6b3eb;#bc9458

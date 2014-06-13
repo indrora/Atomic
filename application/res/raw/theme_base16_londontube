@@ -1,0 +1,17 @@
+# Base16 London Tube by Jan T. Sott
+# Based on Base16 by Chris Kempson (http://chriskempson.com)
+
+# Light/Dark differs only in foregroud/background.
+foreground.dark:#d9d8d8
+background.dark:#231f20
+foreground.light:#5a5758
+background.light:#ffffff
+
+userevent:#f386a1
+error:#ee2e24
+channelevent:#00853e
+topic:#009ddc
+serverevent:#85cebc
+highlight:#b06110
+url:#85cebc
+mirc:#231f20;#1c3f95;#5a5758;#737171;#959ca1;#d9d8d8;#e7e7e8;#ffffff;#ee2e24;#f386a1;#ffd204;#00853e;#85cebc;#009ddc;#98005d;#b06110

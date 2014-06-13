@@ -23,6 +23,7 @@ public class ColorScheme implements OnSharedPreferenceChangeListener {
 	private static Properties themeProps;
 	private static int[] colors = new int[16];
 	private static String lastScheme = "";
+	private static boolean isDarkTheme = true;
 
 	public ColorScheme(Context ctx) {
 		// initialize ourselves.
@@ -39,10 +40,20 @@ public class ColorScheme implements OnSharedPreferenceChangeListener {
 				.registerOnSharedPreferenceChangeListener(this);
 	}
 
-	private synchronized void loadScheme(String scheme) {
+	private synchronized void loadScheme(String scheme, boolean useDarkTheme) {
 		// Load the given scheme.
-		if(scheme.equals(lastScheme)) return;
+		boolean needsReload = false;
+		if( !scheme.equals(lastScheme) )
+		{	needsReload = true; }
+		if( useDarkTheme != isDarkTheme )
+		{	needsReload = true; }
+		
+		if(!needsReload) { return; }
+		
 		lastScheme = scheme;
+		isDarkTheme = useDarkTheme;
+		
+		Log.d("ColorScheme", "Reloading ColorScheme");
 		
 		synchronized (colors) {
 			// Clean up the properties file
@@ -92,6 +103,7 @@ public class ColorScheme implements OnSharedPreferenceChangeListener {
 			//Log.d("ColorScheme", themeProps.getProperty("mirc"));
 
 			for (int i = 0; i < colors_tmp.length; i++) {
+				if(colors_tmp[i].equals("")) continue;
 				int c = Color.parseColor(colors_tmp[i]);
 				colors[i] = c;
 			}
@@ -103,7 +115,10 @@ public class ColorScheme implements OnSharedPreferenceChangeListener {
 			}
 
 			scheme_colors.clear();
-			
+			// Pre-seed the color cache for the light/dark colors. 
+			scheme_colors.put("foreground", Color.parseColor(themeProps.getProperty("foreground."+(useDarkTheme?"dark":"light"))));
+			scheme_colors.put("background", Color.parseColor(themeProps.getProperty("background."+(useDarkTheme?"dark":"light"))));
+
 		}
 		
 	}
@@ -120,8 +135,8 @@ public class ColorScheme implements OnSharedPreferenceChangeListener {
 	private synchronized void refreshColorScheme() {
 
 		String scheme = _settings.getColorScheme();
-		if(scheme.equals(lastScheme)) return;
-		loadScheme(scheme);
+		boolean darkTheme = _settings.getUseDarkColors();
+		loadScheme(scheme, darkTheme);
 
 	}
 
@@ -168,9 +183,8 @@ public class ColorScheme implements OnSharedPreferenceChangeListener {
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
-		if (key.equals("colorscheme")) {
+		if (key.equals(_context.getString(R.string.key_colorscheme)) || key.equals(_context.getString(R.string.key_colorscheme_dark))) {
 			synchronized (colors) {
-				
 				refreshColorScheme();
 			}
 		}

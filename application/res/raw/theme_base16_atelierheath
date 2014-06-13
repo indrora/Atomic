@@ -1,0 +1,17 @@
+# Base16 Atelier Heath by Bram de Haan (http://atelierbram.github.io/syntax-highlighting/atelier-schemes/heath)
+# Based on Base16 by Chris Kempson (http://chriskempson.com)
+
+# Light/Dark differs only in foregroud/background.
+foreground.dark:#ab9bab
+background.dark:#1b181b
+foreground.light:#695d69
+background.light:#f7f3f7
+
+userevent:#a65926
+error:#ca402b
+channelevent:#379a37
+topic:#516aec
+serverevent:#159393
+highlight:#cc33cc
+url:#159393
+mirc:#1b181b;#292329;#695d69;#776977;#9e8f9e;#ab9bab;#d8cad8;#f7f3f7;#ca402b;#a65926;#bb8a35;#379a37;#159393;#516aec;#7b59c0;#cc33cc

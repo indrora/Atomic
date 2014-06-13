@@ -22,9 +22,9 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
 package indrora.atomic.model;
 
 import indrora.atomic.R;
-
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.preference.PreferenceManager;
@@ -320,9 +320,15 @@ public class Settings
     
     public String getColorScheme()
     {
-    	return preferences.getString("colorscheme", "default");
+    	return preferences.getString(resources.getString(R.string.key_colorscheme),
+    			resources.getString(R.string.default_colorscheme));
     }
 
+    public void setColorScheme(String val)
+    {
+    	preferences.edit().putString(resources.getString(R.string.key_colorscheme), val).commit();
+    }
+    
     /**
      * Whether message text should be autocorrected.
      */
@@ -391,4 +397,9 @@ public class Settings
             return Integer.parseInt(resources.getString(R.string.default_history_size));
         }
     }
+
+	public boolean getUseDarkColors() {
+		return preferences.getBoolean(resources.getString(R.string.key_colorscheme_dark),
+				Boolean.parseBoolean(resources.getString(R.string.default_colorscheme_dark) ) );
+	}
 }

@@ -1,6 +1,10 @@
 # default color scheme
-foreground:#ffffffff
-background:#ff000000
+foreground.dark:#ffffffff
+background.dark:#ff000000
+
+foreground.light:#ff000000
+background.light:#ffffffff
+
 userevent:#ff458509
 error:#ffcc0000
 channelevent:#ff729fcf

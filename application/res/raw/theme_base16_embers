@@ -1,0 +1,17 @@
+# Base16 Embers by Jannik Siebert (https://github.com/janniks)
+# Based on Base16 by Chris Kempson (http://chriskempson.com)
+
+# Light/Dark differs only in foregroud/background.
+foreground.dark:#A39A90
+background.dark:#16130F
+foreground.light:#433B32
+background.light:#DBD6D1
+
+userevent:#828257
+error:#826D57
+channelevent:#57826D
+topic:#6D5782
+serverevent:#576D82
+highlight:#825757
+url:#576D82
+mirc:#16130F;#2C2620;#433B32;#5A5047;#8A8075;#A39A90;#BEB6AE;#DBD6D1;#826D57;#828257;#6D8257;#57826D;#576D82;#6D5782;#82576D;#825757

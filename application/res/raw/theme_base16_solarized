@@ -1,0 +1,17 @@
+# Base16 Solarized by Ethan Schoonover (http://ethanschoonover.com/solarized)
+# Based on Base16 by Chris Kempson (http://chriskempson.com)
+
+# Light/Dark differs only in foregroud/background.
+foreground.dark:#93a1a1
+background.dark:#002b36
+foreground.light:#586e75
+background.light:#fdf6e3
+
+userevent:#cb4b16
+error:#dc322f
+channelevent:#859900
+topic:#268bd2
+serverevent:#2aa198
+highlight:#d33682
+url:#2aa198
+mirc:#002b36;#073642;#586e75;#657b83;#839496;#93a1a1;#eee8d5;#fdf6e3;#dc322f;#cb4b16;#b58900;#859900;#2aa198;#268bd2;#6c71c4;#d33682

@@ -1,0 +1,17 @@
+# Base16 Marrakesh by Alexandre Gavioli (http://github.com/Alexx2/)
+# Based on Base16 by Chris Kempson (http://chriskempson.com)
+
+# Light/Dark differs only in foregroud/background.
+foreground.dark:#948e48
+background.dark:#201602
+foreground.light:#5f5b17
+background.light:#faf0a5
+
+userevent:#b36144
+error:#c35359
+channelevent:#18974e
+topic:#477ca1
+serverevent:#75a738
+highlight:#b3588e
+url:#75a738
+mirc:#201602;#302e00;#5f5b17;#6c6823;#86813b;#948e48;#ccc37a;#faf0a5;#c35359;#b36144;#a88339;#18974e;#75a738;#477ca1;#8868b3;#b3588e

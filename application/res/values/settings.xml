@@ -80,4 +80,8 @@
     
     <string name="key_show_channelbar" translatable="false">show_channelbar</string>
     <string name="default_show_channelbar" translatable="false">true</string> 
+    
+    <string name="key_colorscheme_dark">colorscheme_dark</string>
+    <string name="default_colorscheme_dark">true</string>
+    
 </resources>

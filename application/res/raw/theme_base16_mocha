@@ -1,0 +1,17 @@
+# Base16 Mocha by Chris Kempson (http://chriskempson.com)
+# Based on Base16 by Chris Kempson (http://chriskempson.com)
+
+# Light/Dark differs only in foregroud/background.
+foreground.dark:#d0c8c6
+background.dark:#3B3228
+foreground.light:#645240
+background.light:#f5eeeb
+
+userevent:#d28b71
+error:#cb6077
+channelevent:#beb55b
+topic:#8ab3b5
+serverevent:#7bbda4
+highlight:#bb9584
+url:#7bbda4
+mirc:#3B3228;#534636;#645240;#7e705a;#b8afad;#d0c8c6;#e9e1dd;#f5eeeb;#cb6077;#d28b71;#f4bc87;#beb55b;#7bbda4;#8ab3b5;#a89bb9;#bb9584

@@ -1,0 +1,17 @@
+# Base16 Grayscale by Alexandre Gavioli (https://github.com/Alexx2/)
+# Based on Base16 by Chris Kempson (http://chriskempson.com)
+
+# Light/Dark differs only in foregroud/background.
+foreground.dark:#b9b9b9
+background.dark:#101010
+foreground.light:#464646
+background.light:#f7f7f7
+
+userevent:#999999
+error:#7c7c7c
+channelevent:#8e8e8e
+topic:#686868
+serverevent:#868686
+highlight:#5e5e5e
+url:#868686
+mirc:#101010;#252525;#464646;#525252;#ababab;#b9b9b9;#e3e3e3;#f7f7f7;#7c7c7c;#999999;#a0a0a0;#8e8e8e;#868686;#686868;#747474;#5e5e5e

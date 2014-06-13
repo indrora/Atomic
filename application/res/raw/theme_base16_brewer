@@ -1,0 +1,17 @@
+# Base16 Brewer by Timothée Poisot (http://github.com/tpoisot)
+# Based on Base16 by Chris Kempson (http://chriskempson.com)
+
+# Light/Dark differs only in foregroud/background.
+foreground.dark:#b7b8b9
+background.dark:#0c0d0e
+foreground.light:#515253
+background.light:#fcfdfe
+
+userevent:#e6550d
+error:#e31a1c
+channelevent:#31a354
+topic:#3182bd
+serverevent:#80b1d3
+highlight:#b15928
+url:#80b1d3
+mirc:#0c0d0e;#2e2f30;#515253;#737475;#959697;#b7b8b9;#dadbdc;#fcfdfe;#e31a1c;#e6550d;#dca060;#31a354;#80b1d3;#3182bd;#756bb1;#b15928

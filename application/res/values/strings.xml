@@ -262,4 +262,10 @@
     <string name="settings_forget_certificates_desc">Use when you cannot trust a certificate anymore.</string>
     <string name="settings_forget_certificates">Forget trusted certificates?</string>
     <string name="settings_forget_certificates_long">You will have to confirm unknown certificates again later.</string>
+	
+    <string name="settings_colorscheme_title">Color Scheme</string>
+    <string name="settings_colorscheme_desc">May not look right until restart.</string>
+    <string name="settings_colorscheme_dark_title">Use dark colorscheme</string>
+    <string name="settings_colorscheme_dark_desc">Saves power on AMOLED displays</string>
+    
 </resources>

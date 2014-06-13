@@ -1,0 +1,17 @@
+# Base16 Paraiso by Jan T. Sott
+# Based on Base16 by Chris Kempson (http://chriskempson.com)
+
+# Light/Dark differs only in foregroud/background.
+foreground.dark:#a39e9b
+background.dark:#2f1e2e
+foreground.light:#4f424c
+background.light:#e7e9db
+
+userevent:#f99b15
+error:#ef6155
+channelevent:#48b685
+topic:#06b6ef
+serverevent:#5bc4bf
+highlight:#e96ba8
+url:#5bc4bf
+mirc:#2f1e2e;#41323f;#4f424c;#776e71;#8d8687;#a39e9b;#b9b6b0;#e7e9db;#ef6155;#f99b15;#fec418;#48b685;#5bc4bf;#06b6ef;#815ba4;#e96ba8

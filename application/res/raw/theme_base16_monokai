@@ -1,0 +1,17 @@
+# Base16 Monokai by Wimer Hazenberg (http://www.monokai.nl)
+# Based on Base16 by Chris Kempson (http://chriskempson.com)
+
+# Light/Dark differs only in foregroud/background.
+foreground.dark:#f8f8f2
+background.dark:#272822
+foreground.light:#49483e
+background.light:#f9f8f5
+
+userevent:#fd971f
+error:#f92672
+channelevent:#a6e22e
+topic:#66d9ef
+serverevent:#a1efe4
+highlight:#cc6633
+url:#a1efe4
+mirc:#272822;#383830;#49483e;#75715e;#a59f85;#f8f8f2;#f5f4f1;#f9f8f5;#f92672;#fd971f;#f4bf75;#a6e22e;#a1efe4;#66d9ef;#ae81ff;#cc6633

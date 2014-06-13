@@ -1,0 +1,17 @@
+# Base16 Codeschool by brettof86
+# Based on Base16 by Chris Kempson (http://chriskempson.com)
+
+# Light/Dark differs only in foregroud/background.
+foreground.dark:#9ea7a6
+background.dark:#232c31
+foreground.light:#2a343a
+background.light:#b5d8f6
+
+userevent:#43820d
+error:#2a5491
+channelevent:#237986
+topic:#484d79
+serverevent:#b02f30
+highlight:#c98344
+url:#b02f30
+mirc:#232c31;#1c3657;#2a343a;#3f4944;#84898c;#9ea7a6;#a7cfa3;#b5d8f6;#2a5491;#43820d;#a03b1e;#237986;#b02f30;#484d79;#c59820;#c98344
