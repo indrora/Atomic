@@ -7,4 +7,5 @@ android:
     - android-16
 install:
   - cd application
-  - ant debug
+  - android update project -p . --name Atomic --subprojects --target android-19
+  - ant clean debug
