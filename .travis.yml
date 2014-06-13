@@ -1,0 +1,10 @@
+language: android
+android:
+  components:
+    - android-19
+    - android-7
+    - android-14
+    - android-16
+install:
+  - cd application
+  - ant debug
