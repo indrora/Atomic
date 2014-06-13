@@ -20,6 +20,7 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
  */
 package indrora.atomic.adapter;
 
+import indrora.atomic.App;
 import indrora.atomic.model.ColorScheme;
 import indrora.atomic.model.Conversation;
 import indrora.atomic.model.Message;
@@ -62,7 +63,7 @@ public class MessageListAdapter extends BaseAdapter
     public MessageListAdapter(Conversation conversation, Context context)
     {
     	
-    	_colorScheme = new ColorScheme(context);
+    	_colorScheme = App.getColorScheme();
     	_settings = new Settings(context);
     	
         LinkedList<CharSequence> messages = new LinkedList<CharSequence>();        

@@ -20,11 +20,12 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
  */
 package indrora.atomic.model;
 
-import indrora.atomic.activity.ConversationActivity;
+import indrora.atomic.App;
 import indrora.atomic.utils.MircColors;
 import indrora.atomic.utils.Smilies;
 
 import java.util.Date;
+
 
 
 import android.annotation.TargetApi;
@@ -122,10 +123,18 @@ public class Message
      */
     public Message(String text, String sender, int type)
     {
+    	this(text,sender,type,new Date().getTime());
+
+    }
+    public Message(String text, String sender, int type, long time)
+    {
         this.text = text;
         this.sender = sender;
-        this.timestamp = new Date().getTime();
+        this.timestamp = time;
         this.type = type;
+        
+        _scheme = App.getColorScheme();
+
     }
 
     /**
@@ -244,13 +253,8 @@ public class Message
     public SpannableString render(Context context)
     {
         Settings settings = new Settings(context);
-        if(_scheme == null)
-        	{
-        		_scheme = ConversationActivity.getScheme();
-        	}
-        
 
-		MircColors.setColorScheme(_scheme);
+        _scheme = App.getColorScheme();
 		
         if (canvas == null) {
             String prefix    = hasIcon() && settings.showIcons() ? "  " : "";
@@ -351,11 +355,7 @@ public class Message
         // XXX: We should not read settings here ALWAYS for EVERY textview
         Settings settings = new Settings(context);
 
-        if(_scheme == null)
-        	{
-        		_scheme = new ColorScheme(context);
-        	}
-
+        _scheme = App.getColorScheme();
         
         TextView canvas = new TextView(context);
 

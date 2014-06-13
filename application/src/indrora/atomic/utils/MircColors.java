@@ -20,6 +20,7 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
  */
 package indrora.atomic.utils;
 
+import indrora.atomic.App;
 import indrora.atomic.model.ColorScheme;
 
 import java.util.ArrayList;
@@ -53,10 +54,6 @@ public abstract class MircColors
 
     private static ColorScheme _cScheme;
     
-    public static void setColorScheme(ColorScheme scheme)
-    {
-    	_cScheme = scheme;
-    }
     
     /**
      * Converts a string with mIRC style and color codes to a SpannableString with
@@ -67,6 +64,8 @@ public abstract class MircColors
      */
     public static SpannableString toSpannable(SpannableString text)
     {
+    	_cScheme = App.getColorScheme();
+    	
         SpannableStringBuilder ssb = new SpannableStringBuilder(text);
         replaceControlCodes(boldPattern.matcher(ssb), ssb, new StyleSpan(Typeface.BOLD));
         replaceControlCodes(underlinePattern.matcher(ssb), ssb, new UnderlineSpan());

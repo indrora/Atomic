@@ -20,6 +20,7 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
  */
 package indrora.atomic.view;
 
+import indrora.atomic.App;
 import indrora.atomic.activity.ConversationActivity;
 import indrora.atomic.adapter.MessageListAdapter;
 import indrora.atomic.listener.MessageClickListener;
@@ -46,7 +47,7 @@ public class MessageListView extends ListView
     {
         super(context);
 
-        _scheme = new ColorScheme(context);
+        _scheme = App.getColorScheme();
         
         setOnItemClickListener(MessageClickListener.getInstance());
 

@@ -20,6 +20,7 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
  */
 package indrora.atomic.activity;
 
+import indrora.atomic.App;
 import indrora.atomic.Atomic;
 import indrora.atomic.R;
 import indrora.atomic.adapter.ConversationPagerAdapter;
@@ -200,7 +201,7 @@ public class ConversationActivity extends SherlockActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		_scheme = new ColorScheme(this);
+		_scheme = App.getColorScheme();
 
 		serverId = getIntent().getExtras().getInt("serverId");
 		server = Atomic.getInstance().getServerById(serverId);

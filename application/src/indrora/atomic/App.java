@@ -17,6 +17,13 @@ public class App extends Application {
 	
 	private static LatchingValue<Boolean> autoconnectComplete;
 	
+	private static ColorScheme _c;
+	
+	public static ColorScheme getColorScheme()
+	{
+		return _c;
+	}
+	
 	public static Boolean doAutoconnect()
 	{
 		return autoconnectComplete.getValue();
@@ -34,7 +41,7 @@ public class App extends Application {
 			_settings.setColorScheme("default");
 		}
 		
-		ColorScheme _c = new ColorScheme(getApplicationContext());
+		 _c = new ColorScheme(getApplicationContext());
 		
 		super.onCreate();
 	}
