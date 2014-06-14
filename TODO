@@ -2,12 +2,27 @@
 The great Atomic TODO list
 ------------------------------------------
 
-TODOs that would be really helpful:
+Things that are actively problems:
+
+* No tab-complete button for devices without a hardware tab-complete.
+* Keyboard has problems in landscape mode (thanks, Android!)
+* Let the user type after disconnect
+
+Future improvements:
  
+ * Allow for auto-reconnect when 3G drops out.
  * Prompt for newline management
- * A firstrun wizard.
+ * A firstrun wizard. (+1 badjillion)
+ * DOC. YOO. MEN. TAY. SHUNN. Let's spell it out, folks.
  * Jellybean type message buttons inside the service message.
  
+ Bluesky features:
+ 
+* Loading colorschemes from the SD card. 
+* a DashClock plugin (ooh!)
+
+SRS Notes:
+
  There are plenty of places in the source tree that need to be documented and
  made less insane. Much of the source takes advantage of the Android Dalvik
  runtime stack manipulation:
@@ -20,8 +35,4 @@ TODOs that would be really helpful:
  
  This causes some stack magic: r will be kicked around as a reference until it
  is used in a function call. Do this when possible.
- 
- Bluesky features:
- 
-* Loading colorschemes from the SD card. 
- * a DashClock plugin (ooh!)
+
