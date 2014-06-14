@@ -1,5 +1,5 @@
 
-Travis build satus: [![Build Status](https://travis-ci.org/indrora/Atomic.svg?branch=master)](https://travis-ci.org/indrora/Atomic)
+[![Build Status](https://travis-ci.org/indrora/Atomic.svg?branch=master)](https://travis-ci.org/indrora/Atomic) [![Crowdin](https://d322cqt584bo4o.cloudfront.net/atomic/localized.png)](https://crowdin.net/project/atomic)
 
 Atomic - a Fork of Yaaic
 ========================
