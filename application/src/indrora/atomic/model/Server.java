@@ -31,7 +31,7 @@ import indrora.atomic.R;
  * 
  * @author Sebastian Kaspari <sebastian@yaaic.org>
  */
-public class Server
+public class Server implements Comparable<Server>
 {
     private int id;
     private String title;
@@ -60,6 +60,18 @@ public class Server
     {
         conversations.put(ServerInfo.DEFAULT_NAME, new ServerInfo());
         this.selected = ServerInfo.DEFAULT_NAME;
+    }
+
+    /**
+     * Compares this Server with another Server. This compares the two
+     * Servers by their titles.
+     *
+     * @param server The Server to compare
+     */
+    @Override
+    public int compareTo(Server server)
+    {
+        return title.compareToIgnoreCase(server.title);
     }
 
     /**
