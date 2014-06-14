@@ -22,6 +22,7 @@ package indrora.atomic.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 
 import indrora.atomic.R;
@@ -31,7 +32,7 @@ import indrora.atomic.R;
  * 
  * @author Sebastian Kaspari <sebastian@yaaic.org>
  */
-public class Server
+public class Server implements Comparable<Server>
 {
     private int id;
     private String title;
@@ -60,6 +61,18 @@ public class Server
     {
         conversations.put(ServerInfo.DEFAULT_NAME, new ServerInfo());
         this.selected = ServerInfo.DEFAULT_NAME;
+    }
+
+    /**
+     * Compares this Server with another Server. This compares the two
+     * Servers by their titles.
+     *
+     * @param server The Server to compare
+     */
+    @Override
+    public int compareTo(Server server)
+    {
+        return title.compareToIgnoreCase(server.title);
     }
 
     /**
@@ -325,9 +338,13 @@ public class Server
      * 
      * @return
      */
-    public Collection<Conversation> getConversations()
+    public ArrayList<Conversation> getConversations()
     {
-        return conversations.values();
+        ArrayList<Conversation> conversationList = new ArrayList<Conversation>();
+        conversationList.addAll(conversations.values());
+
+        Collections.sort(conversationList);
+        return conversationList;
     }
 
     /**

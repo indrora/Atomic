@@ -24,6 +24,7 @@ import indrora.atomic.db.Database;
 import indrora.atomic.model.Server;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -145,6 +146,7 @@ public class Atomic
             serverList.add(servers.get(key));
         }
 
+        Collections.sort(serverList);
         return serverList;
     }
 }

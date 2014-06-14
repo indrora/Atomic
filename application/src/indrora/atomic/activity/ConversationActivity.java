@@ -744,8 +744,7 @@ public class ConversationActivity extends SherlockActivity implements
 	@Override
 	public synchronized void onNewConversation(String target) {
 		createNewConversation(target);
-		//Log.d("ConversationActivity", "new conversation:"+target);
-		pager.setCurrentItem(pagerAdapter.getCount() - 1);
+		pager.setCurrentItem(pagerAdapter.getPositionByName(target));
 	}
 
 	/**
