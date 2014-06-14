@@ -1114,7 +1114,7 @@ public class ConversationActivity extends SherlockActivity implements
 	 */
 	private void openSoftKeyboard(View view) {
 		((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE))
-				.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
+				.showSoftInput(view, InputMethodManager.SHOW_FORCED);
 	}
 
 	/**
