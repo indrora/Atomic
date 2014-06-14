@@ -20,6 +20,7 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
  */
 package indrora.atomic.model;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 
 /**
@@ -29,7 +30,7 @@ import java.util.LinkedList;
  * 
  * @author Sebastian Kaspari <sebastian@yaaic.org>
  */
-public abstract class Conversation {
+public abstract class Conversation implements Comparable<Conversation> {
 	public static final int TYPE_CHANNEL = 1;
 	public static final int TYPE_QUERY = 2;
 	public static final int TYPE_SERVER = 3;
@@ -48,6 +49,14 @@ public abstract class Conversation {
 	private int status = 1;
 	private int newMentions = 0;
 	private int historySize = DEFAULT_HISTORY_SIZE;
+
+	/* Type list (order: lowest to highest) */
+	private static final int[] typeList = {
+		TYPE_QUERY,
+		TYPE_CHANNEL,
+		TYPE_SERVER
+	};
+
 	/**
 	 * Get the type of conversation (channel, query, ..)
 	 * 
@@ -67,6 +76,27 @@ public abstract class Conversation {
 		this.name = name;
 	}
 
+	/**
+	 * Compares this Conversation with another Conversation. This
+	 * compares the two Conversations by their types, and then by
+	 * their names.
+	 *
+	 * @param conversation The Conversation to compare
+	 */
+	@Override
+	public int compareTo(Conversation conversation)
+	{
+		int i1 = Arrays.binarySearch(typeList, getType());
+		int i2 = Arrays.binarySearch(typeList, conversation.getType());
+
+		if (i1 == i2) {
+			/* Resort to a case-insensitive comparison */
+			return name.compareToIgnoreCase(conversation.name);
+		}
+
+		/* Reversed comparison to account for an empty type */
+		return Integer.valueOf(i2).compareTo(Integer.valueOf(i1));
+	}
 
 	/**
 	 * Get name of the conversation (channel, user)

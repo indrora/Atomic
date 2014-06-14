@@ -22,6 +22,7 @@ package indrora.atomic.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 
 import indrora.atomic.R;
@@ -337,9 +338,13 @@ public class Server implements Comparable<Server>
      * 
      * @return
      */
-    public Collection<Conversation> getConversations()
+    public ArrayList<Conversation> getConversations()
     {
-        return conversations.values();
+        ArrayList<Conversation> conversationList = new ArrayList<Conversation>();
+        conversationList.addAll(conversations.values());
+
+        Collections.sort(conversationList);
+        return conversationList;
     }
 
     /**

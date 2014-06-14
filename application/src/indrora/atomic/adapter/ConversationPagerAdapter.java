@@ -26,6 +26,7 @@ import indrora.atomic.model.Conversation;
 import indrora.atomic.model.Server;
 import indrora.atomic.view.MessageListView;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -56,7 +57,7 @@ public class ConversationPagerAdapter extends PagerAdapter implements Conversati
     /**
      * Container class to remember conversation and view association.
      */
-    public class ConversationInfo {
+    public class ConversationInfo implements Comparable<ConversationInfo> {
         public Conversation conv;
         public MessageListAdapter adapter;
         public MessageListView view;
@@ -65,6 +66,18 @@ public class ConversationPagerAdapter extends PagerAdapter implements Conversati
             this.conv = conv;
             this.adapter = null;
             this.view = null;
+        }
+
+        /**
+         * Compares this ConversationInfo with another ConversationInfo.
+         * This compares the two ConversationInfos by their Conversations.
+         *
+         * @param convInfo The ConversationInfo to compare
+         */
+        @Override
+        public int compareTo(ConversationInfo convInfo)
+        {
+            return conv.compareTo(convInfo.conv);
         }
     }
 
@@ -85,6 +98,7 @@ public class ConversationPagerAdapter extends PagerAdapter implements Conversati
      */
     public void addConversation(Conversation conversation) {
         conversations.add(new ConversationInfo(conversation));
+        Collections.sort(conversations);
 
         notifyDataSetChanged();
     }
