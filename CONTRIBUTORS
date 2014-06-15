@@ -18,6 +18,7 @@ Development
  Darren Salt                       https://github.com/dsalt
  Daniel E. Moctezuma               https://github.com/democtezuma
  Morgan ``Indrora'' Gangwere       https://github.com/indrora
+ James Geboski                     https://github.com/jgeboski
 
 --------------------------------------------------------------------------------
 Graphics
@@ -26,7 +27,7 @@ Graphics
  Jörn Schreiber                   http://www.joern-schreiber.de
 
 --------------------------------------------------------------------------------
-Translations (not used in Atomic)
+Translations
 --------------------------------------------------------------------------------
  English      Sebastian Kaspari   https://github.com/pocmo
  Spanish      Diego Kuperman      https://github.com/diegok
@@ -40,3 +41,4 @@ Translations (not used in Atomic)
  Danish       Jonas Häggqvist	  https://github.com/rasher
  Russian      NeKit
 
+(If you want to translate more, check out https://www.crowdin.net/project/atomic !)
