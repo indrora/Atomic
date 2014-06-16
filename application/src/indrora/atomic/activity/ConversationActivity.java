@@ -66,6 +66,8 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
+import android.hardware.input.InputManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.speech.RecognizerIntent;
@@ -74,6 +76,7 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.text.InputType;
 import android.text.method.TextKeyListener;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnKeyListener;
 import android.view.inputmethod.EditorInfo;
@@ -215,7 +218,6 @@ public class ConversationActivity extends SherlockActivity implements
 		ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		
-
 		setTitle(server.getTitle());
 
 		setContentView(R.layout.conversations);
@@ -232,10 +234,11 @@ public class ConversationActivity extends SherlockActivity implements
 				openSoftKeyboard(v);
 			}
 		});
+		
 
 		pager = (ViewPager) findViewById(R.id.pager);
 
-		pagerAdapter = new ConversationPagerAdapter(this, server);
+		pagerAdapter =  new ConversationPagerAdapter(this, server);
 		pager.setAdapter(pagerAdapter);
 
 		final float density = getResources().getDisplayMetrics().density;
@@ -256,7 +259,7 @@ public class ConversationActivity extends SherlockActivity implements
 		indicator.setVisibility(View.GONE);
 
 		indicator.setOnPageChangeListener(this);
-
+		
 		historySize = settings.getHistorySize();
 
 		if (server.getStatus() == Status.PRE_CONNECTING) {
@@ -303,8 +306,35 @@ public class ConversationActivity extends SherlockActivity implements
 
 		input.setInputType(input.getInputType() | setInputTypeFlags);
 
-		// lll.setBackgroundColor(0xFF181818);
+		
+		// Add handling for tab-completing from the input box.
+		final Drawable dd = 				getResources().getDrawable(R.drawable.user);
+		dd.setBounds(0,0,dd.getIntrinsicWidth(),dd.getIntrinsicWidth());
+		input.setCompoundDrawables(
+				null,
+				null,
+				dd,
+				null
+				);
+		final EditText tt = input;
+		final ConversationActivity cv = this;
+		input.setOnTouchListener(new View.OnTouchListener() {
+			
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+					// This is where we handle some things.
+					boolean tappedX = event.getX() > (tt.getWidth() - tt.getPaddingRight() - dd
+						.getIntrinsicWidth());
 
+					if(event.getAction() == MotionEvent.ACTION_UP && tappedX)
+					{
+						cv.doNickCompletion(tt);
+					}
+				return false;
+			}
+		});
+
+		
 		setupColors();
 		setupIndicator();
 
@@ -448,6 +478,13 @@ public class ConversationActivity extends SherlockActivity implements
 		unbindService(this);
 		unregisterReceiver(channelReceiver);
 		unregisterReceiver(serverReceiver);
+		
+		// Force the OSK to go away
+		// This makes it so that if the implicit keyboard doesn't work, the explicit one
+		// will force close.
+		EditText input = (EditText) findViewById(R.id.input);
+		((InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE))
+			.hideSoftInputFromWindow(input.getWindowToken(), 0);
 	}
 
 	/**
