@@ -31,6 +31,7 @@ import indrora.atomic.model.Query;
 import indrora.atomic.model.Server;
 import indrora.atomic.model.ServerInfo;
 import indrora.atomic.model.Status;
+import indrora.atomic.utils.LatchingValue;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -199,6 +200,8 @@ public class IRCConnection extends PircBot
         service.sendBroadcast(intent);
     }
 
+    LatchingValue<Boolean> hasDoneAutorun = new LatchingValue<Boolean>(true,false);
+    
     /**
      * On register
      */
@@ -207,14 +210,17 @@ public class IRCConnection extends PircBot
     {
         // Call parent method to ensure "register" status is tracked
         super.onRegister();
-
-        // execute commands
-        CommandParser parser = CommandParser.getInstance();
-
-        this.updateNickMatchPattern();
-        for (String command : server.getConnectCommands()) {
-            parser.parse(command, server, server.getConversation(ServerInfo.DEFAULT_NAME), service);
+        // We will reset this on disconnect.
+        if(hasDoneAutorun.getValue())
+        {
+	        // execute commands
+	        CommandParser parser = CommandParser.getInstance();
+	
+	        for (String command : server.getConnectCommands()) {
+	            parser.parse(command, server, server.getConversation(ServerInfo.DEFAULT_NAME), service);
+	        }
         }
+        this.updateNickMatchPattern();
 
         // TODO: Detect "You are now identified for <nick>" notices from NickServ and handle
         //       auto joins in onNotice instead if the user has chosen to wait for NickServ
@@ -1171,6 +1177,8 @@ public class IRCConnection extends PircBot
         // Call parent method to ensure "register" status is tracked
         super.onDisconnect();
 
+        hasDoneAutorun.reset(); // Reset so that autorun will happen.
+        
         if (service.getSettings().isReconnectEnabled() && server.getStatus() != Status.DISCONNECTED) {
             setAutojoinChannels(server.getCurrentChannelNames());
 

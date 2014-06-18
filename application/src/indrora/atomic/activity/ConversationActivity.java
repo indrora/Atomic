@@ -791,6 +791,9 @@ public class ConversationActivity extends SherlockActivity implements
 	 * @param target
 	 */
 	public void createNewConversation(String target) {
+		Conversation cv = server.getConversation(target);
+		if(cv == null) return; // Hack!
+		// The above stops a bug with ZNC.
 		pagerAdapter.addConversation(server.getConversation(target));
 	}
 
