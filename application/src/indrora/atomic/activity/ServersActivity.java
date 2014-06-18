@@ -21,6 +21,7 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
 package indrora.atomic.activity;
 
 import indrora.atomic.Atomic;
+import indrora.atomic.FirstRunActivity;
 import indrora.atomic.adapter.ServerListAdapter;
 import indrora.atomic.db.Database;
 import indrora.atomic.irc.IRCBinder;
@@ -88,6 +89,7 @@ public class ServersActivity extends SherlockActivity implements ServiceConnecti
         if (instanceCount > 0) {
             finish();
         }
+        
         instanceCount++;
         setContentView(R.layout.servers);
 

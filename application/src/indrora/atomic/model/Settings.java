@@ -43,6 +43,7 @@ public class Settings
 {
     private final SharedPreferences preferences;
     private final Resources resources;
+    private int currentRelease;
 
     /**
      * Create a new Settings instance
@@ -53,6 +54,13 @@ public class Settings
     {
         this.preferences = PreferenceManager.getDefaultSharedPreferences(context);
         this.resources = context.getApplicationContext().getResources();
+        try {
+        	this.currentRelease = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionCode;
+        }
+        catch(Exception ex)
+        {
+        	this.currentRelease = 99;
+        }
     }
 
     /**
@@ -402,4 +410,19 @@ public class Settings
 		return preferences.getBoolean(resources.getString(R.string.key_colorscheme_dark),
 				Boolean.parseBoolean(resources.getString(R.string.default_colorscheme_dark) ) );
 	}
+	
+	public int getLastRunVersion()
+	{
+		return preferences.getInt("LAST_RUN_VERSION", 0);
+	}
+	public void resetLastRunVersion()
+	{
+		preferences.edit().putInt("LAST_RUN_VERSION", 0).commit();
+	}
+	public void updateLastRunVersion()
+	{
+		preferences.edit().putInt("LAST_RUN_VERSION", currentRelease).commit();
+	}
+	public int getCurrentVersion() { return currentRelease; }
+	
 }

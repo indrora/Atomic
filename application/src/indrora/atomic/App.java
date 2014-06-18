@@ -4,6 +4,7 @@ import indrora.atomic.model.ColorScheme;
 import indrora.atomic.model.Settings;
 import indrora.atomic.utils.LatchingValue;
 import android.app.Application;
+import android.content.Intent;
 
 public class App extends Application {
 
@@ -42,8 +43,15 @@ public class App extends Application {
 		}
 		
 		 _c = new ColorScheme(getApplicationContext());
-		
+		 
+		 if(_settings.getCurrentVersion() > _settings.getLastRunVersion())
+		 {
+			 Intent runIntent = new Intent(this,FirstRunActivity.class);
+			 runIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			 this.startActivity(runIntent);
+			 _settings.updateLastRunVersion();
+		 }
+		 
 		super.onCreate();
 	}
-
 }
