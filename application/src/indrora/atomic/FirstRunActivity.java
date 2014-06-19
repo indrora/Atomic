@@ -61,23 +61,25 @@ public class FirstRunActivity extends Activity {
 
 			Log.d("AssetImageGetter", "Get resource: "+source);
 			try {
+				// Load the resource from the assets/help/ directory.
 				InputStream sourceIS = resources.getAssets().open("help/"+source);
+				// Create a drawable from the stream
 				Drawable sourceDrawable = Drawable.createFromStream(sourceIS, "");
+				// This gives us the width of the display.
 				DisplayMetrics outMetrics = new DisplayMetrics();
 				FirstRunActivity.this.getWindowManager().getDefaultDisplay().getMetrics(outMetrics);
-				// Scale the image
+				// This tells us the ratio we have to work with.
 				
 				double scale = (float)(outMetrics.widthPixels) / (float)(sourceDrawable.getIntrinsicWidth());
+				
+				// Take up no more than 50% when in landscape, but 80% when in portrait.
+				
+				double imscale = (outMetrics.widthPixels > outMetrics.heightPixels? 0.5:0.8);
+				
+				int width = (int)(imscale*outMetrics.widthPixels);
+				int height = (int)(imscale * scale * sourceDrawable.getMinimumHeight());
 
-				int width = sourceDrawable.getIntrinsicWidth();
-				int height = sourceDrawable.getIntrinsicHeight();
-				if(outMetrics.widthPixels < width)
-				{
-					width = outMetrics.widthPixels;
-					height = (int) (sourceDrawable.getIntrinsicHeight() * scale);
-				}
-				Log.d("AssetImageGetter", String.format("New image dimentions: (%f scale) <%d x %d>", scale, width, height));
-				sourceDrawable.setBounds(0, 0, (int)width, (int)height);
+				sourceDrawable.setBounds(0, 0, (int)(width), (int)(height));
 				
 				return sourceDrawable;
 				
