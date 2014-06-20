@@ -25,7 +25,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import indrora.atomic.R;
-
+import indrora.atomic.model.Settings;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.text.Spannable;
@@ -41,7 +41,58 @@ import android.util.Log;
 public abstract class Smilies
 {
     private static final HashMap<String, Integer> mappings = new HashMap<String, Integer>();
+    private static indrora.atomic.model.Settings _settings;
+    static
+    {
+    	// Putting these here saves time in smiley-heavy conversations.
+    	// It also preserves some amount of memory, as these live on the heap, not the stack.
+        mappings.put(">:o", R.drawable.emoji_yell);
+        mappings.put(">:-o", R.drawable.emoji_yell);
+        mappings.put("O:)", R.drawable.emoji_innocent);
+        mappings.put("O:-)", R.drawable.emoji_innocent);
+        mappings.put(":)", R.drawable.emoji_smile);
+        mappings.put(":-)", R.drawable.emoji_smile);
+        mappings.put(":(", R.drawable.emoji_frown);
+        mappings.put(":-(", R.drawable.emoji_frown);
+        mappings.put(";)", R.drawable.emoji_wink); 
+        mappings.put(";-)", R.drawable.emoji_wink);
+        mappings.put(":p", R.drawable.emoji_tongue_out);
+        mappings.put(":-p", R.drawable.emoji_tongue_out);
+        mappings.put(":P", R.drawable.emoji_tongue_out);
+        mappings.put(":-P", R.drawable.emoji_tongue_out);
+        mappings.put(":D", R.drawable.emoji_laughing);
+        mappings.put(":-D", R.drawable.emoji_laughing);
+        mappings.put(":[", R.drawable.emoji_embarassed);
+        mappings.put(":-[", R.drawable.emoji_embarassed);
+        mappings.put(":\\", R.drawable.emoji_undecided);
+        mappings.put(":-\\", R.drawable.emoji_undecided);
+        mappings.put(":o", R.drawable.emoji_surprised);
+        mappings.put(":-o", R.drawable.emoji_surprised);
+        mappings.put(":O", R.drawable.emoji_surprised);
+        mappings.put(":-O", R.drawable.emoji_surprised);
+        mappings.put(":*", R.drawable.emoji_kiss);
+        mappings.put(":-*", R.drawable.emoji_kiss);
+        mappings.put("8)", R.drawable.emoji_cool);
+        mappings.put("8-)", R.drawable.emoji_cool);
+        mappings.put(":!", R.drawable.emoji_foot_in_mouth);
+        mappings.put(":-!", R.drawable.emoji_foot_in_mouth);
+        mappings.put(":'(", R.drawable.emoji_cry);
+        mappings.put(":'-(", R.drawable.emoji_cry);
+        mappings.put(":X", R.drawable.emoji_sealed);
+        mappings.put(":-X", R.drawable.emoji_sealed);
+        mappings.put("o_O", R.drawable.emoji_wtf);
+        mappings.put("O_o", R.drawable.emoji_wtf);
+        mappings.put("XP",R.drawable.emoji_xp);
+        mappings.put(";P", R.drawable.emoji_wink_tongue);
+        mappings.put("-_-", R.drawable.emoji_null);
+        mappings.put("X)", R.drawable.emoji_happy);
+        mappings.put(":3", R.drawable.emoji_catface);
+        mappings.put("o3o", R.drawable.emoji_catface_kiss);
+        mappings.put(":'3", R.drawable.emoji_catface_cry);
+        
 
+    }
+    
     /**
      * Converts all smilies in a string to graphical smilies.
      *
@@ -50,47 +101,7 @@ public abstract class Smilies
      */
     public static SpannableString toSpannable(SpannableString text, Context context)
     {
-        mappings.put(">:o", R.drawable.smiley_yell);
-        mappings.put(">:-o", R.drawable.smiley_yell);
-        mappings.put("O:)", R.drawable.smiley_innocent);
-        mappings.put("O:-)", R.drawable.smiley_innocent);
-        mappings.put(":)", R.drawable.smiley_smile);
-        mappings.put(":-)", R.drawable.smiley_smile);
-        mappings.put(":(", R.drawable.smiley_frown);
-        mappings.put(":-(", R.drawable.smiley_frown);
-        mappings.put(";)", R.drawable.smiley_wink);
-        mappings.put(";-)", R.drawable.smiley_wink);
-        mappings.put(":p", R.drawable.smiley_tongue_out);
-        mappings.put(":-p", R.drawable.smiley_tongue_out);
-        mappings.put(":P", R.drawable.smiley_tongue_out);
-        mappings.put(":-P", R.drawable.smiley_tongue_out);
-        mappings.put(":D", R.drawable.smiley_laughing);
-        mappings.put(":-D", R.drawable.smiley_laughing);
-        mappings.put(":[", R.drawable.smiley_embarassed);
-        mappings.put(":-[", R.drawable.smiley_embarassed);
-        mappings.put(":\\", R.drawable.smiley_undecided);
-        mappings.put(":-\\", R.drawable.smiley_undecided);
-        mappings.put(":o", R.drawable.smiley_surprised);
-        mappings.put(":-o", R.drawable.smiley_surprised);
-        mappings.put(":O", R.drawable.smiley_surprised);
-        mappings.put(":-O", R.drawable.smiley_surprised);
-        mappings.put(":*", R.drawable.smiley_kiss);
-        mappings.put(":-*", R.drawable.smiley_kiss);
-        mappings.put("8)", R.drawable.smiley_cool);
-        mappings.put("8-)", R.drawable.smiley_cool);
-        mappings.put(":$", R.drawable.smiley_money_mouth);
-        mappings.put(":-$", R.drawable.smiley_money_mouth);
-        mappings.put(":!", R.drawable.smiley_foot_in_mouth);
-        mappings.put(":-!", R.drawable.smiley_foot_in_mouth);
-        mappings.put(":'(", R.drawable.smiley_cry);
-        mappings.put(":'-(", R.drawable.smiley_cry);
-        mappings.put(":�(", R.drawable.smiley_cry);
-        mappings.put(":�-(", R.drawable.smiley_cry);
-        mappings.put(":X", R.drawable.smiley_sealed);
-        mappings.put(":-X", R.drawable.smiley_sealed);
-        mappings.put("o_O", R.drawable.smiley_wtf);
-        mappings.put("O_o", R.drawable.smiley_wtf);
-
+    	if(_settings == null) _settings = new Settings(context.getApplicationContext());
         StringBuilder regex = new StringBuilder("(");
         String[] smilies = mappings.keySet().toArray(new String[mappings.size()]);
 
@@ -105,11 +116,16 @@ public abstract class Smilies
         Matcher m = smiliematcher.matcher(text);
 
         while (m.find()) {
-            Log.d("Smilies", "SID: "+mappings.get(m.group(1)).intValue());
-            Log.d("Smilies", "OID: "+R.drawable.smiley_smile);
+            //Log.d("Smilies", "SID: "+mappings.get(m.group(1)).intValue());
+            //Log.d("Smilies", "OID: "+R.drawable.emoji_smile);
             Drawable smilie = context.getResources().getDrawable(mappings.get(m.group(1)).intValue());
-            smilie.setBounds(0, 0, smilie.getIntrinsicWidth(), smilie.getIntrinsicHeight());
-            ImageSpan span = new ImageSpan(smilie, ImageSpan.ALIGN_BOTTOM);
+
+            // We should scale the image
+            int height = _settings.getFontSize();
+            float density = context.getResources().getDisplayMetrics().density;
+            float scale = height / (float)(smilie.getMinimumHeight());
+            smilie.setBounds(0, 0, (int)(smilie.getMinimumWidth() * scale * density), (int)(height * density));
+            ImageSpan span = new ImageSpan(smilie, ImageSpan.ALIGN_BASELINE);
             text.setSpan(span, m.start(), m.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
 
