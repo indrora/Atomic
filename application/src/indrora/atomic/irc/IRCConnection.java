@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.Vector;
 import java.util.regex.Pattern;
 
@@ -83,8 +84,9 @@ public class IRCConnection extends PircBot
 
         // XXX: Should be configurable via settings
         this.setAutoNickChange(true);
-
-        this.setFinger("http://www.youtube.com/watch?v=oHg5SJYRHA0");
+        // 2012: R-R-Rickroll'd.
+        // 2014: Let's make bread... Or not.
+        this.setFinger("https://www.youtube.com/watch?v=bHK0uFb6Vzw");
         this.updateNickMatchPattern();
     }
 
@@ -476,9 +478,9 @@ public class IRCConnection extends PircBot
      * On Message
      */
     @Override
-    protected void onMessage(String target, String sender, String login, String hostname, String text)
+    protected void onMessage(Date evDate, String target, String sender, String login, String hostname, String text)
     {
-        Message message = new Message(text, sender);
+        Message message = new Message(text, sender,Message.TYPE_MESSAGE,evDate.getTime());
         Conversation conversation = server.getConversation(target);
 
         if (isMentioned(text)) {
@@ -657,9 +659,9 @@ public class IRCConnection extends PircBot
      * On Private Message
      */
     @Override
-    protected void onPrivateMessage(String sender, String login, String hostname, String target, String text)
+    protected void onPrivateMessage(Date evDate, String sender, String login, String hostname, String target, String text)
     {
-        Message message = new Message("<" + sender + "> " + text);
+        Message message = new Message(text,sender,Message.TYPE_MESSAGE,evDate.getTime());
         String queryNick = sender;
 
         if (queryNick.equals(this.getNick())) {

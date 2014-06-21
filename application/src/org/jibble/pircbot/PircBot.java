@@ -28,19 +28,31 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.SecureRandom;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Locale;
 import java.util.StringTokenizer;
+import java.util.TimeZone;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.X509TrustManager;
+
+import android.os.PatternMatcher;
+import android.util.Log;
 
 
 /**
@@ -204,12 +216,43 @@ public abstract class PircBot implements ReplyConstants {
         }
         String nick = this.getName();
 
+        
+        
+        // Capabilities negotiation
+        OutputThread.sendRawLine(this, bwriter, "CAP LS");
 
-        if (saslUsername != null) {
-            OutputThread.sendRawLine(this, bwriter, "CAP LS");
-            OutputThread.sendRawLine(this, bwriter, "CAP REQ : sasl multi-prefix");
+        String ll = breader.readLine();
+        Log.d("pIRCBot", ll);
+        Pattern CAPPattern = Pattern.compile(":(.+) CAP (.+) (LS|ACK) :(.+)");
+        Matcher CAPMatcher = CAPPattern.matcher(ll);
+        if(CAPMatcher.matches())
+        {
+        	String listed_caps = ll;
+        	String[] wanted_caps = { "sasl", "multi-prefix", "znc.in/server-time-iso", "server-time" };
+        	List<String> got_caps = new ArrayList<String>();
+        	for(String want_cap : wanted_caps)
+        	{
+        		if(!listed_caps.contains(want_cap)) continue;
+        		
+        		OutputThread.sendRawLine(this, bwriter, "CAP REQ :"+want_cap);
+        		ll = breader.readLine();
+        		Log.d("pIRCBot", ll);
+        		if(CAPPattern.matcher(ll).matches())
+        		{
+        			got_caps.add(want_cap);
+        		}
+        	}
+        	this.capHasSASL = got_caps.contains("sasl");
+        	this.capMultiPrefix = got_caps.contains("multi-prefix");
+        	this.capServerTime = got_caps.contains("server-time");
+        	this.capZNCServerTime = got_caps.contains("znc.in/server-time-iso");
             OutputThread.sendRawLine(this, bwriter, "CAP END");
-
+        }
+        
+        
+        
+        
+        if (saslUsername != null && this.capHasSASL) {
             OutputThread.sendRawLine(this, bwriter, "AUTHENTICATE PLAIN");
 
             String authString = saslUsername + "\0" + saslUsername + "\0" + saslPassword;
@@ -886,7 +929,35 @@ public abstract class PircBot implements ReplyConstants {
             this.onServerPing(line.substring(5));
             return;
         }
+        HashMap<String,String> tags = new HashMap<String,String>();
+        Date messageDate = new Date();
+        // Get tags
+        if(line.startsWith("@"))
+        {
+        	String[] tag_raw = line.substring(1, line.indexOf(' ')).split(";");
+        	for(String tag_kv : tag_raw)
+        	{
+        		String key = tag_kv.substring(0,tag_kv.indexOf('='));
+        		String valu = tag_kv.substring(tag_kv.indexOf('=')+1);
+        		tags.put(key,valu);
 
+        	}
+        	line = line.substring(line.indexOf(' ')+1);
+        }
+        
+        if(tags.containsKey("time"))
+        {
+        	// ex 2014-06-11T08:10:29.668Z
+        	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
+        	sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        	try {
+				messageDate = sdf.parse(tags.get("time"));
+			} catch (ParseException e) {
+				Log.d("pIRCbot", "EX! "+e.toString());
+				messageDate = new Date();
+			}
+        }
+        
         String sourceNick = "";
         String sourceLogin = "";
         String sourceHostname = "";
@@ -1031,12 +1102,12 @@ public abstract class PircBot implements ReplyConstants {
         }
         else if (command.equals("PRIVMSG") && _channelPrefixes.indexOf(target.charAt(0)) >= 0) {
             // This is a normal message to a channel.
-            this.onMessage(target, sourceNick, sourceLogin, sourceHostname, line.substring(line.indexOf(" :") + 2));
+            this.onMessage( messageDate, target, sourceNick, sourceLogin, sourceHostname, line.substring(line.indexOf(" :") + 2));
         }
         else if (command.equals("PRIVMSG")) {
             // This is a private message to us.
             // XXX PircBot patch to pass target info to privmsg callback
-            this.onPrivateMessage(sourceNick, sourceLogin, sourceHostname, target, line.substring(line.indexOf(" :") + 2));
+            this.onPrivateMessage(messageDate, sourceNick, sourceLogin, sourceHostname, target, line.substring(line.indexOf(" :") + 2));
         }
         else if (command.equals("JOIN")) {
             // Someone is joining a channel.
@@ -1336,7 +1407,7 @@ public abstract class PircBot implements ReplyConstants {
      * @param hostname The hostname of the person who sent the message.
      * @param message The actual message sent to the channel.
      */
-    protected void onMessage(String channel, String sender, String login, String hostname, String message) {}
+    protected void onMessage(Date evDate, String channel, String sender, String login, String hostname, String message) {}
 
 
     /**
@@ -1351,7 +1422,7 @@ public abstract class PircBot implements ReplyConstants {
      * @param message The actual message.
      */
     // XXX PircBot patch to pass target info to privmsg callback
-    protected void onPrivateMessage(String sender, String login, String hostname, String target, String message) {}
+    protected void onPrivateMessage(Date evDate, String sender, String login, String hostname, String target, String message) {}
 
 
     /**
@@ -2922,7 +2993,7 @@ public abstract class PircBot implements ReplyConstants {
      * @see #onUserList(String,User[]) onUserList
      */
     public final User[] getUsers(String channel) {
-        channel = channel.toLowerCase();
+        channel = channel.toLowerCase(Locale.US);
         User[] userArray = new User[0];
         synchronized (_channels) {
             Hashtable<User, User> users = _channels.get(channel);
@@ -3063,7 +3134,7 @@ public abstract class PircBot implements ReplyConstants {
      * Removes an entire channel from our memory of users.
      */
     private final void removeChannel(String channel) {
-        channel = channel.toLowerCase();
+        channel = channel.toLowerCase(Locale.US);
         synchronized (_channels) {
             _channels.remove(channel);
         }
@@ -3148,6 +3219,13 @@ public abstract class PircBot implements ReplyConstants {
     private String _server = null;
     private int _port = -1;
     private String _password = null;
+    
+    // Capabilities
+    
+    private boolean capHasSASL = false;
+    private boolean capServerTime = false;
+    private boolean capZNCServerTime = false;
+    private boolean capMultiPrefix = false;
 
     // Outgoing message stuff.
     private final Queue _outQueue = new Queue();
@@ -3184,6 +3262,8 @@ public abstract class PircBot implements ReplyConstants {
     private String _finger = "You ought to be arrested for fingering a bot!";
 
     private final String _channelPrefixes = "#&+!";
+    
+    
     
     // XXX: Better TLS support
     X509TrustManager[] _trustManagers = new X509TrustManager[] { new NaiveTrustManager() };
