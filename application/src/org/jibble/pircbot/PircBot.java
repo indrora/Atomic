@@ -224,57 +224,15 @@ public abstract class PircBot implements ReplyConstants {
         
         // Capabilities negotiation
         OutputThread.sendRawLine(this, bwriter, "CAP LS");
+    	String[] wanted_caps = { "sasl", "multi-prefix", "znc.in/server-time-iso", "server-time" };
 
-        String ll = breader.readLine();
-        Log.d("pIRCBot", ll);
-        Pattern CAPPattern = Pattern.compile(":(.+) CAP (.+) (LS|ACK) :(.+)");
-        Matcher CAPMatcher = CAPPattern.matcher(ll);
-        if(CAPMatcher.matches())
-        {
-        	String listed_caps = ll;
-        	String[] wanted_caps = { "sasl", "multi-prefix", "znc.in/server-time-iso", "server-time" };
-        	List<String> got_caps = new ArrayList<String>();
-        	for(String want_cap : wanted_caps)
-        	{
-        		if(!listed_caps.contains(want_cap)) continue;
-        		
-        		OutputThread.sendRawLine(this, bwriter, "CAP REQ :"+want_cap);
-        		ll = breader.readLine();
-        		Log.d("pIRCBot", ll);
-        		if(CAPPattern.matcher(ll).matches())
-        		{
-        			got_caps.add(want_cap);
-        		}
-        	}
-        	this.capHasSASL = got_caps.contains("sasl");
-        	this.capMultiPrefix = got_caps.contains("multi-prefix");
-        	this.capServerTime = got_caps.contains("server-time");
-        	this.capZNCServerTime = got_caps.contains("znc.in/server-time-iso");
-            OutputThread.sendRawLine(this, bwriter, "CAP END");
-        }
-        
-        
-        
-        
-        if (saslUsername != null && this.capHasSASL) {
-            OutputThread.sendRawLine(this, bwriter, "AUTHENTICATE PLAIN");
-
-            String authString = saslUsername + "\0" + saslUsername + "\0" + saslPassword;
-
-            String authStringEncoded = Base64.encodeBytes(authString.getBytes());
-
-            while (authStringEncoded.length() >= 400) {
-                String toSend = authStringEncoded.substring(0, 400);
-                authString = authStringEncoded.substring(400);
-
-                OutputThread.sendRawLine(this, bwriter, "AUTHENTICATE " + toSend);
-            }
-
-            if (authStringEncoded.length() > 0) {
-                OutputThread.sendRawLine(this, bwriter, "AUTHENTICATE " + authStringEncoded);
-            } else {
-                OutputThread.sendRawLine(this, bwriter, "AUTHENTICATE +");
-            }
+    	for(String cap : wanted_caps)
+    	{
+    		OutputThread.sendRawLine(this, bwriter, "CAP REQ :"+cap);
+    	}
+    	OutputThread.sendRawLine(this, bwriter, "CAP END");
+    	
+        if (saslUsername != null) {
         }
 
         OutputThread.sendRawLine(this, bwriter, "NICK " + nick);
@@ -915,6 +873,31 @@ public abstract class PircBot implements ReplyConstants {
         throw new RuntimeException("dccAcceptChatRequest is deprecated, please use onIncomingChatRequest");
     }
 
+    private void doSaslAuth(String username, String password)
+    {
+        this.sendRawLine("AUTHENTICATE PLAIN");
+
+        String authString = username + "\0" + username + "\0" + password;
+
+        String authStringEncoded = Base64.encodeBytes(authString.getBytes());
+
+        while (authStringEncoded.length() >= 400) {
+            String toSend = authStringEncoded.substring(0, 400);
+            authString = authStringEncoded.substring(400);
+
+            this.sendRawLine("AUTHENTICATE " + toSend);
+        }
+
+        if (authStringEncoded.length() > 0) {
+            this.sendRawLine("AUTHENTICATE " + authStringEncoded);
+        } else {
+           this.sendRawLine( "AUTHENTICATE +");
+        }
+
+    }
+    
+    private static String CAP_ACK_REGEX = ":(.+) CAP (.+) (LS|ACK|NAK) :(.+)";
+    
     /**
      * This method handles events when any line of text arrives from the server,
      * then calling the appropriate method in the PircBot.  This method is
@@ -933,6 +916,22 @@ public abstract class PircBot implements ReplyConstants {
             this.onServerPing(line.substring(5));
             return;
         }
+    	Matcher m = Pattern.compile(CAP_ACK_REGEX).matcher(line);
+
+        if(m.matches())
+        {
+        	if(m.group(3).equals("NAK")) return;
+        	if(m.group(3).equals("LS")) return;
+        	String acked_cap = m.group(4);
+        	Log.d("pIRCbot", "Got cap from server:"+acked_cap);
+        	if(acked_cap.equals("sasl") && this.saslUsername != null)
+        	{
+        		Log.d("pIRCbot", "Doing SASL authentication");
+        		doSaslAuth(saslUsername, saslPassword);
+        	}
+        	return;
+        }
+        
         HashMap<String,String> tags = new HashMap<String,String>();
         Date messageDate = new Date();
         // Get tags
