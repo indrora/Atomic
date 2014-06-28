@@ -175,6 +175,7 @@ public abstract class PircBot implements ReplyConstants {
         // XXX: PircBot Patch for SSL
         if (_useSSL) {
             try {
+            	this.onConnectionMessage("Opening SSL connection...");
                 SSLContext context = SSLContext.getInstance("TLS");
                 context.init(null, _trustManagers , new SecureRandom());
                 SSLSocketFactory factory = context.getSocketFactory();
@@ -185,7 +186,10 @@ public abstract class PircBot implements ReplyConstants {
             catch(Exception e)
             {
                 // XXX: It's not really an IOException :)
-                throw new IOException("Cannot open SSL socket");
+            	
+            	this.onConnectionMessage("Failed to open SSL socket: "+e.toString());
+            	return;
+                //throw new IOException("Cannot open SSL socket");
             }
         } else {
             _socket =  new Socket(hostname, port);
@@ -1367,6 +1371,14 @@ public abstract class PircBot implements ReplyConstants {
      */
     protected void onServerResponse(int code, String response) {}
 
+    /**
+     * This method is called when there is a generic message about the
+     * that may be interesting for the user to see.
+     * 
+     * This is 100% generated here in the connection.
+     * @param message
+     */
+    protected void onConnectionMessage(String message) {}
 
     /**
      * This method is called when we receive a user list from the server
