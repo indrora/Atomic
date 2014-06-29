@@ -31,6 +31,7 @@ import indrora.atomic.model.Query;
 import indrora.atomic.model.Server;
 import indrora.atomic.model.ServerInfo;
 import indrora.atomic.model.Status;
+import indrora.atomic.model.Message.MessageColor;
 import indrora.atomic.utils.LatchingValue;
 
 import java.io.IOException;
@@ -1119,6 +1120,20 @@ public class IRCConnection extends PircBot
             ServerInfo.DEFAULT_NAME
         );
         service.sendBroadcast(intent);
+    }
+    
+    @Override
+    protected void onConnectionMessage(String message_text) {
+    	Message message = new Message(message_text,Message.TYPE_MISC);
+    	message.setIcon(R.drawable.info);
+    	message.setColor(MessageColor.SERVER_EVENT);
+    	server.getConversation(ServerInfo.DEFAULT_NAME).addMessage(message);
+        Intent intent = Broadcast.createConversationIntent(
+                Broadcast.CONVERSATION_MESSAGE,
+                server.getId(),
+                ServerInfo.DEFAULT_NAME
+            );
+            service.sendBroadcast(intent);
     }
 
     /**
