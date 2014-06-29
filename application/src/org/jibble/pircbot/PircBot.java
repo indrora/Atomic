@@ -1056,7 +1056,7 @@ public abstract class PircBot implements ReplyConstants {
             }
         }
 
-        command = command.toUpperCase();
+        command = command.toUpperCase(Locale.US);
         if (sourceNick.startsWith(":")) {
             sourceNick = sourceNick.substring(1);
         }
