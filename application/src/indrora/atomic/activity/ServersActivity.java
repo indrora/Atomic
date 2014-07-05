@@ -201,36 +201,54 @@ public class ServersActivity extends SherlockActivity implements ServiceConnecti
             // "Add server" view selected
             return true;
         }
+        
+        // This lets us change if we're going to CONNECT or DISCONNECT from a server from the long-press menu.
+        int mangleString = R.string.connect;
+        
+        if(server.getStatus() == Status.CONNECTED)
+        {
+        	mangleString = R.string.disconnect;
+        }
+        final int fMangleString = mangleString;
 
         final CharSequence[] items = {
-            getString(R.string.connect),
-            getString(R.string.disconnect),
+            getString(fMangleString),
             getString(R.string.edit),
+            getString(R.string.duplicate_server),
             getString(R.string.delete)
         };
 
+        
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(server.getTitle());
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
                 switch (item) {
-                    case 0: // Connect
-                        if (server.getStatus() == Status.DISCONNECTED) {
-                            binder.connect(server);
-                            server.setStatus(Status.CONNECTING);
-                            adapter.notifyDataSetChanged();
-                        }
+                    case 0: // Connect/Disconnect
+                    	if(fMangleString == R.string.connect)
+                    	{
+                    		if (server.getStatus() == Status.DISCONNECTED) {
+                    			binder.connect(server);
+                    			server.setStatus(Status.CONNECTING);
+                    			adapter.notifyDataSetChanged();
+                    		}
+                    	}
+                    	else if(fMangleString == R.string.disconnect)
+                    	{
+                            server.clearConversations();
+                            server.setStatus(Status.DISCONNECTED);
+                            server.setMayReconnect(false);
+                            binder.getService().getConnection(server.getId()).quitServer();
+
+                    	}
                         break;
-                    case 1: // Disconnect
-                        server.clearConversations();
-                        server.setStatus(Status.DISCONNECTED);
-                        server.setMayReconnect(false);
-                        binder.getService().getConnection(server.getId()).quitServer();
-                        break;
-                    case 2: // Edit
+                    case 1: // Edit
                         editServer(server.getId());
                         break;
+                    case 2:
+                    	duplicateServer(server.getId());
+                    	break;
                     case 3: // Delete
                         binder.getService().getConnection(server.getId()).quitServer();
                         deleteServer(server.getId());
@@ -257,11 +275,20 @@ public class ServersActivity extends SherlockActivity implements ServiceConnecti
         }
         else {
             Intent intent = new Intent(this, AddServerActivity.class);
+            intent.setAction(AddServerActivity.ACTION_EDIT_SERVER);
             intent.putExtra(Extra.SERVER, serverId);
             startActivityForResult(intent, 0);
         }
     }
 
+    private void duplicateServer(int serverId)
+    {
+    	Intent intent = new Intent(this, AddServerActivity.class);
+    	intent.setAction(AddServerActivity.ACTION_DUPE_SERVER);
+    	intent.putExtra(Extra.SERVER, serverId);
+    	startActivityForResult(intent, 0);
+    }
+    
     /**
      * Options Menu (Menu Button pressed)
      */
@@ -343,11 +370,6 @@ public class ServersActivity extends SherlockActivity implements ServiceConnecti
     public void onStatusUpdate()
     {
         adapter.loadServers();
-
-        if (adapter.getCount() > 2) {
-            // Hide background if there are servers in the list
-            list.setBackgroundDrawable(null);
-        }
     }
     
     long lastBackPress = 0;

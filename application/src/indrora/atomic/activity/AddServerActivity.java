@@ -64,6 +64,12 @@ public class AddServerActivity extends SherlockActivity implements OnClickListen
     private static final int REQUEST_CODE_COMMANDS       = 2;
     private static final int REQUEST_CODE_ALIASES        = 3;
     private static final int REQUEST_CODE_AUTHENTICATION = 4;
+    
+    public static final String ACTION_NEW_SERVER = "new_server";
+    public static final String ACTION_EDIT_SERVER = "edit_server";
+    public static final String ACTION_DUPE_SERVER = "dupe_server";
+    
+    private String _action = ACTION_NEW_SERVER;
 
     private Server server;
     private Authentication authentication;
@@ -102,10 +108,19 @@ public class AddServerActivity extends SherlockActivity implements OnClickListen
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
+        if(getIntent().getAction() != null)
+        {
+        	_action = getIntent().getAction();
+        }
+        
         Bundle extras = getIntent().getExtras();
         if (extras != null && extras.containsKey(Extra.SERVER)) {
-            setTitle(R.string.edit_server_label);
-
+        	
+        	if(_action.equals(ACTION_EDIT_SERVER))
+        	{
+        		setTitle(R.string.edit_server_label);
+        	}
+        	
             // Request to edit an existing server
             Database db = new Database(this);
             this.server = db.getServerById(extras.getInt(Extra.SERVER));
@@ -115,8 +130,12 @@ public class AddServerActivity extends SherlockActivity implements OnClickListen
             this.authentication = server.getAuthentication();
             db.close();
 
+            
             // Set server values
-            ((EditText) findViewById(R.id.title)).setText(server.getTitle());
+            if(_action.equals(ACTION_EDIT_SERVER))
+            {
+            	((EditText) findViewById(R.id.title)).setText(server.getTitle());
+            }
             ((EditText) findViewById(R.id.host)).setText(server.getHost());
             ((EditText) findViewById(R.id.port)).setText(String.valueOf(server.getPort()));
             ((EditText) findViewById(R.id.password)).setText(server.getPassword());
@@ -135,6 +154,14 @@ public class AddServerActivity extends SherlockActivity implements OnClickListen
                     }
                 }
             }
+            
+            // Make the requested server null, since we don't care anymore.
+            if(_action.equals(ACTION_DUPE_SERVER))
+            {
+            	this.server = null;
+            }
+
+            
         }
 
         // Disable suggestions for host name
@@ -276,7 +303,7 @@ public class AddServerActivity extends SherlockActivity implements OnClickListen
         try {
             validateServer();
             validateIdentity();
-            if (server == null) {
+            if (server == null || _action.equals(ACTION_DUPE_SERVER)) {
                 addServer();
             } else {
                 updateServer();

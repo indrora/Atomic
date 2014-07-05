@@ -25,6 +25,7 @@
     <string name="add_server_label">Add new server</string>
     <!-- Edit server (label???) -->
     <string name="edit_server_label">Edit server</string>
+    <string name="duplicate_server">Duplicate Server</string>
     <!-- Server name (human) -->
     <string name="server_title">Title</string>
     <!-- Server hostname (not human) -->
