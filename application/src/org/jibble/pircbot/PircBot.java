@@ -3231,13 +3231,6 @@ public abstract class PircBot implements ReplyConstants {
     private int _port = -1;
     private String _password = null;
     
-    // Capabilities
-    
-    private boolean capHasSASL = false;
-    private boolean capServerTime = false;
-    private boolean capZNCServerTime = false;
-    private boolean capMultiPrefix = false;
-
     // Outgoing message stuff.
     private final Queue _outQueue = new Queue();
     private long _messageDelay = 1000;
