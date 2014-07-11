@@ -12,13 +12,9 @@ public class App extends Application {
 	public App()
 	{
 		super();
-		_a = this;
+		
 		autoconnectComplete = new LatchingValue<Boolean>(true, false);
 	}
-	
-	private static App _a;
-	
-	public static App getApp() { return _a; }
 	
 	private static LatchingValue<Boolean> autoconnectComplete;
 	
@@ -37,9 +33,6 @@ public class App extends Application {
 	public void onCreate() {
 		// Context exists here.
 		Atomic.getInstance().loadServers(getApplicationContext());
-		
-		Thread.UncaughtExceptionHandler def = Thread.getDefaultUncaughtExceptionHandler();
-		Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(def));
 		
 		indrora.atomic.model.Settings _settings = new Settings(this);
 		// Release 16 changes things for colors.

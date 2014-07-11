@@ -16,6 +16,3 @@ ant.properties
 proguard.cfg
 
 application/local.properties
-
-# Classpaths should not be here...
-**/.classpath
