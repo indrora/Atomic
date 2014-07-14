@@ -47,6 +47,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.X509TrustManager;
@@ -184,12 +185,8 @@ public abstract class PircBot implements ReplyConstants {
                 _socket = ssocket;
             }
             catch(Exception e)
-            {
-                // XXX: It's not really an IOException :)
-            	
-            	this.onConnectionMessage("Failed to open SSL socket: "+e.toString());
-            	return;
-                //throw new IOException("Cannot open SSL socket");
+            {            	
+            	throw new SSLException("SSL certificate denied: "+e.getMessage(), e);
             }
         } else {
             _socket =  new Socket(hostname, port);
