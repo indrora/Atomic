@@ -41,6 +41,7 @@ public class Server implements Comparable<Server>
     private String password;
     private String charset;
     private boolean useSSL = false;
+    private boolean autoconnect = false;
 
     private Identity identity;
     private Authentication authentication;
@@ -62,7 +63,17 @@ public class Server implements Comparable<Server>
         conversations.put(ServerInfo.DEFAULT_NAME, new ServerInfo());
         this.selected = ServerInfo.DEFAULT_NAME;
     }
+    
+    public boolean getAutoconnect()
+    {
+    	return this.autoconnect;
+    }
 
+    public void setAutoconnect(boolean auto)
+    {
+    	this.autoconnect = auto;
+    }
+    
     /**
      * Compares this Server with another Server. This compares the two
      * Servers by their titles.

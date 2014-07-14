@@ -180,7 +180,7 @@ public class Database extends SQLiteOpenHelper
         values.put(ServerConstants.USE_SSL, server.useSSL());
         values.put(ServerConstants.IDENTITY, identityId);
         values.put(ServerConstants.CHARSET, server.getCharset());
-
+        values.put(ServerConstants.AUTOCONNECT, server.getAutoconnect());
         Authentication authentication = server.getAuthentication();
         values.put(ServerConstants.NICKSERV_PASSWORD, authentication.getNickservPassword());
         values.put(ServerConstants.SASL_USERNAME, authentication.getSaslUsername());
