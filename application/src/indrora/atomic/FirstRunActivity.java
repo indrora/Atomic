@@ -200,7 +200,6 @@ public class FirstRunActivity extends Activity {
 	
 	@Override
 	public void onBackPressed() {
-		final FirstRunActivity t = this;
 		AlertDialog ab = new AlertDialog.Builder(this)
 			.setTitle(R.string.title_activity_first_run)
 			.setMessage(R.string.back_twice_exit)

@@ -308,14 +308,25 @@ public class ConversationActivity extends SherlockActivity implements
 
 		
 		// Add handling for tab-completing from the input box.
-		final Drawable dd = 				getResources().getDrawable(R.drawable.user);
-		dd.setBounds(0,0,dd.getIntrinsicWidth(),dd.getIntrinsicWidth());
+				
+		int tabCompleteDrawableResource = (settings.getUseDarkColors()?
+				R.drawable.ic_tabcomplete_light : R.drawable.ic_tabcomplete_dark);
+		// The drawable that makes up the actual clicky
+		final Drawable tabcompleteDrawable = getResources().getDrawable(tabCompleteDrawableResource);
+		// Set the bounds to the Intrinsic width
+		// We'll resize this later (well, the input box will handle that for us)
+		tabcompleteDrawable.setBounds(0,0,
+				tabcompleteDrawable.getIntrinsicWidth(),
+				tabcompleteDrawable.getIntrinsicWidth()
+				);
+		// Set the input compound drawables.
 		input.setCompoundDrawables(
 				null,
 				null,
-				dd,
+				tabcompleteDrawable,
 				null
 				);
+		// Magic.
 		final EditText tt = input;
 		final ConversationActivity cv = this;
 		input.setOnTouchListener(new View.OnTouchListener() {
@@ -323,14 +334,14 @@ public class ConversationActivity extends SherlockActivity implements
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 					// This is where we handle some things.
-					boolean tappedX = event.getX() > (tt.getWidth() - tt.getPaddingRight() - dd
+					boolean tappedX = event.getX() > (tt.getWidth() - tt.getPaddingRight() - tabcompleteDrawable
 						.getIntrinsicWidth());
 
 					if(event.getAction() == MotionEvent.ACTION_UP && tappedX)
 					{
 						cv.doNickCompletion(tt);
 					}
-				return false;
+				return false; 
 			}
 		});
 

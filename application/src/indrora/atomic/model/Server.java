@@ -435,12 +435,12 @@ public class Server implements Comparable<Server>
     {
         switch (status) {
             case Status.CONNECTED:
-                return R.drawable.connected;
+                return R.drawable.ic_network_connected;
             case Status.DISCONNECTED:
-                return R.drawable.disconnected;
+                return R.drawable.ic_network_disconnected;
             case Status.PRE_CONNECTING:
             case Status.CONNECTING:
-                return R.drawable.connecting;
+                return R.drawable.ic_network_connecting;
         }
 
         return R.drawable.connecting;
