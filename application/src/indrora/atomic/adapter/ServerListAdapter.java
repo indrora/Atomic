@@ -137,8 +137,10 @@ public class ServerListAdapter extends BaseAdapter
         titleView.setText(server.getTitle());
 
         TextView hostView = (TextView) v.findViewById(R.id.host);
-        hostView.setText(server.getIdentity().getNickname() + " @ " + server.getHost() + " : " + server.getPort());
+        hostView.setText(server.getIdentity().getNickname() + "@" + server.getHost() + ":" + server.getPort());
 
+        /* This is crap. */
+        /*
         if (server.isConnected()) {
             titleView.setTextColor(COLOR_CONNECTED);
             hostView.setTextColor(COLOR_CONNECTED);
@@ -146,7 +148,8 @@ public class ServerListAdapter extends BaseAdapter
             titleView.setTextColor(COLOR_DISCONNECTED);
             hostView.setTextColor(COLOR_DISCONNECTED);
         }
-
+		*/
+        
         ((ImageView) v.findViewById(R.id.status)).setImageResource(server.getStatusIcon());
 
         return v;
