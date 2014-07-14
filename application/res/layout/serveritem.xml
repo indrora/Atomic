@@ -20,32 +20,37 @@ You should have received a copy of the GNU General Public License
 along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:padding="5dp">
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:padding="5dp" >
+
     <ImageView
         android:id="@+id/status"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:src="@drawable/disconnected"
         android:layout_gravity="center_vertical" />
+
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
         android:orientation="vertical"
-        android:paddingLeft="5dp">
+        android:paddingLeft="5dp" >
+
         <TextView
             android:id="@+id/title"
-            android:layout_width="fill_parent" 
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Server"
-            android:textSize="18sp" />
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
         <TextView
-           android:id="@+id/host"
-           android:layout_width="fill_parent"
-           android:layout_height="wrap_content"
-           android:text="irc.example.com"
-           android:textSize="12sp" />
+            android:id="@+id/host"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="irc.example.com" />
+
     </LinearLayout>
 </LinearLayout>
