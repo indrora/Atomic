@@ -173,11 +173,10 @@ public class ServersActivity extends SherlockActivity implements ServiceConnecti
         	for(int idx=0;idx<adapter.getCount();idx++)
         	{
         		Server s = adapter.getItem(idx);
-        		if(s.getAutoconnect())
+        		
+        		if(s.getAutoconnect() && s.getStatus() == Status.DISCONNECTED)
         		{
-        			s.setStatus(Status.PRE_CONNECTING);
-        			binder.getService().connect(s);
-        			adapter.notifyDataSetChanged();
+        			ConnectServer(s);
         		}
         	}
         }
@@ -216,6 +215,24 @@ public class ServersActivity extends SherlockActivity implements ServiceConnecti
         startActivity(intent);
     }
 
+    private void ConnectServer(Server s)
+    {
+		if (s.getStatus() == Status.DISCONNECTED) {
+			binder.connect(s);
+			s.setStatus(Status.CONNECTING);
+			adapter.notifyDataSetChanged();
+		}
+
+    }
+    private void DisconnectServer(Server server)
+    {
+        server.clearConversations();
+        server.setStatus(Status.DISCONNECTED);
+        server.setMayReconnect(false);
+        binder.getService().getConnection(server.getId()).quitServer();
+
+    }
+    
     /**
      * On long click
      */
@@ -255,19 +272,11 @@ public class ServersActivity extends SherlockActivity implements ServiceConnecti
                     case 0: // Connect/Disconnect
                     	if(fMangleString == R.string.connect)
                     	{
-                    		if (server.getStatus() == Status.DISCONNECTED) {
-                    			binder.connect(server);
-                    			server.setStatus(Status.CONNECTING);
-                    			adapter.notifyDataSetChanged();
-                    		}
+                    		ConnectServer(server);
                     	}
                     	else if(fMangleString == R.string.disconnect)
                     	{
-                            server.clearConversations();
-                            server.setStatus(Status.DISCONNECTED);
-                            server.setMayReconnect(false);
-                            binder.getService().getConnection(server.getId()).quitServer();
-
+                    		DisconnectServer(server);
                     	}
                         break;
                     case 1: // Edit
@@ -408,9 +417,7 @@ public class ServersActivity extends SherlockActivity implements ServiceConnecti
             ArrayList<Server> mServers = Atomic.getInstance().getServersAsArrayList();
             for (Server server : mServers) {
                 if (binder.getService().hasConnection(server.getId())) {
-                    server.setStatus(Status.DISCONNECTED);
-                    server.setMayReconnect(false);
-                    binder.getService().getConnection(server.getId()).quitServer();
+                	DisconnectServer(server);
                 }
             }
             binder.getService().stopForegroundCompat(R.string.app_name);
