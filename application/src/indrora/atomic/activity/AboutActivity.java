@@ -43,6 +43,9 @@ public class AboutActivity extends SherlockActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.about);
         
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        
         TextView licenseDetails = (TextView) findViewById(R.id.about_license_info);
         licenseDetails.setText(Html.fromHtml(getString(R.string.licence_info)));
         

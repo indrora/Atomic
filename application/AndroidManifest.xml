@@ -68,61 +68,65 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
         <activity
             android:name="indrora.atomic.activity.AuthenticationActivity"
             android:label="@string/authentication"
-            android:theme="@android:style/Theme.Dialog" >
+            android:theme="@style/Theme.Sherlock.Dialog" >
         </activity>
         <activity
             android:name="indrora.atomic.activity.AboutActivity"
+            android:parentActivityName="indrora.atomic.activity.ServersActivity"
             android:label="@string/about_label" >
         </activity>
         <activity
             android:name="indrora.atomic.activity.SettingsActivity"
+            android:parentActivityName="indrora.atomic.activity.ServersActivity"
             android:label="@string/settings_label" >
         </activity>
         <activity
             android:name="indrora.atomic.activity.JoinActivity"
             android:label="@string/join_label"
-            android:theme="@android:style/Theme.Dialog" >
+            android:theme="@style/Theme.Sherlock.Dialog" >
         </activity>
         <activity
             android:name="indrora.atomic.activity.UsersActivity"
             android:label="@string/users"
-            android:theme="@android:style/Theme.Dialog" >
+             android:theme="@style/Theme.Sherlock.Dialog"  >
         </activity>
         <activity
             android:name="indrora.atomic.activity.AddAliasActivity"
-            android:theme="@android:style/Theme.Dialog" >
+             android:theme="@style/Theme.Sherlock.Dialog"  >
         </activity>
         <activity
             android:name="indrora.atomic.activity.AddChannelActivity"
-            android:theme="@android:style/Theme.Dialog" >
+            android:theme="@style/Theme.Sherlock.Dialog" >
         </activity>
         <activity
             android:name="indrora.atomic.activity.AddCommandsActivity"
-            android:theme="@android:style/Theme.Dialog" >
+            android:theme="@style/Theme.Sherlock.Dialog" >
         </activity>
         <activity
             android:name="indrora.atomic.activity.MessageActivity"
-            android:theme="@android:style/Theme.Dialog" >
+            android:theme="@style/Theme.Sherlock.Dialog" >
         </activity>
         <activity
             android:name="indrora.atomic.activity.UserActivity"
-            android:theme="@android:style/Theme.Dialog" >
+            android:theme="@style/Theme.Sherlock.Dialog" >
         </activity>
 
-        <service android:name="indrora.atomic.irc.IRCService" >
+        <service android:name="indrora.atomic.irc.IRCService" 
+            >
         </service>
 
         <activity android:name="indrora.atomic.activity.ForgetCertificatesActivity" >
             <intent-filter>
                 <action android:name="indrora.atomic.activity.ForgetCertificatesActivity" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+            
         </activity>
         <!-- Memorizing Trust manager -->
         <activity android:name="de.duenndns.ssl.MemorizingActivity" />
         <activity
             android:name="indrora.atomic.FirstRunActivity"
+            android:theme="@android:style/Theme.Black.NoTitleBar"
             android:label="@string/title_activity_first_run" >
         </activity>
     </application>
