@@ -27,6 +27,7 @@ import indrora.atomic.db.Database;
 import indrora.atomic.model.Broadcast;
 import indrora.atomic.model.Conversation;
 import indrora.atomic.model.Message;
+import indrora.atomic.model.Message.MessageColor;
 import indrora.atomic.model.Server;
 import indrora.atomic.model.ServerInfo;
 import indrora.atomic.model.Settings;
@@ -39,6 +40,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
+import javax.net.ssl.SSLException;
 import javax.net.ssl.X509TrustManager;
 
 import org.jibble.pircbot.IrcException;
@@ -514,6 +516,11 @@ public class IRCService extends Service
                     } else if (e instanceof IrcException) {
                         message = new Message(getString(R.string.irc_login_error, server.getHost(), server.getPort()));
                         server.setMayReconnect(false);
+                    } else if (e instanceof SSLException) {
+                    	// This happens when we declined the SSL certificate most of the time
+                    	// We should check what really happened.
+                    	message = new Message("SSL negotiation failed: "+e.toString());
+                    	message.setColor(MessageColor.SERVER_EVENT);
                     } else {
                         message = new Message(getString(R.string.could_not_connect, server.getHost(), server.getPort()) +":\n"+e.getMessage());
                         
