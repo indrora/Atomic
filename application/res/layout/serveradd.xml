@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<!--
 Yaaic - Yet Another Android IRC Client
 
 Copyright 2009-2013 Sebastian Kaspari
@@ -19,182 +19,215 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:scrollbarStyle="outsideInset">
+    android:scrollbarStyle="outsideInset" >
+
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
         <TextView
-            android:text="@string/server"
+            style="?android:attr/listSeparatorTextViewStyle"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="3dip"
-            style="?android:attr/listSeparatorTextViewStyle" />
+            android:text="@string/server" />
+
         <TextView
-            android:text="@string/server_title"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="@string/server_title" />
+
         <EditText
             android:id="@+id/title"
-            android:contentDescription="@string/server_title"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/server_title"
+            android:inputType="textCapCharacters"
             android:singleLine="true" />
+
         <TextView
-            android:text="@string/server_host"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="@string/server_host" />
+
         <EditText
             android:id="@+id/host"
-            android:contentDescription="@string/server_host"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:inputType="textNoSuggestions" />
+            android:contentDescription="@string/server_host"
+            android:inputType="textNoSuggestions"
+            android:singleLine="true" />
+
         <TextView
-            android:text="@string/server_port"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="@string/server_port" />
+
         <EditText
             android:id="@+id/port"
-            android:contentDescription="@string/server_port"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:singleLine="true"
+            android:contentDescription="@string/server_port"
+            android:inputType="number"
+            android:maxLength="5"
             android:minEms="6"
-            android:text="6667"
-            android:numeric="integer"
-            android:maxLength="5" />
+            android:singleLine="true"
+            android:text="6667" />
+
         <TextView
-            android:text="@string/server_password"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="@string/server_password" />
+
         <EditText
             android:id="@+id/password"
-            android:contentDescription="@string/server_password"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:password="true"
+            android:contentDescription="@string/server_password"
+            android:inputType="textPassword"
+            android:maxEms="10"
             android:minEms="10"
-            android:maxEms="10" />
+            android:singleLine="true" />
+
         <CheckBox
             android:id="@+id/autoconnect"
-            android:contentDescription="@string/server_port"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/server_port"
             android:text="@string/server_port"
             android:visibility="gone" />
+
         <CheckBox
             android:id="@+id/useSSL"
-            android:contentDescription="@string/server_useSSL"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/server_useSSL"
             android:text="@string/server_useSSL" />
-<!-- ############################################################################ -->
+        <!-- ############################################################################ -->
+
         <TextView
-            android:text="@string/user"
+            style="?android:attr/listSeparatorTextViewStyle"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="3dip"
-            style="?android:attr/listSeparatorTextViewStyle" />
+            android:text="@string/user" />
+
         <TextView
-            android:text="@string/nickname"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="@string/nickname" />
+
         <EditText
             android:id="@+id/nickname"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:contentDescription="@string/nickname" />
+            android:contentDescription="@string/nickname"
+            android:inputType="textNoSuggestions"
+            android:singleLine="true" />
+
         <Button
             android:id="@+id/aliases"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/aliases" />
+
         <TextView
-            android:text="@string/ident"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="@string/ident" />
+
         <EditText
             android:id="@+id/ident"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="yaaic"
             android:contentDescription="@string/ident"
-            android:singleLine="true" />
+            android:inputType="textNoSuggestions"
+            android:singleLine="true"
+            android:text="yaaic" />
+
         <TextView
-            android:text="@string/realname"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="@string/realname" />
+
         <EditText
             android:id="@+id/realname"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text=""
             android:contentDescription="@string/realname"
-            android:singleLine="true" />
-<!-- ############################################################################ -->
+            android:inputType="textPersonName"
+            android:singleLine="true"
+            android:text="" />
+        <!-- ############################################################################ -->
+
         <TextView
-            android:text="@string/on_connect"
+            style="?android:attr/listSeparatorTextViewStyle"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="3dip"
-            style="?android:attr/listSeparatorTextViewStyle" />
+            android:text="@string/on_connect" />
+
         <Button
             android:id="@+id/authentication"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/authentication" />
+
         <Button
             android:id="@+id/channels"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/channels" />
+
         <Button
             android:id="@+id/commands"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/commands" />
-<!-- ############################################################################ -->
+        <!-- ############################################################################ -->
+
         <TextView
-            android:text="@string/preferences"
+            style="?android:attr/listSeparatorTextViewStyle"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="3dip"
-            style="?android:attr/listSeparatorTextViewStyle" />
+            android:text="@string/preferences" />
+
         <TextView
-            android:text="@string/charset"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="@string/charset" />
+
         <Spinner
             android:id="@+id/charset"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:prompt="@string/select_charset" />
-<!-- ############################################################################ -->
+        <!-- ############################################################################ -->
+
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="10dp">
+            android:orientation="horizontal"
+            android:paddingTop="10dp" >
+
             <Button
                 android:id="@+id/add"
-                android:text="@string/server_save"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:text="@string/server_save" />
+
             <Button
                 android:id="@+id/cancel"
-                android:text="@string/action_cancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="0" />
+                android:layout_weight="0"
+                android:text="@string/action_cancel" />
         </LinearLayout>
     </LinearLayout>
+
 </ScrollView>
