@@ -23,7 +23,6 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:scrollbarStyle="outsideInset" >
-
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -93,19 +92,17 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
             android:singleLine="true" />
 
         <CheckBox
-            android:id="@+id/autoconnect"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/server_port"
-            android:text="@string/server_port"
-            android:visibility="gone" />
-
-        <CheckBox
             android:id="@+id/useSSL"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:contentDescription="@string/server_useSSL"
             android:text="@string/server_useSSL" />
+        
+        <CheckBox android:id="@+id/autoconnect"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/server_autoconnect"
+            />
         <!-- ############################################################################ -->
 
         <TextView

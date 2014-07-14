@@ -206,9 +206,9 @@ public class Database extends SQLiteOpenHelper
         values.put(ServerConstants.PASSWORD, server.getPassword());
         values.put(ServerConstants.AUTOCONNECT, false);
         values.put(ServerConstants.USE_SSL, server.useSSL());
+        values.put(ServerConstants.AUTOCONNECT, server.getAutoconnect());
         values.put(ServerConstants.IDENTITY, identityId);
         values.put(ServerConstants.CHARSET, server.getCharset());
-
         Authentication authentication = server.getAuthentication();
 
         values.put(ServerConstants.NICKSERV_PASSWORD, authentication.getNickservPassword());
@@ -424,11 +424,12 @@ public class Database extends SQLiteOpenHelper
         server.setPassword(cursor.getString(cursor.getColumnIndex(ServerConstants.PASSWORD)));
         server.setId(cursor.getInt(cursor.getColumnIndex((ServerConstants._ID))));
         server.setCharset(cursor.getString(cursor.getColumnIndex(ServerConstants.CHARSET)));
-
         String useSSLvalue = cursor.getString(cursor.getColumnIndex(ServerConstants.USE_SSL));
         if (useSSLvalue != null && useSSLvalue.equals("1")) {
             server.setUseSSL(true);
         }
+        String autoconnectValue = cursor.getString(cursor.getColumnIndex(ServerConstants.AUTOCONNECT));
+        server.setAutoconnect("1".equals(autoconnectValue)); // Yoda-Style
 
         server.setStatus(Status.DISCONNECTED);
 

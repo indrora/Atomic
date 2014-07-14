@@ -520,7 +520,6 @@ public class IRCService extends Service
                     	// This happens when we declined the SSL certificate most of the time
                     	// We should check what really happened.
                     	message = new Message("SSL negotiation failed: "+e.toString());
-                    	message.setColor(MessageColor.SERVER_EVENT);
                     } else {
                         message = new Message(getString(R.string.could_not_connect, server.getHost(), server.getPort()) +":\n"+e.getMessage());
                         

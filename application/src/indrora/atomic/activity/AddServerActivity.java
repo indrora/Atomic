@@ -38,6 +38,7 @@ import indrora.atomic.R;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -139,11 +140,12 @@ public class AddServerActivity extends SherlockActivity implements OnClickListen
             ((EditText) findViewById(R.id.host)).setText(server.getHost());
             ((EditText) findViewById(R.id.port)).setText(String.valueOf(server.getPort()));
             ((EditText) findViewById(R.id.password)).setText(server.getPassword());
-
+           
             ((EditText) findViewById(R.id.nickname)).setText(server.getIdentity().getNickname());
             ((EditText) findViewById(R.id.ident)).setText(server.getIdentity().getIdent());
             ((EditText) findViewById(R.id.realname)).setText(server.getIdentity().getRealName());
             ((CheckBox) findViewById(R.id.useSSL)).setChecked(server.useSSL());
+            ((CheckBox) findViewById(R.id.autoconnect)).setChecked(server.getAutoconnect());
 
             // Select charset
             if (server.getCharset() != null) {
@@ -397,9 +399,7 @@ public class AddServerActivity extends SherlockActivity implements OnClickListen
         String password = ((EditText) findViewById(R.id.password)).getText().toString().trim();
         String charset = ((Spinner) findViewById(R.id.charset)).getSelectedItem().toString();
         Boolean useSSL = ((CheckBox) findViewById(R.id.useSSL)).isChecked();
-
-        // not in use yet
-        //boolean autoConnect = ((CheckBox) findViewById(R.id.autoconnect)).isChecked();
+        Boolean autoConnect = ((CheckBox) findViewById(R.id.autoconnect)).isChecked();
 
         Server server = new Server();
         server.setHost(host);
@@ -408,6 +408,7 @@ public class AddServerActivity extends SherlockActivity implements OnClickListen
         server.setTitle(title);
         server.setCharset(charset);
         server.setUseSSL(useSSL);
+        server.setAutoconnect(autoConnect);
         server.setStatus(Status.DISCONNECTED);
 
         return server;

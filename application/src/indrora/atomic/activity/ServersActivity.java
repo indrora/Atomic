@@ -32,6 +32,7 @@ import indrora.atomic.model.Extra;
 import indrora.atomic.model.Server;
 import indrora.atomic.model.Status;
 import indrora.atomic.receiver.ServerReceiver;
+import indrora.atomic.utils.LatchingValue;
 
 import java.util.ArrayList;
 
@@ -46,6 +47,7 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.text.format.Time;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -70,6 +72,8 @@ public class ServersActivity extends SherlockActivity implements ServiceConnecti
     private ListView list;
     private static int instanceCount = 0;
 
+    LatchingValue<Boolean> doAutoconnect = new LatchingValue<Boolean>(true,false);
+    
     /**
      * On create
      */
@@ -154,6 +158,29 @@ public class ServersActivity extends SherlockActivity implements ServiceConnecti
     public void onServiceConnected(ComponentName name, IBinder service)
     {
         binder = (IRCBinder) service;
+        
+        // This is kinda cute
+        // We'll always keep the service in the foreground, just to remind people that it's there.
+        
+        Intent intent = new Intent(this, IRCService.class);
+        intent.setAction(IRCService.ACTION_FOREGROUND);
+        startService(intent);
+        // Autoconnect is done via a Latching Value. There's no real reason to have it
+        // a latchingValue but it lets us later on reset the Autoconnect fields.
+        if(doAutoconnect.getValue())
+        {
+        	Log.d("ServerList", "Doing autoconnect");
+        	for(int idx=0;idx<adapter.getCount();idx++)
+        	{
+        		Server s = adapter.getItem(idx);
+        		if(s.getAutoconnect())
+        		{
+        			s.setStatus(Status.PRE_CONNECTING);
+        			binder.getService().connect(s);
+        			adapter.notifyDataSetChanged();
+        		}
+        	}
+        }
     }
 
     /**
