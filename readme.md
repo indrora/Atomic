@@ -9,6 +9,8 @@ After trying HoloIRC, AndChat, yaaic, and several others, yaaic came the
 closest and after pressure from friends, I decided to go ahead and
 fork yaaic.
 
+Atomic's official IRC channel is `#atomic-irc` on Freenode.
+
 I'm changing the name to prevent clashes with yaaic, and to preserve
 Sebastian's honour. 
 
