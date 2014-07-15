@@ -22,12 +22,13 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
 package indrora.atomic.irc;
 
 import indrora.atomic.Atomic;
+import indrora.atomic.R;
+import indrora.atomic.activity.ConversationActivity;
 import indrora.atomic.activity.ServersActivity;
 import indrora.atomic.db.Database;
 import indrora.atomic.model.Broadcast;
 import indrora.atomic.model.Conversation;
 import indrora.atomic.model.Message;
-import indrora.atomic.model.Message.MessageColor;
 import indrora.atomic.model.Server;
 import indrora.atomic.model.ServerInfo;
 import indrora.atomic.model.Settings;
@@ -46,8 +47,6 @@ import javax.net.ssl.X509TrustManager;
 import org.jibble.pircbot.IrcException;
 import org.jibble.pircbot.NickAlreadyInUseException;
 
-import de.duenndns.ssl.MemorizingTrustManager;
-import indrora.atomic.R;
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -57,6 +56,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
+import de.duenndns.ssl.MemorizingTrustManager;
 
 /**
  * The background service for managing the irc connections
@@ -244,9 +245,9 @@ public class IRCService extends Service
         if (foreground) {
         	// I give up. Android changed how this works -- Hope it never goes away. 
             notification = new Notification(R.drawable.ic_service_icon, text, System.currentTimeMillis());
+            
             Intent notifyIntent = new Intent(this, ServersActivity.class);
             notifyIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notifyIntent, 0);
 
             if (contentText == null) {
                 if (newMentions >= 1) {
@@ -255,6 +256,26 @@ public class IRCService extends Service
                         sb.append(conv.getName() + " (" + conv.getNewMentions() + "), ");
                     }
                     contentText = getString(R.string.notification_mentions, sb.substring(0, sb.length()-2));
+                    
+                    notifyIntent = new Intent().setClass(this, ConversationActivity.class);
+                    
+                    // We're going to work through the mentions keys. The first half is the server ID, the other half
+                    // is the channel that the mention belongs to.
+                    
+                    int ServerID = -1;
+                    String Convo = "";
+                    for(String convID:mentions.keySet())
+                    {
+                    	ServerID = Integer.parseInt(convID.substring(0, convID.indexOf(':')));
+                    	Convo = convID.substring(convID.indexOf(':')+1);
+                    }
+                    
+                    Log.d("IRCService", "Jump target is '"+Convo+"'");
+                    notifyIntent.setAction("GOTO");
+                    notifyIntent.putExtra("serverId", ServerID);
+                    //notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    notifyIntent.putExtra(ConversationActivity.EXTRA_TARGET, ""+Convo);                    
+                    
                 } else if (!connectedServerTitles.isEmpty()) {
                     StringBuilder sb = new StringBuilder();
                     for (String title : connectedServerTitles) {
@@ -266,6 +287,7 @@ public class IRCService extends Service
                 }
             }
 
+            PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notifyIntent, PendingIntent.FLAG_CANCEL_CURRENT|PendingIntent.FLAG_ONE_SHOT);
             notification.setLatestEventInfo(this, getText(R.string.app_name), contentText, contentIntent);
 
             if (vibrate) {

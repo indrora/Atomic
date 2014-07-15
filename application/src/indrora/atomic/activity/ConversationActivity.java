@@ -67,7 +67,6 @@ import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.hardware.input.InputManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.speech.RecognizerIntent;
@@ -75,6 +74,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.text.InputType;
 import android.text.method.TextKeyListener;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -109,6 +109,8 @@ public class ConversationActivity extends SherlockActivity implements
 	private static final int REQUEST_CODE_USER = 3;
 	private static final int REQUEST_CODE_NICK_COMPLETION = 4;
 
+	public static final String EXTRA_TARGET = "target";
+	
 	private static ColorScheme _scheme;
 
 	public static ColorScheme getScheme() {
@@ -205,7 +207,7 @@ public class ConversationActivity extends SherlockActivity implements
 		super.onCreate(savedInstanceState);
 
 		_scheme = App.getColorScheme();
-
+		
 		serverId = getIntent().getExtras().getInt("serverId");
 		server = Atomic.getInstance().getServerById(serverId);
 		settings = new Settings(this);
@@ -217,7 +219,7 @@ public class ConversationActivity extends SherlockActivity implements
 
 		ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
-		
+
 		setTitle(server.getTitle());
 
 		setContentView(R.layout.conversations);
@@ -351,6 +353,26 @@ public class ConversationActivity extends SherlockActivity implements
 
 		// Create a new scrollback history
 		scrollback = new Scrollback();
+		
+		if("GOTO".equals(getIntent().getAction()))
+		{
+			boolean found = false;
+			// Try and find the conversation given in the intent.
+			String convo = getIntent().getExtras().getString(ConversationActivity.EXTRA_TARGET);
+			Log.d("ConversationActivity", "Trying to change to conversation "+convo);
+						
+			if(convo == null) {found =true; }
+			for(int idx =0; idx < pagerAdapter.getCount() && !found; idx++)
+			{
+				if(pagerAdapter.getItem(idx) == null) continue;
+				String tConvo = pagerAdapter.getItem(idx).getName();
+				if (tConvo.equals(convo))
+				{
+					pager.setCurrentItem(idx,false);
+					found = true;
+				}
+			}
+		}
 	}
 
 	private void setupColors() {
@@ -468,6 +490,9 @@ public class ConversationActivity extends SherlockActivity implements
 		setupColors();
 		setupIndicator();
 
+		openSoftKeyboard(findViewById(R.id.input));
+
+		
 		server.setIsForeground(true);
 	}
 
