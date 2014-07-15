@@ -54,6 +54,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -256,9 +257,7 @@ public class IRCService extends Service
                         sb.append(conv.getName() + " (" + conv.getNewMentions() + "), ");
                     }
                     contentText = getString(R.string.notification_mentions, sb.substring(0, sb.length()-2));
-                    
-                    notifyIntent = new Intent().setClass(this, ConversationActivity.class);
-                    
+                                        
                     // We're going to work through the mentions keys. The first half is the server ID, the other half
                     // is the channel that the mention belongs to.
                     
@@ -271,25 +270,30 @@ public class IRCService extends Service
                     }
                     
                     Log.d("IRCService", "Jump target is '"+Convo+"'");
+                    notifyIntent.setClass(this, ConversationActivity.class);
                     notifyIntent.setAction("GOTO");
                     notifyIntent.putExtra("serverId", ServerID);
-                    //notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     notifyIntent.putExtra(ConversationActivity.EXTRA_TARGET, ""+Convo);                    
                     
-                } else if (!connectedServerTitles.isEmpty()) {
-                    StringBuilder sb = new StringBuilder();
-                    for (String title : connectedServerTitles) {
-                        sb.append(title + ", ");
-                    }
-                    contentText = getString(R.string.notification_connected, sb.substring(0, sb.length()-2));
-                } else {
-                    contentText = getString(R.string.notification_not_connected);
-                }
+                } else
+                {
+                	if (!connectedServerTitles.isEmpty()) {
+	                    StringBuilder sb = new StringBuilder();
+	                    for (String title : connectedServerTitles) {
+	                        sb.append(title + ", ");
+	                    }
+	                    contentText = getString(R.string.notification_connected, sb.substring(0, sb.length()-2));
+	                } else {
+	                    contentText = getString(R.string.notification_not_connected);
+	                }
+            	}
             }
 
-            PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notifyIntent, PendingIntent.FLAG_CANCEL_CURRENT|PendingIntent.FLAG_ONE_SHOT);
+            PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             notification.setLatestEventInfo(this, getText(R.string.app_name), contentText, contentIntent);
 
+            
+            
             if (vibrate) {
                 notification.defaults |= Notification.DEFAULT_VIBRATE;
             }
@@ -307,6 +311,8 @@ public class IRCService extends Service
                 notification.flags    |= Notification.FLAG_SHOW_LIGHTS;
             }
 
+            
+            
             notification.number = newMentions;
 
             notificationManager.notify(FOREGROUND_NOTIFICATION, notification);
