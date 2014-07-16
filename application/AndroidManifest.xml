@@ -64,6 +64,7 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
         <activity
             android:name="indrora.atomic.activity.ConversationActivity"
             android:windowSoftInputMode="adjustResize"
+            android:launchMode="singleTop"
             android:parentActivityName="indrora.atomic.activity.ServersActivity"
              >
         </activity>

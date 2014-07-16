@@ -248,8 +248,8 @@ public class IRCService extends Service
             notification = new Notification(R.drawable.ic_service_icon, text, System.currentTimeMillis());
             
             Intent notifyIntent = new Intent(this, ServersActivity.class);
-            notifyIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
+            //notifyIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            
             if (contentText == null) {
                 if (newMentions >= 1) {
                     StringBuilder sb = new StringBuilder();
@@ -271,7 +271,7 @@ public class IRCService extends Service
                     
                     Log.d("IRCService", "Jump target is '"+Convo+"'");
                     notifyIntent.setClass(this, ConversationActivity.class);
-                    notifyIntent.setAction("GOTO");
+                    notifyIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     notifyIntent.putExtra("serverId", ServerID);
                     notifyIntent.putExtra(ConversationActivity.EXTRA_TARGET, ""+Convo);                    
                     

@@ -354,27 +354,62 @@ public class ConversationActivity extends SherlockActivity implements
 		// Create a new scrollback history
 		scrollback = new Scrollback();
 		
-		if("GOTO".equals(getIntent().getAction()))
+		if(getIntent().getExtras().containsKey(EXTRA_TARGET))
 		{
-			boolean found = false;
-			// Try and find the conversation given in the intent.
-			String convo = getIntent().getExtras().getString(ConversationActivity.EXTRA_TARGET);
-			Log.d("ConversationActivity", "Trying to change to conversation "+convo);
-						
-			if(convo == null) {found =true; }
-			for(int idx =0; idx < pagerAdapter.getCount() && !found; idx++)
-			{
-				if(pagerAdapter.getItem(idx) == null) continue;
-				String tConvo = pagerAdapter.getItem(idx).getName();
-				if (tConvo.equals(convo))
-				{
-					pager.setCurrentItem(idx,false);
-					found = true;
-				}
-			}
+			ShuffleToHighlight(getIntent());
+		}
+	}
+	
+	@Override
+	protected void onNewIntent(Intent intent) {
+		// Debugging: Blarg our new intent.
+		for(String s : intent.getExtras().keySet())
+		{
+			Log.d("ConversationActivty", String.format("k=%s v=\"%s\"", s, intent.getExtras().get(s)));
+		}
+		
+		
+		// If we are not the intended server, we should swap to the intended server.
+		if(intent.getExtras().getInt("serverId") != serverId)
+		{
+			// Set the flag that lets us clear the top activity (killing ourselves, but resurrecting after the jump)
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			// Start the activity
+			startActivity(intent);
+			// And commit seppuku
+			finish();
+		}
+		
+
+		super.onNewIntent(intent);
+		// If our new intent is to change to a target, do it.
+		if(intent.getExtras().containsKey(ConversationActivity.EXTRA_TARGET))
+		{
+			ShuffleToHighlight(intent);
 		}
 	}
 
+	private void ShuffleToHighlight(Intent inten)
+	{
+		boolean found = false;
+		// Try and find the conversation given in the intent.
+		String convo = inten.getExtras().getString(ConversationActivity.EXTRA_TARGET);
+		Log.d("ConversationActivity", "Trying to change to conversation "+convo);
+					
+		if(convo == null) {found =true; }
+		for(int idx =0; idx < pagerAdapter.getCount() && !found; idx++)
+		{
+			if(pagerAdapter.getItem(idx) == null) continue;
+			String tConvo = pagerAdapter.getItem(idx).getName();
+			if (tConvo.equals(convo))
+			{
+				pager.setCurrentItem(idx,false);
+				found = true;
+			}
+		}
+
+	}
+	
 	private void setupColors() {
 		EditText input = (EditText) findViewById(R.id.input);
 		LinearLayout lll = (LinearLayout) (input.getParent());
@@ -491,7 +526,6 @@ public class ConversationActivity extends SherlockActivity implements
 		setupIndicator();
 
 		openSoftKeyboard(findViewById(R.id.input));
-
 		
 		server.setIsForeground(true);
 	}
