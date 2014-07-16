@@ -34,6 +34,7 @@ import java.util.Date;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -242,13 +243,33 @@ public class Message
 
         // We don't want the color to be the background color.
         
+        
+        
         int tmpColor = _scheme.getMircColor(color % 16);
-        while(tmpColor == _scheme.getBackground())
+        while(likeness(_scheme.getBackground(), tmpColor) < 64)
         {
         	tmpColor = _scheme.getMircColor(color++ % 16);
         }
         
         return tmpColor; //colors[color];
+    }
+    
+    /**
+     * Calculates a likeness. This will return between 0-255
+     * on the likeness of the color.
+     * @param back
+     * @param fore
+     * @return
+     */
+    private static int likeness(int back, int fore)
+    {
+    
+    	int distances = Math.abs(Color.red(back) - Color.red(fore)) +
+    					Math.abs(Color.blue(back) - Color.blue(fore)) +
+    					Math.abs(Color.green(back) - Color.green(back));
+    	
+    	return  (int) ((float)distances/(256.0*3)*255);
+    	
     }
 
     /**
@@ -263,11 +284,19 @@ public class Message
         _scheme = App.getColorScheme();
 		
         if (canvas == null) {
-            String prefix    = hasIcon() && settings.showIcons() ? "  " : "";
+            String prefix    ="";
+            if(hasIcon())
+            {
+            	if(settings.showIcons())
+                	prefix = " ";
+            	else
+                	prefix = "*";
+            }
+            
             String nick      = hasSender() ? "<" + sender + "> " : "";
             String timestamp = settings.showTimestamp() ? renderTimeStamp(settings.use24hFormat(), settings.includeSeconds()) : "";
 
-            canvas = new SpannableString(prefix + timestamp + nick);
+            canvas = new SpannableString(prefix + /*timestamp + */nick);
             SpannableString renderedText;
 
             
@@ -286,7 +315,7 @@ public class Message
             canvas = new SpannableString(TextUtils.concat(canvas, renderedText));
 
             if (hasSender()) {
-                int start = (prefix + timestamp).length() + 1;
+                int start = prefix.length() + 1;
                 int end = start + sender.length();
 
                 if (settings.showColorsNick()) {
@@ -315,8 +344,13 @@ public class Message
 
                 canvas.setSpan(new ForegroundColorSpan(translateColor(color)), start, canvas.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
+            
+            // Timestamp should be there.
+            // We're prepending the timestamp so that things line up all the time.
+            // Potatoes.
+            canvas = new SpannableString(TextUtils.concat(timestamp+" ", canvas));
         }
-
+        
         return canvas;
     }
 
