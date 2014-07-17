@@ -84,4 +84,9 @@
     <string name="key_colorscheme_dark">colorscheme_dark</string>
     <string name="default_colorscheme_dark">true</string>
     
+    <string name="key_reconnect_transient">reconnect_transient</string>
+    <string name="default_reconnect_transient">false</string>
+    <string name="key_reconnect_loss">reconnect_loss</string>
+    <string name="default_reconnect_loss">true</string>
+    
 </resources>

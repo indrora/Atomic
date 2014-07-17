@@ -23,6 +23,19 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <PreferenceScreen android:title="@string/settings_connection" >
+        <CheckBoxPreference 
+			android:title="@string/settings_reconnect_transient_title"
+			android:summary="@string/settings_reconnect_transient_desc"
+			android:key="@string/key_reconnect_transient"
+			android:defaultValue="@string/default_reconnect_transient"            
+            />
+        <CheckBoxPreference 
+            android:title="@string/settings_reconnect_loss_title"
+            android:summary="@string/settings_reconnect_loss_desc"
+            android:key="@string/key_reconnect_loss"
+            android:defaultValue="@string/default_reconnect_loss"
+            />
+
         <CheckBoxPreference
             android:defaultValue="@string/default_reconnect"
             android:key="@string/key_reconnect"

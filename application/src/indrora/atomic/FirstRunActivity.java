@@ -51,6 +51,7 @@ public class FirstRunActivity extends Activity {
 			new HelpTopic(16, R.string.helptopic_introduction_title, R.string.helptopic_introduction_body),
 			new HelpTopic(16, R.string.helptopic_conversation_title, R.string.helptopic_conversation_body),
 			new HelpTopic(16, R.string.helptopic_colorschemes_title, R.string.helptopic_colorschemes_body),
+			new HelpTopic(17, R.string.helptopic_reconnect_title, R.string.helptopic_reconnect_body),
 			new HelpTopic(16, R.string.helptopic_notification_title, R.string.helptopic_notification_body)
 	};
 	

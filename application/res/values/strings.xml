@@ -265,4 +265,13 @@
     <string name="settings_colorscheme_dark_desc">Saves power on AMOLED displays</string>
     <string name="title_activity_first_run">First run</string>
     <string name="x_of_y">%1$s of %2$s</string>
+    
+    <string name="settings_reconnect_transient_title">Reconnect on network transition</string>
+    <string name="settings_reconnect_transient_desc">Re-establish connections on network transition</string>
+    <string name="settings_reconnect_loss_title">Reconnect after network loss</string>
+    <string name="settings_reconnect_loss_desc">Re-establish connections after network outage</string>
+    
+    <string name="network_reconnecting_lost">Waiting for network…</string>
+    <string name="network_reconnecting_transient">Network in transition…</string>
+    
 </resources>

@@ -39,6 +39,7 @@ import indrora.atomic.model.ColorScheme;
 import indrora.atomic.model.Conversation;
 import indrora.atomic.model.Extra;
 import indrora.atomic.model.Message;
+import indrora.atomic.model.Message.MessageColor;
 import indrora.atomic.model.Query;
 import indrora.atomic.model.Scrollback;
 import indrora.atomic.model.Server;
@@ -892,14 +893,19 @@ public class ConversationActivity extends SherlockActivity implements
 	 */
 	@Override
 	public void onStatusUpdate() {
-		EditText input = (EditText) findViewById(R.id.input);
+		// An issue in the tracker relates to this.
+		// It's way too late to figure out which one.
+		//EditText input = (EditText) findViewById(R.id.input);
 
 		if (server.isConnected()) {
-			input.setEnabled(true);
+			//input.setEnabled(true);
 		} else {
-			input.setEnabled(false);
-
-			if (server.getStatus() == Status.CONNECTING) {
+			//input.setEnabled(false);
+			
+			
+			if (server.getStatus() == Status.CONNECTING 
+					|| ((settings.reconnectLoss() || settings.reconnectTransient()) && ( binder.getService().isReconnecting(serverId) || binder.getService().isNetworkTransient() )  )
+					) {
 				return;
 			}
 
@@ -909,8 +915,12 @@ public class ConversationActivity extends SherlockActivity implements
 				return;
 			}
 
+			
+			
 			if (!binder.getService().getSettings().isReconnectEnabled()
-					&& !reconnectDialogActive) {
+					&& !reconnectDialogActive
+					&& !binder.getService().isReconnecting(serverId)) {
+				
 				reconnectDialogActive = true;
 				AlertDialog.Builder builder = new AlertDialog.Builder(this);
 				builder.setMessage(

@@ -33,6 +33,7 @@ import indrora.atomic.model.Server;
 import indrora.atomic.model.ServerInfo;
 import indrora.atomic.model.Settings;
 import indrora.atomic.model.Status;
+import indrora.atomic.model.Message.MessageColor;
 import indrora.atomic.receiver.ReconnectReceiver;
 
 import java.lang.reflect.InvocationTargetException;
@@ -40,6 +41,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 import javax.net.ssl.SSLException;
 import javax.net.ssl.X509TrustManager;
@@ -52,8 +54,13 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.NetworkInfo.State;
 import android.os.Build;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
@@ -104,6 +111,59 @@ public class IRCService extends Service
     private HashMap<Integer, ReconnectReceiver> alarmReceivers;
     private final Object alarmIntentsLock;
 
+    /****
+     * 
+     * This class will handle the network changes.
+     * 
+     */
+    private class NetworkTransitionHandler extends BroadcastReceiver
+    {
+    	private NetworkTransitionHandler(Context ctx)
+    	{
+			NetworkInfo networkInfo = ((ConnectivityManager)(ctx.getSystemService(Service.CONNECTIVITY_SERVICE))).getActiveNetworkInfo();
+			if(networkInfo == null)
+				lastNetworkType = -1;
+			else
+				lastNetworkType = networkInfo.getType();
+    	}
+    	private int lastNetworkType = -1;
+    	private static final String TAG = "NetworkTransitions";
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			String action = intent.getAction();
+			if (!action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
+				return;
+			}
+			
+			IRCService.this._isTransient = true;
+			
+			NetworkInfo networkInfo = ((ConnectivityManager)(context.getSystemService(Service.CONNECTIVITY_SERVICE))).getActiveNetworkInfo();
+			int newNetworkType =-1;
+			if(networkInfo == null)
+			{
+				Log.d(TAG,"Lost all connectivity.");
+				lastNetworkType =-1;
+				_isTransient = false;
+				return;
+			}else if (networkInfo.isConnected()) {
+				Log.d(TAG, "new network type: "+ networkInfo.getTypeName());
+				newNetworkType = networkInfo.getType();
+			}
+			
+			if(newNetworkType != lastNetworkType)
+			{
+				Log.d(TAG, "Transition from network "+lastNetworkType+" to "+newNetworkType);
+				IRCService.this.networksChanged(newNetworkType);
+				lastNetworkType = newNetworkType;
+			}
+
+		}
+    	
+    }
+    
+    private static NetworkTransitionHandler _netTransitionHandler;
+    private static ArrayList<Integer> reconnectNextNetwork;
+    
     /**
      * Create new service
      */
@@ -118,8 +178,98 @@ public class IRCService extends Service
         this.alarmIntents = new HashMap<Integer, PendingIntent>();
         this.alarmReceivers = new HashMap<Integer, ReconnectReceiver>();
         this.alarmIntentsLock = new Object();
+        this.reconnectNextNetwork = new ArrayList<Integer>();
     }
 
+    private boolean _isTransient = false;
+    
+    public boolean isNetworkTransient()
+    {
+    	Log.d("IRCService", "Network is transient: "+_isTransient);
+    	return _isTransient;
+    }
+    
+    protected void networksChanged(int newNetworkType)
+    {
+    	// If new network is -1, we need to configure reconnecting.
+    	_isTransient = true;
+    	if(newNetworkType == -1 && settings.reconnectLoss())
+    	{
+    		updateNotification(getString(R.string.notification_not_connected), "Waiting for network", false, false, false);
+    		reconnectNextNetwork.clear();
+    		for(int sid : connections.keySet())
+    		{
+    			reconnectNextNetwork.add(sid);
+    			Intent sIntent = Broadcast.createServerIntent(Broadcast.SERVER_UPDATE, sid);
+    			sendBroadcast(sIntent);
+    		}
+
+    	}
+    	else
+    	{
+    		// We're transitioning between networks, not losing our network entirely.
+    		if(settings.reconnectTransient())
+    		{
+    			updateNotification(getString(R.string.notification_not_connected), "Network in transition", false, false, false);
+    			for(int sid : connections.keySet())
+    			{
+    				connections.get(sid).disconnect(); // Disconnect and clean up.
+    				if(!reconnectNextNetwork.contains(sid))
+    					reconnectNextNetwork.add(sid);
+    			}
+    		}
+    		final ArrayList<Integer> new_servers = (ArrayList<Integer>) reconnectNextNetwork.clone();
+    		for(int reconnect_server : new_servers)
+    		{
+    			
+    			Server s = Atomic.getInstance().getServerById(reconnect_server);
+
+    			Message message = new Message("Waiting on network connectivity");
+    			message.setIcon(R.drawable.info);
+    			message.setColor(MessageColor.SERVER_EVENT);
+
+                s.getConversation(ServerInfo.DEFAULT_NAME).addMessage(message);
+
+                Intent cIntent = Broadcast.createConversationIntent(
+                    Broadcast.CONVERSATION_MESSAGE,
+                    reconnect_server,
+                    ServerInfo.DEFAULT_NAME
+                    );
+                sendBroadcast(cIntent);
+
+    			
+    			this.getConnection(reconnect_server).disconnect();
+    			connect(s);
+
+    			
+    			reconnectNextNetwork.remove((Object)reconnect_server);
+    		}
+
+    		reconnectNextNetwork.clear();
+
+    	}
+    	checkServiceStatus();
+
+    }
+
+    public void removeReconnection(int sid)
+    {
+    	if(!reconnectNextNetwork.contains(sid))
+    	{
+    		return; // This server doesn't currently have a reconnect listing.
+    	}
+    	reconnectNextNetwork.remove(reconnectNextNetwork.indexOf(sid));
+    }
+    public void clearReconnectList()
+    {
+    	reconnectNextNetwork.clear();
+    }
+    
+    public boolean isReconnecting(int sid)
+    {
+    	return reconnectNextNetwork.contains(sid);
+    }
+    
     /**
      * On create
      */
@@ -127,7 +277,7 @@ public class IRCService extends Service
     public void onCreate()
     {
         super.onCreate();
-
+        _netTransitionHandler = new NetworkTransitionHandler(this);
         settings = new Settings(getBaseContext());
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
@@ -139,6 +289,8 @@ public class IRCService extends Service
             mStartForeground = mStopForeground = null;
         }
 
+        
+        
         // Load servers from Database
         Database db = new Database(this);
         Atomic.getInstance().setServers(db.getServers());
@@ -146,8 +298,14 @@ public class IRCService extends Service
 
         // Broadcast changed server list
         sendBroadcast(new Intent(Broadcast.SERVER_UPDATE));
-    }
+        
+        
+        // Set up our connectivity handler
+        registerReceiver(_netTransitionHandler, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
 
+        
+    }
+    
     /**
      * Get Settings object
      *
@@ -489,6 +647,7 @@ public class IRCService extends Service
             @Override
             public void run() {
                 synchronized(alarmIntentsLock) {
+                	if(alarmIntents == null) return;
                     alarmIntents.remove(serverId);
                     ReconnectReceiver lastReceiver = alarmReceivers.remove(serverId);
                     if (lastReceiver != null) {
@@ -530,6 +689,16 @@ public class IRCService extends Service
                 }
                 catch (Exception e) {
                     server.setStatus(Status.DISCONNECTED);
+                    
+                    NetworkInfo ninf = ((ConnectivityManager)(IRCService.this.getSystemService(Service.CONNECTIVITY_SERVICE))).getActiveNetworkInfo();
+                    if(ninf == null)
+                    {
+                    	_isTransient = false;
+                    }
+                    else 
+                    {
+                    	_isTransient = !(ninf.getState() == NetworkInfo.State.CONNECTED);
+                    }
 
                     Intent sIntent = Broadcast.createServerIntent(Broadcast.SERVER_UPDATE, serverId);
                     sendBroadcast(sIntent);
@@ -680,6 +849,7 @@ public class IRCService extends Service
             alarmReceivers.clear();
             alarmReceivers = null;
         }
+        unregisterReceiver(_netTransitionHandler);
     }
 
     /**

@@ -39,11 +39,14 @@ import java.util.ArrayList;
 import indrora.atomic.R;
 import android.app.AlertDialog;
 import android.app.Notification;
+import android.app.Service;
 import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.text.format.Time;
@@ -72,7 +75,7 @@ public class ServersActivity extends SherlockActivity implements ServiceConnecti
     private ListView list;
     private static int instanceCount = 0;
 
-    LatchingValue<Boolean> doAutoconnect = new LatchingValue<Boolean>(true,false);
+    static LatchingValue<Boolean> doAutoconnect = new LatchingValue<Boolean>(true,false);
     
     /**
      * On create
@@ -167,16 +170,26 @@ public class ServersActivity extends SherlockActivity implements ServiceConnecti
         startService(intent);
         // Autoconnect is done via a Latching Value. There's no real reason to have it
         // a latchingValue but it lets us later on reset the Autoconnect fields.
+        
+        NetworkInfo ninf = ((ConnectivityManager)(this.getSystemService(Service.CONNECTIVITY_SERVICE))).getActiveNetworkInfo();
+        
         if(doAutoconnect.getValue())
         {
-        	Log.d("ServerList", "Doing autoconnect");
-        	for(int idx=0;idx<adapter.getCount();idx++)
+        	if(ninf == null || ninf.getState() != NetworkInfo.State.CONNECTED)
         	{
-        		Server s = adapter.getItem(idx);
-        		
-        		if(s.getAutoconnect() && s.getStatus() == Status.DISCONNECTED)
+        		Toast.makeText(this, "Autoconnect skipped due to network outage", Toast.LENGTH_LONG).show();
+        	}	
+        	else
+        	{
+        		Log.d("ServerList", "Doing autoconnect");
+        		for(int idx=0;idx<adapter.getCount();idx++)
         		{
-        			ConnectServer(s);
+        			Server s = adapter.getItem(idx);
+
+        			if(s.getAutoconnect() && s.getStatus() == Status.DISCONNECTED)
+        			{
+        				ConnectServer(s);
+        			}
         		}
         	}
         }
@@ -226,9 +239,15 @@ public class ServersActivity extends SherlockActivity implements ServiceConnecti
     }
     private void DisconnectServer(Server server)
     {
+    	if(server.getStatus() == Status.DISCONNECTED)
+    	{
+    		return;
+    	}
+    	
         server.clearConversations();
         server.setStatus(Status.DISCONNECTED);
         server.setMayReconnect(false);
+        binder.getService().removeReconnection(server.getId());
         binder.getService().getConnection(server.getId()).quitServer();
 
     }
@@ -358,15 +377,12 @@ public class ServersActivity extends SherlockActivity implements ServiceConnecti
                 break;
             case R.id.disconnect_all:
                 ArrayList<Server> mServers = Atomic.getInstance().getServersAsArrayList();
+                binder.getService().clearReconnectList();
                 for (Server server : mServers) {
-                    if (binder.getService().hasConnection(server.getId())) {
-                        server.setStatus(Status.DISCONNECTED);
-                        server.setMayReconnect(false);
-                        binder.getService().getConnection(server.getId()).quitServer();
-                    }
+                	DisconnectServer(server);
                 }
                 // ugly
-                binder.getService().stopForegroundCompat(R.string.app_name);
+                // binder.getService().stopForegroundCompat(R.string.app_name);
         }
 
         return true;
@@ -394,7 +410,8 @@ public class ServersActivity extends SherlockActivity implements ServiceConnecti
         Database db = new Database(this);
         db.removeServerById(serverId);
         db.close();
-
+        // make sure we don't accidentally reconnect it
+        binder.getService().removeReconnection(serverId);
         Atomic.getInstance().removeServerById(serverId);
         adapter.loadServers();
     }

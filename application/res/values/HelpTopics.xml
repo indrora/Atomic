@@ -56,5 +56,14 @@
         <img src="channel_as_subtitle.png" />
         <p>These settings may be found in the &quot;Interface&quot; section of the settings.</p>
     ]]>
-    </string>    
+    </string>
+    <string name="helptopic_reconnect_title">Network awareness</string>
+    <string name="helptopic_reconnect_body">
+        <![CDATA[
+        <p><em>New in 1.17</em></p>
+		<p>Connections will automatically re-connect themselves when your mobile or wifi network breaks down.</p>
+		<p>Optionally, you may automatically reconnect your networks when you move between wifi and mobile networks</p>
+		<p>The classic behavior is kept for posterity. It may vanish in later releases.</p>
+        ]]>
+    </string>
 </resources>

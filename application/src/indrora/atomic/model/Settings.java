@@ -388,7 +388,27 @@ public class Settings
     			Boolean.parseBoolean(resources.getString(R.string.default_show_channelbar))
     			);
     }
+    
+    public boolean reconnectTransient()
+    {
+    	return preferences.getBoolean(
+    			resources.getString(R.string.key_reconnect_transient),
+    			Boolean.parseBoolean(
+    					resources.getString(R.string.default_reconnect_transient)
+    				)
+    			);
+    }
 
+    public boolean reconnectLoss()
+    {
+    	return preferences.getBoolean(
+    			resources.getString(R.string.key_reconnect_loss),
+    			Boolean.parseBoolean(
+    					resources.getString(R.string.default_reconnect_loss)
+    				)
+    			);
+    }
+    
     /**
      * Get the conversation history size.
      *
