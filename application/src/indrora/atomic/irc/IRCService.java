@@ -178,7 +178,7 @@ public class IRCService extends Service
         this.alarmIntents = new HashMap<Integer, PendingIntent>();
         this.alarmReceivers = new HashMap<Integer, ReconnectReceiver>();
         this.alarmIntentsLock = new Object();
-        this.reconnectNextNetwork = new ArrayList<Integer>();
+        reconnectNextNetwork = new ArrayList<Integer>();
     }
 
     private boolean _isTransient = false;
@@ -189,7 +189,7 @@ public class IRCService extends Service
     	return _isTransient;
     }
     
-    protected void networksChanged(int newNetworkType)
+    protected synchronized void networksChanged(int newNetworkType)
     {
     	// If new network is -1, we need to configure reconnecting.
     	_isTransient = true;
@@ -207,7 +207,7 @@ public class IRCService extends Service
     	}
     	else
     	{
-    		// We're transitioning between networks, not losing our network entirely.
+    		// We're changing between networks, not losing our network entirely.
     		if(settings.reconnectTransient())
     		{
     			updateNotification(getString(R.string.notification_not_connected), "Network in transition", false, false, false);
@@ -218,7 +218,7 @@ public class IRCService extends Service
     					reconnectNextNetwork.add(sid);
     			}
     		}
-    		final ArrayList<Integer> new_servers = (ArrayList<Integer>) reconnectNextNetwork.clone();
+    		final Integer[] new_servers = (Integer[]) reconnectNextNetwork.toArray(new Integer[reconnectNextNetwork.size()]);
     		for(int reconnect_server : new_servers)
     		{
     			
@@ -236,7 +236,6 @@ public class IRCService extends Service
                     ServerInfo.DEFAULT_NAME
                     );
                 sendBroadcast(cIntent);
-
     			
     			this.getConnection(reconnect_server).disconnect();
     			connect(s);
@@ -252,7 +251,7 @@ public class IRCService extends Service
 
     }
 
-    public void removeReconnection(int sid)
+    public synchronized void removeReconnection(int sid)
     {
     	if(!reconnectNextNetwork.contains(sid))
     	{
@@ -260,12 +259,12 @@ public class IRCService extends Service
     	}
     	reconnectNextNetwork.remove(reconnectNextNetwork.indexOf(sid));
     }
-    public void clearReconnectList()
+    public synchronized void clearReconnectList()
     {
     	reconnectNextNetwork.clear();
     }
     
-    public boolean isReconnecting(int sid)
+    public synchronized boolean isReconnecting(int sid)
     {
     	return reconnectNextNetwork.contains(sid);
     }

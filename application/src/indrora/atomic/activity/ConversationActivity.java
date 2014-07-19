@@ -903,8 +903,21 @@ public class ConversationActivity extends SherlockActivity implements
 			//input.setEnabled(false);
 			
 			
-			if (server.getStatus() == Status.CONNECTING 
-					|| ((settings.reconnectLoss() || settings.reconnectTransient()) && ( binder.getService().isReconnecting(serverId) || binder.getService().isNetworkTransient() )  )
+			/*
+			 * 
+			 * If we are disconnected, we should have two times where we don't care to pop up the dialog:
+			 * 
+			 * * Total network loss has occurred and we're working on reconnecting a server (it happens!)
+			 * * The network is transient and we're waiting on the network to become not-transient.
+			 * 
+			 */
+			
+			if (
+					server.getStatus() == Status.DISCONNECTED
+					&& (
+						(settings.reconnectLoss() && binder.getService().isReconnecting(server.getId()) )
+					||  (settings.reconnectTransient() && binder.getService().isNetworkTransient() )	
+					   )
 					) {
 				return;
 			}
