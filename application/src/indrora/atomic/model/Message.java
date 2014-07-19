@@ -236,20 +236,31 @@ public class Message
         }
 
         int color = 0;
-
+        int variant = sender.charAt(0);
+        
         for(int i = 0; i < sender.length(); i++){
-            color += sender.charAt(i);
+            char c = sender.charAt(i);
+            if(c-33 >'Z')  variant +=(c-33)%32;
+            else variant -=(c-33)%32;
+            color += c;
         }
-
+        
+        variant %= 20;
         // We don't want the color to be the background color.
         
+        Log.d("Message", "Variant="+variant);
         
-        
-        int tmpColor = _scheme.getMircColor(color % 16);
-        while(likeness(_scheme.getBackground(), tmpColor) < 64)
+        final int bg = _scheme.getBackground();
+        int tmpColor;// = _scheme.getMircColor(color);
+        do
         {
-        	tmpColor = _scheme.getMircColor(color++ % 16);
-        }
+        	
+        	float[] hsv = new float[3];
+        	Color.colorToHSV(_scheme.getMircColor(color++), hsv);
+        	hsv[0] += variant;
+        	
+        	tmpColor = Color.HSVToColor(hsv);
+        }while(likeness(bg, tmpColor) < 30);
         
         return tmpColor; //colors[color];
     }
@@ -263,13 +274,20 @@ public class Message
      */
     private static int likeness(int back, int fore)
     {
-    
-    	int distances = Math.abs(Color.red(back) - Color.red(fore)) +
-    					Math.abs(Color.blue(back) - Color.blue(fore)) +
-    					Math.abs(Color.green(back) - Color.green(back));
+
     	
-    	return  (int) ((float)distances/(256.0*3)*255);
-    	
+    	double gamma = 2.2; // Woo constants.
+    	double backL =
+    			  0.2126 * Math.pow( (float)Color.red(back)/255.0,    gamma )
+    	        + 0.7152 * Math.pow( (float)Color.green(back)/255.0,  gamma )
+    	        + 0.0722 * Math.pow( (float)Color.blue(back)/255.0,   gamma );
+    	double foreL = 
+    			  0.2126 * Math.pow( (float)Color.red(fore)/255.0,    gamma )
+    	        + 0.7152 * Math.pow( (float)Color.green(fore)/255.0,  gamma )
+    	        + 0.0722 * Math.pow( (float)Color.blue(fore)/255.0,   gamma );
+    	int distance = (int) (100 * Math.abs(backL-foreL));
+    	//Log.d("Message", " ForeL=<"+foreL+"> backL=<"+backL+"> Color distance = "+distance);
+    	return distance;
     }
 
     /**
