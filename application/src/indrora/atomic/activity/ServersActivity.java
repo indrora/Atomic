@@ -170,29 +170,45 @@ public class ServersActivity extends SherlockActivity implements ServiceConnecti
         startService(intent);
         // Autoconnect is done via a Latching Value. There's no real reason to have it
         // a latchingValue but it lets us later on reset the Autoconnect fields.
+        autoconnect();
         
-        NetworkInfo ninf = ((ConnectivityManager)(this.getSystemService(Service.CONNECTIVITY_SERVICE))).getActiveNetworkInfo();
-        
-        if(doAutoconnect.getValue())
-        {
-        	if(ninf == null || ninf.getState() != NetworkInfo.State.CONNECTED)
-        	{
-        		Toast.makeText(this, "Autoconnect skipped due to network outage", Toast.LENGTH_LONG).show();
-        	}	
-        	else
-        	{
-        		Log.d("ServerList", "Doing autoconnect");
-        		for(int idx=0;idx<adapter.getCount();idx++)
-        		{
-        			Server s = adapter.getItem(idx);
+    }
 
-        			if(s.getAutoconnect() && s.getStatus() == Status.DISCONNECTED)
-        			{
-        				ConnectServer(s);
-        			}
-        		}
-        	}
-        }
+    /**
+     * Do the autoconnect stuff
+     */
+    private void autoconnect()
+    {
+    	// If we don't have any servers to go with.
+    	if(Atomic.getInstance().getServersAsArrayList().size() < 1)
+    		return;
+    	// Or we've done this already
+    	if(!doAutoconnect.getValue())
+    		return;
+    	// We don't need to get this far.
+    	
+    	// Are we connected to the greater wide not-us?
+    	NetworkInfo ninf = ((ConnectivityManager)(this.getSystemService(Service.CONNECTIVITY_SERVICE))).getActiveNetworkInfo();
+    	// If there's no way out, or we aren't actually connected,
+    	if(ninf == null || ninf.getState() != NetworkInfo.State.CONNECTED)
+    	{
+    		// We don't need to bother, but we should say something.
+    		Toast.makeText(this, "Autoconnect skipped due to network outage", Toast.LENGTH_LONG).show();
+    		return;
+    	}	
+    	// 
+    	Log.d("ServerList", "Doing autoconnect");
+    	for(int idx=0;idx<adapter.getCount();idx++)
+    	{
+    		Server s = adapter.getItem(idx);
+    		if(s.getAutoconnect() && s.getStatus() == Status.DISCONNECTED)
+    		{
+    			ConnectServer(s);
+    		}
+    	}
+    	
+
+
     }
 
     /**
