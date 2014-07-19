@@ -283,14 +283,14 @@ public class Message
 
         _scheme = App.getColorScheme();
 		
-        if (canvas == null) {
+        //if (canvas == null) {
             String prefix    ="";
             if(hasIcon())
             {
             	if(settings.showIcons())
                 	prefix = " ";
             	else
-                	prefix = "*";
+                	prefix = "* ";
             }
             
             String nick      = hasSender() ? "<" + sender + "> " : "";
@@ -325,8 +325,12 @@ public class Message
 
             if (hasIcon() && settings.showIcons()) {
                 Drawable drawable = context.getResources().getDrawable(icon);
-                drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
-                canvas.setSpan(new ImageSpan(drawable, ImageSpan.ALIGN_BOTTOM), 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                
+                int height = settings.getFontSize();
+                float density = context.getResources().getDisplayMetrics().density;
+                float scale = height / (float)(drawable.getMinimumHeight());
+                drawable.setBounds(0, 0, (int)(drawable.getMinimumWidth() * scale * density), (int)(height * density));
+                canvas.setSpan(new ImageSpan(drawable, ImageSpan.ALIGN_BASELINE), 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
             if (hasColor() && settings.showColors()) {
@@ -349,7 +353,7 @@ public class Message
             // We're prepending the timestamp so that things line up all the time.
             // Potatoes.
             canvas = new SpannableString(TextUtils.concat(timestamp+" ", canvas));
-        }
+        //}
         
         return canvas;
     }
@@ -389,7 +393,7 @@ public class Message
      *
      * @param context
      * @return
-     */
+     
     public TextView renderTextView(Context context)
     {
         // XXX: We should not read settings here ALWAYS for EVERY textview
@@ -418,7 +422,7 @@ public class Message
     @TargetApi(11)
     private void setupViewForHoneycombAndLater(TextView canvas) {
         canvas.setTextIsSelectable(true);
-    }
+    }*/
 
     /**
      * Generate a timestamp
