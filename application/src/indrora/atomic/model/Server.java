@@ -454,7 +454,7 @@ public class Server implements Comparable<Server>
                 return R.drawable.ic_network_connecting;
         }
 
-        return R.drawable.connecting;
+        return R.drawable.ic_network_connecting;
     }
 
     /**
