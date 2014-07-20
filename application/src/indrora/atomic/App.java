@@ -49,7 +49,6 @@ public class App extends Application {
 			 Intent runIntent = new Intent(this,FirstRunActivity.class);
 			 runIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			 this.startActivity(runIntent);
-			 _settings.updateLastRunVersion();
 		 }
 		 
 		super.onCreate();

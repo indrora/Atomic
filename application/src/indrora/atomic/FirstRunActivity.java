@@ -121,22 +121,25 @@ public class FirstRunActivity extends Activity {
 		vf.addView(wrapScrollview(v));
 		vf.setScrollContainer(true);
 		ss = new Settings(this);
-		for(int i = ss.getLastRunVersion(); i <= ss.getCurrentVersion(); i++ )
+		int lrVersion = ss.getLastRunVersion();
+		Log.d("Firstrun", "Last version = "+lrVersion);
+		for(HelpTopic ht : topics)
 		{
-			for(HelpTopic ht : topics)
+			Log.d("Firstrun", "addedin="+ht.AddedIn+" vs ver "+lrVersion);
+			if(ht.AddedIn >= lrVersion )
 			{
-				if(ht.AddedIn == i)
-				{
-					
-					vf.addView(generateHelpPage(ht));
-				}
+				vf.addView(generateHelpPage(ht));
 			}
 		}
+		
+		ss.updateLastRunVersion();
+		
 		Button nButton = (Button)findViewById(R.id.action_next);
 		nButton.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
+				Log.d("Firstrun", "on page "+(vf.getDisplayedChild())+" of "+(vf.getChildCount()));
 				if(!isLast())
 				{
 					vf.showNext();
@@ -144,6 +147,7 @@ public class FirstRunActivity extends Activity {
 				else
 				{
 					// We're all cool, be done.
+					Log.d("Firstrun", "Finished firstrun");
 					FirstRunActivity.this.finish();
 				}
 				updateButton();
@@ -163,6 +167,7 @@ public class FirstRunActivity extends Activity {
 				updateTitle();
 			}
 		});
+		
 		if(currentPage>0)
 		{
 			vf.setDisplayedChild(currentPage);

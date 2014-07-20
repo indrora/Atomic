@@ -196,7 +196,7 @@ public class ServersActivity extends SherlockActivity implements ServiceConnecti
     		Toast.makeText(this, "Autoconnect skipped due to network outage", Toast.LENGTH_LONG).show();
     		return;
     	}	
-    	// 
+    	// Some slime...
     	Log.d("ServerList", "Doing autoconnect");
     	for(int idx=0;idx<adapter.getCount();idx++)
     	{
