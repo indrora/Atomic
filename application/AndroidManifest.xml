@@ -22,8 +22,8 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="indrora.atomic"
     android:installLocation="auto"
-    android:versionCode="17"
-    android:versionName="1.17" >
+    android:versionCode="18"
+    android:versionName="1.18-DEV" >
 
     <uses-sdk
         android:minSdkVersion="7"
