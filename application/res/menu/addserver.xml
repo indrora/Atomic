@@ -23,6 +23,6 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
     <item
         android:id="@+id/save"
         android:title="@string/server_save"
-        android:icon="@drawable/actionbar_save"
+        android:icon="@drawable/ic_action_save"
         android:showAsAction="ifRoom|withText" />
 </menu>

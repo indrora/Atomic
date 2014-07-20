@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:background="@drawable/apptheme_list_focused_holo"
+        android:background="@color/apptheme_color"
         android:orientation="horizontal"
         android:padding="5dp" >
 
