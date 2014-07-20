@@ -16,3 +16,13 @@ ant.properties
 proguard.cfg
 
 application/local.properties
+
+# Ignore crowdin configuration
+crowdin.yaml
+
+# no.
+.classpath
+
+# NO.
+lint.xml
+**/lint.xml 
