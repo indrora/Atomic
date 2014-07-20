@@ -23,7 +23,7 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
     package="indrora.atomic"
     android:installLocation="auto"
     android:versionCode="17"
-    android:versionName="1.17-DEV" >
+    android:versionName="1.17" >
 
     <uses-sdk
         android:minSdkVersion="7"
@@ -33,7 +33,6 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
-    <!-- I have no idea why the yaaic guy extended his own theme. There's no difference. -->
     <application
         android:name="indrora.atomic.App"
         android:allowBackup="true"
