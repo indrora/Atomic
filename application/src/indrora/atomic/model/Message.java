@@ -248,7 +248,7 @@ public class Message
         variant %= 20;
         // We don't want the color to be the background color.
         
-        Log.d("Message", "Variant="+variant);
+        //Log.d("Message", "Variant="+variant);
         
         final int bg = _scheme.getBackground();
         int tmpColor;// = _scheme.getMircColor(color);
