@@ -32,43 +32,39 @@ import android.content.Context;
 
 /**
  * Command: /voice <nickname>
- * 
+ *
  * @author Sebastian Kaspari <sebastian@yaaic.org>
  */
-public class VoiceHandler extends BaseHandler
-{
-    /**
-     * Execute /voice
-     */
-    @Override
-    public void execute(String[] params, Server server, Conversation conversation, IRCService service) throws CommandException
-    {
-        if (conversation.getType() != Conversation.TYPE_CHANNEL) {
-            throw new CommandException(service.getString(R.string.only_usable_from_channel));
-        }
-
-        if (params.length == 2) {
-            service.getConnection(server.getId()).voice(conversation.getName(), params[1]);
-        } else {
-            throw new CommandException(service.getString(R.string.invalid_number_of_params));
-        }
+public class VoiceHandler extends BaseHandler {
+  /**
+   * Execute /voice
+   */
+  @Override
+  public void execute(String[] params, Server server, Conversation conversation, IRCService service) throws CommandException {
+    if (conversation.getType() != Conversation.TYPE_CHANNEL) {
+      throw new CommandException(service.getString(R.string.only_usable_from_channel));
     }
 
-    /**
-     * Usage of /voice
-     */
-    @Override
-    public String getUsage()
-    {
-        return "/voice <nickname>";
+    if (params.length == 2) {
+      service.getConnection(server.getId()).voice(conversation.getName(), params[1]);
+    } else {
+      throw new CommandException(service.getString(R.string.invalid_number_of_params));
     }
+  }
 
-    /**
-     * Description of /voice
-     */
-    @Override
-    public String getDescription(Context context)
-    {
-        return context.getString(R.string.command_desc_voice);
-    }
+  /**
+   * Usage of /voice
+   */
+  @Override
+  public String getUsage() {
+    return "/voice <nickname>";
+  }
+
+  /**
+   * Description of /voice
+   */
+  @Override
+  public String getDescription(Context context) {
+    return context.getString(R.string.command_desc_voice);
+  }
 }

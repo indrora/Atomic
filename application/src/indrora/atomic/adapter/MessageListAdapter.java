@@ -41,173 +41,165 @@ import android.widget.TextView;
 
 /**
  * Adapter for (channel) messages in a ListView
- * 
+ *
  * @author Sebastian Kaspari <sebastian@yaaic.org>
  */
-public class MessageListAdapter extends BaseAdapter
-{
-    private final LinkedList<CharSequence> messages;
-    private final Context context;
-    private int historySize;
+public class MessageListAdapter extends BaseAdapter {
+  private final LinkedList<CharSequence> messages;
+  private final Context context;
+  private int historySize;
 
-    private ColorScheme _colorScheme;
-    private Settings _settings;
-    
-    
-    /**
-     * Create a new MessageAdapter
-     * 
-     * @param channel
-     * @param context
-     */
-    public MessageListAdapter(Conversation conversation, Context context)
-    {
-    	
-    	_colorScheme = App.getColorScheme();
-    	_settings = new Settings(context);
-    	
-        LinkedList<CharSequence> messages = new LinkedList<CharSequence>();        
+  private ColorScheme _colorScheme;
+  private Settings _settings;
 
-        // Optimization - cache field lookups
-        LinkedList<Message> mHistory =  conversation.getHistory();
-        int mSize = mHistory.size();
 
-        for (int i = 0; i < mSize; i++) {
-            messages.add(mHistory.get(i).render(context));
-        }
-        
-        
+  /**
+   * Create a new MessageAdapter
+   *
+   * @param channel
+   * @param context
+   */
+  public MessageListAdapter(Conversation conversation, Context context) {
 
-        // XXX: We don't want to clear the buffer, we want to add only
-        //      buffered messages that are not already added (history)
-        conversation.clearBuffer();
+    _colorScheme = App.getColorScheme();
+    _settings = new Settings(context);
 
-        this.messages = messages;
-        this.context = context;
-        historySize = conversation.getHistorySize();
-    }
-    
-    
-    /**
-     * Add a message to the list
-     * 
-     * @param message
-     */
-    public void addMessage(Message message)
-    {
-        messages.add(message.render(context));
+    LinkedList<CharSequence> messages = new LinkedList<CharSequence>();
 
-        if (messages.size() > historySize) {
-            messages.remove(0);
-        }
+    // Optimization - cache field lookups
+    LinkedList<Message> mHistory =  conversation.getHistory();
+    int mSize = mHistory.size();
 
-        notifyDataSetChanged();
+    for (int i = 0; i < mSize; i++) {
+      messages.add(mHistory.get(i).render(context));
     }
 
-    /**
-     * Add a list of messages to the list
-     * 
-     * @param messages
-     */
-    public void addBulkMessages(LinkedList<Message> messages)
-    {
-        LinkedList<CharSequence> mMessages = this.messages;
-        Context mContext = this.context;
-        int mSize = messages.size();
 
-        for (int i = mSize - 1; i > -1; i--) {
-            mMessages.add(messages.get(i).render(mContext));
 
-            if (mMessages.size() > historySize) {
-                mMessages.remove(0);
-            }
-        }
+    // XXX: We don't want to clear the buffer, we want to add only
+    //      buffered messages that are not already added (history)
+    conversation.clearBuffer();
 
-        notifyDataSetChanged();
+    this.messages = messages;
+    this.context = context;
+    historySize = conversation.getHistorySize();
+  }
+
+
+  /**
+   * Add a message to the list
+   *
+   * @param message
+   */
+  public void addMessage(Message message) {
+    messages.add(message.render(context));
+
+    if (messages.size() > historySize) {
+      messages.remove(0);
     }
 
-    /**
-     * Get number of items
-     * 
-     * @return
-     */
-    @Override
-    public int getCount()
-    {
-        return messages.size();
+    notifyDataSetChanged();
+  }
+
+  /**
+   * Add a list of messages to the list
+   *
+   * @param messages
+   */
+  public void addBulkMessages(LinkedList<Message> messages) {
+    LinkedList<CharSequence> mMessages = this.messages;
+    Context mContext = this.context;
+    int mSize = messages.size();
+
+    for (int i = mSize - 1; i > -1; i--) {
+      mMessages.add(messages.get(i).render(mContext));
+
+      if (mMessages.size() > historySize) {
+        mMessages.remove(0);
+      }
     }
 
-    /**
-     * Get item at given position
-     * 
-     * @param position
-     * @return
-     */
-    @Override
-    public CharSequence getItem(int position)
-    {
-        return messages.get(position);
+    notifyDataSetChanged();
+  }
+
+  /**
+   * Get number of items
+   *
+   * @return
+   */
+  @Override
+  public int getCount() {
+    return messages.size();
+  }
+
+  /**
+   * Get item at given position
+   *
+   * @param position
+   * @return
+   */
+  @Override
+  public CharSequence getItem(int position) {
+    return messages.get(position);
+  }
+
+  /**
+   * Get id of item at given position
+   *
+   * @param position
+   * @return
+   */
+  @Override
+  public long getItemId(int position) {
+    return position;
+  }
+
+  /**
+   * Get item view for the given position
+   *
+   * @param position
+   * @param convertView
+   * @param parent
+   * @return
+   */
+  @Override
+  public View getView(int position, View convertView, ViewGroup parent) {
+
+    TextView view = (TextView)convertView;
+    if (view == null) {
+      view = new TextView(context);
+
+      view.setAutoLinkMask(Linkify.ALL);
+      view.setLinksClickable(true);
+      view.setLinkTextColor(_colorScheme.getUrl());
+      view.setTypeface(Typeface.MONOSPACE);
+      view.setTextColor(_colorScheme.getForeground());
     }
 
-    /**
-     * Get id of item at given position
-     * 
-     * @param position
-     * @return
-     */
-    @Override
-    public long getItemId(int position)
-    {
-        return position;
+    view.setText(getItem(position));
+    view.setTextSize(_settings.getFontSize());
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+      setupViewForHoneycombAndLater(view);
     }
 
-    /**
-     * Get item view for the given position
-     * 
-     * @param position
-     * @param convertView
-     * @param parent
-     * @return
-     */
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent)
-    {
+    return view;
+  }
 
-        TextView view = (TextView)convertView;
-        if (view == null) {
-            view = new TextView(context);
+  @TargetApi(11)
+  private void setupViewForHoneycombAndLater(TextView canvas) {
+    canvas.setTextIsSelectable(true);
+  }
 
-            view.setAutoLinkMask(Linkify.ALL);
-            view.setLinksClickable(true);
-            view.setLinkTextColor(_colorScheme.getUrl());
-            view.setTypeface(Typeface.MONOSPACE);
-            view.setTextColor(_colorScheme.getForeground());
-        }
 
-        view.setText(getItem(position));
-        view.setTextSize(_settings.getFontSize());
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            setupViewForHoneycombAndLater(view);
-        }
-
-        return view;
+  /**
+   * XXX This is almost certainly covering up a bug elsewhere -- find it!
+   */
+  @Override
+  public void unregisterDataSetObserver(DataSetObserver observer) {
+    if (observer == null) {
+      return;
     }
-
-    @TargetApi(11)
-    private void setupViewForHoneycombAndLater(TextView canvas) {
-        canvas.setTextIsSelectable(true);
-    }
-
-    
-    /**
-     * XXX This is almost certainly covering up a bug elsewhere -- find it!
-     */
-    @Override
-    public void unregisterDataSetObserver(DataSetObserver observer) {
-        if (observer == null) {
-            return;
-        }
-        super.unregisterDataSetObserver(observer);
-    }
+    super.unregisterDataSetObserver(observer);
+  }
 }

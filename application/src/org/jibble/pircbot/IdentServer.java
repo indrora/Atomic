@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright Paul James Mutton, 2001-2007, http://www.jibble.org/
 
 This file is part of PircBot.
@@ -42,71 +42,68 @@ import java.io.*;
  * @version    1.4.6 (Build time: Wed Apr 11 19:20:59 2007)
  */
 public class IdentServer extends Thread {
-    
-    /**
-     * Constructs and starts an instance of an IdentServer that will
-     * respond to a client with the provided login.  Rather than calling
-     * this constructor explicitly from your code, it is recommended that
-     * you use the startIdentServer method in the PircBot class.
-     *  <p>
-     * The ident server will wait for up to 60 seconds before shutting
-     * down.  Otherwise, it will shut down as soon as it has responded
-     * to an ident request.
-     *
-     * @param bot The PircBot instance that will be used to log to.
-     * @param login The login that the ident server will respond with.
-     */
-    IdentServer(String login) {
-        _login = login;
 
-        try {
-            _ss = new ServerSocket(113);
-            _ss.setSoTimeout(60000);
-        }
-        catch (Exception e) {
-            return;
-        }
-        
-        this.setName(this.getClass() + "-Thread");
-        this.start();
+  /**
+   * Constructs and starts an instance of an IdentServer that will
+   * respond to a client with the provided login.  Rather than calling
+   * this constructor explicitly from your code, it is recommended that
+   * you use the startIdentServer method in the PircBot class.
+   *  <p>
+   * The ident server will wait for up to 60 seconds before shutting
+   * down.  Otherwise, it will shut down as soon as it has responded
+   * to an ident request.
+   *
+   * @param bot The PircBot instance that will be used to log to.
+   * @param login The login that the ident server will respond with.
+   */
+  IdentServer(String login) {
+    _login = login;
+
+    try {
+      _ss = new ServerSocket(113);
+      _ss.setSoTimeout(60000);
+    } catch (Exception e) {
+      return;
     }
-    
-    
-    /**
-     * Waits for a client to connect to the ident server before making an
-     * appropriate response.  Note that this method is started by the class
-     * constructor.
-     */
-    public void run() {
-        try {
-            Socket socket = _ss.accept();
-            socket.setSoTimeout(60000);
-            
-            BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-            
-            String line = reader.readLine();
-            if (line != null) {
-                line = line + " : USERID : UNIX : " + _login;
-                writer.write(line + "\r\n");
-                writer.flush();
-                writer.close();
-            }
-        }
-        catch (Exception e) {
-            // We're not really concerned with what went wrong, are we?
-        }
-        
-        try {
-            _ss.close();
-        }
-        catch (Exception e) {
-            // Doesn't really matter...
-        }
-        
+
+    this.setName(this.getClass() + "-Thread");
+    this.start();
+  }
+
+
+  /**
+   * Waits for a client to connect to the ident server before making an
+   * appropriate response.  Note that this method is started by the class
+   * constructor.
+   */
+  public void run() {
+    try {
+      Socket socket = _ss.accept();
+      socket.setSoTimeout(60000);
+
+      BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+      BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+
+      String line = reader.readLine();
+      if (line != null) {
+        line = line + " : USERID : UNIX : " + _login;
+        writer.write(line + "\r\n");
+        writer.flush();
+        writer.close();
+      }
+    } catch (Exception e) {
+      // We're not really concerned with what went wrong, are we?
     }
-    
-    private String _login;
-    private ServerSocket _ss = null;
-    
+
+    try {
+      _ss.close();
+    } catch (Exception e) {
+      // Doesn't really matter...
+    }
+
+  }
+
+  private String _login;
+  private ServerSocket _ss = null;
+
 }

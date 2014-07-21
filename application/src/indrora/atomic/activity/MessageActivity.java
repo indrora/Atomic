@@ -31,24 +31,22 @@ import android.widget.TextView;
 
 /**
  * Activity for single message view
- * 
+ *
  * @author Sebastian Kaspari <sebastian@yaaic.org>
  */
-public class MessageActivity extends Activity
-{
-    /**
-     * On create
-     */
-    @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
+public class MessageActivity extends Activity {
+  /**
+   * On create
+   */
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
 
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.message);
+    requestWindowFeature(Window.FEATURE_NO_TITLE);
+    setContentView(R.layout.message);
 
-        ((TextView) findViewById(R.id.message)).setText(
-            getIntent().getExtras().getString(Extra.MESSAGE)
-        );
-    }
+    ((TextView) findViewById(R.id.message)).setText(
+      getIntent().getExtras().getString(Extra.MESSAGE)
+    );
+  }
 }

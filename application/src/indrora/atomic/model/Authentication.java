@@ -25,101 +25,92 @@ package indrora.atomic.model;
  *
  * @author Sebastian Kaspari <sebastian@yaaic.org>
  */
-public class Authentication
-{
-    private String saslUsername;
-    private String saslPassword;
-    private String nickservPassword;
+public class Authentication {
+  private String saslUsername;
+  private String saslPassword;
+  private String nickservPassword;
 
-    /**
-     * Does this instance have credentials for Nickserv authentication?
-     * 
-     * @return True if nickserv credentials are present, false otherwise.
-     */
-    public boolean hasNickservCredentials()
-    {
-        return nickservPassword != null && nickservPassword.length() > 0;
+  /**
+   * Does this instance have credentials for Nickserv authentication?
+   *
+   * @return True if nickserv credentials are present, false otherwise.
+   */
+  public boolean hasNickservCredentials() {
+    return nickservPassword != null && nickservPassword.length() > 0;
+  }
+
+  /**
+   * Does this instance have credentials for SASL authentication?
+   *
+   * @return True if nickserv credentials are present, false otherwise.
+   */
+  public boolean hasSaslCredentials() {
+    return saslUsername != null && saslUsername.length() > 0;
+  }
+
+  /**
+   * Set the username for SASL authentication.
+   *
+   * @param saslUsername
+   */
+  public void setSaslUsername(String saslUsername) {
+    if (saslUsername == "") {
+      saslUsername = null;
     }
 
-    /**
-     * Does this instance have credentials for SASL authentication?
-     * 
-     * @return True if nickserv credentials are present, false otherwise.
-     */
-    public boolean hasSaslCredentials()
-    {
-        return saslUsername != null && saslUsername.length() > 0;
+    this.saslUsername = saslUsername;
+  }
+
+  /**
+   * Set the password for SASL authentication.
+   *
+   * @param saslPassword
+   */
+  public void setSaslPassword(String saslPassword) {
+    if (saslPassword == "") {
+      saslPassword = null;
     }
 
-    /**
-     * Set the username for SASL authentication.
-     *
-     * @param saslUsername
-     */
-    public void setSaslUsername(String saslUsername)
-    {
-        if (saslUsername == "") {
-            saslUsername = null;
-        }
+    this.saslPassword = saslPassword;
+  }
 
-        this.saslUsername = saslUsername;
+  /**
+   * Set the password for Nickserv authentication.
+   *
+   * @param nickservPassword
+   */
+  public void setNickservPassword(String nickservPassword) {
+    if (nickservPassword == "") {
+      nickservPassword = null;
     }
 
-    /**
-     * Set the password for SASL authentication.
-     * 
-     * @param saslPassword
-     */
-    public void setSaslPassword(String saslPassword)
-    {
-        if (saslPassword == "") {
-            saslPassword = null;
-        }
+    this.nickservPassword = nickservPassword;
+  }
 
-        this.saslPassword = saslPassword;
-    }
+  /**
+   * Get the username for SASL authentication.
+   *
+   * @return
+   */
+  public String getSaslUsername() {
+    return saslUsername;
+  }
 
-    /**
-     * Set the password for Nickserv authentication.
-     * 
-     * @param nickservPassword
-     */
-    public void setNickservPassword(String nickservPassword)
-    {
-        if (nickservPassword == "") {
-            nickservPassword = null;
-        }
+  /**
+   * Get the password for SASL authentication.
+   *
+   * @return
+   */
+  public String getSaslPassword() {
+    return saslPassword;
+  }
 
-        this.nickservPassword = nickservPassword;
-    }
-
-    /**
-     * Get the username for SASL authentication.
-     * 
-     * @return
-     */
-    public String getSaslUsername()
-    {
-        return saslUsername;
-    }
-
-    /**
-     * Get the password for SASL authentication.
-     * 
-     * @return
-     */
-    public String getSaslPassword()
-    {
-        return saslPassword;
-    }
-
-    /**
-     * Get the password for Nickserv authentication.
-     * 
-     * @return
-     */
-    public String getNickservPassword()
-    {
-        return nickservPassword;
-    }
+  /**
+   * Get the password for Nickserv authentication.
+   *
+   * @return
+   */
+  public String getNickservPassword() {
+    return nickservPassword;
+  }
 }

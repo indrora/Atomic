@@ -27,34 +27,33 @@ import android.content.Context;
  *
  * @author Sebastian Kaspari <sebastian@yaaic.org>
  */
-public class DisplayUtils
-{
-    private static float density = -1;
+public class DisplayUtils {
+  private static float density = -1;
 
-    /**
-     * Convert the given density-independent pixels into real pixels for the
-     * display of the device.
-     *
-     * @param dp
-     * @return
-     */
-    public static int convertToPixels(Context context, int dp) {
-        float density = getScreenDensity(context);
+  /**
+   * Convert the given density-independent pixels into real pixels for the
+   * display of the device.
+   *
+   * @param dp
+   * @return
+   */
+  public static int convertToPixels(Context context, int dp) {
+    float density = getScreenDensity(context);
 
-        return (int) (dp * density + 0.5f);
+    return (int) (dp * density + 0.5f);
+  }
+
+  /**
+   * Get the density of the display of the device.
+   *
+   * @param context
+   * @return
+   */
+  public static float getScreenDensity(Context context) {
+    if (density == -1) {
+      density = context.getResources().getDisplayMetrics().density;
     }
 
-    /**
-     * Get the density of the display of the device.
-     *
-     * @param context
-     * @return
-     */
-    public static float getScreenDensity(Context context) {
-        if (density == -1) {
-            density = context.getResources().getDisplayMetrics().density;
-        }
-
-        return density;
-    }
+    return density;
+  }
 }

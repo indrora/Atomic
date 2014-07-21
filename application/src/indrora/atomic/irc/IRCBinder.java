@@ -26,42 +26,38 @@ import android.os.Binder;
 
 /**
  * Binder for service communication
- * 
+ *
  * @author Sebastian Kaspari <sebastian@yaaic.org>
  */
-public class IRCBinder extends Binder
-{
-    private final IRCService service;
+public class IRCBinder extends Binder {
+  private final IRCService service;
 
-    /**
-     * Create a new binder for given service
-     *
-     * @param service
-     */
-    public IRCBinder(IRCService service)
-    {
-        super();
+  /**
+   * Create a new binder for given service
+   *
+   * @param service
+   */
+  public IRCBinder(IRCService service) {
+    super();
 
-        this.service = service;
-    }
+    this.service = service;
+  }
 
-    /**
-     * Connect to given server
-     * 
-     * @param server
-     */
-    public void connect(final Server server)
-    {
-        service.connect(server);
-    }
+  /**
+   * Connect to given server
+   *
+   * @param server
+   */
+  public void connect(final Server server) {
+    service.connect(server);
+  }
 
-    /**
-     * Get service associated with this binder
-     *
-     * @return
-     */
-    public IRCService getService()
-    {
-        return service;
-    }
+  /**
+   * Get service associated with this binder
+   *
+   * @return
+   */
+  public IRCService getService() {
+    return service;
+  }
 }

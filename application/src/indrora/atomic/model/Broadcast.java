@@ -24,50 +24,47 @@ import android.content.Intent;
 
 /**
  * Constants and helpers for Broadcasts
- * 
+ *
  * @author Sebastian Kaspari <sebastian@yaaic.org>
  */
-public abstract class Broadcast
-{
-    public static final String SERVER_UPDATE         = "indrora.atomic.server.status";
-    public static final String SERVER_RECONNECT      = "indrora.atomic.server.reconnect.";
+public abstract class Broadcast {
+  public static final String SERVER_UPDATE         = "indrora.atomic.server.status";
+  public static final String SERVER_RECONNECT      = "indrora.atomic.server.reconnect.";
 
-    public static final String CONVERSATION_MESSAGE    = "indrora.atomic.conversation.message";
-    public static final String CONVERSATION_NEW        = "indrora.atomic.conversation.new";
-    public static final String CONVERSATION_REMOVE    = "indrora.atomic.conversation.remove";
-    public static final String CONVERSATION_TOPIC    = "indrora.atomic.conversation.topic";
+  public static final String CONVERSATION_MESSAGE    = "indrora.atomic.conversation.message";
+  public static final String CONVERSATION_NEW        = "indrora.atomic.conversation.new";
+  public static final String CONVERSATION_REMOVE    = "indrora.atomic.conversation.remove";
+  public static final String CONVERSATION_TOPIC    = "indrora.atomic.conversation.topic";
 
-    /**
-     * Create an Intent for conversation broadcasting
-     * 
-     * @param broadcastType The type of the broadcast, some constant of Broadcast.*
-     * @param serverId The id of the server
-     * @param conversationName The unique name of the conversation
-     * @return  The created Intent
-     */
-    public static Intent createConversationIntent(String broadcastType, int serverId, String conversationName)
-    {
-        Intent intent = new Intent(broadcastType);
+  /**
+   * Create an Intent for conversation broadcasting
+   *
+   * @param broadcastType The type of the broadcast, some constant of Broadcast.*
+   * @param serverId The id of the server
+   * @param conversationName The unique name of the conversation
+   * @return  The created Intent
+   */
+  public static Intent createConversationIntent(String broadcastType, int serverId, String conversationName) {
+    Intent intent = new Intent(broadcastType);
 
-        intent.putExtra(Extra.SERVER, serverId);
-        intent.putExtra(Extra.CONVERSATION, conversationName);
+    intent.putExtra(Extra.SERVER, serverId);
+    intent.putExtra(Extra.CONVERSATION, conversationName);
 
-        return intent;
-    }
+    return intent;
+  }
 
-    /**
-     * Create an Intent for server broadcasting
-     * 
-     * @param broadcastType The typo of the broadcast, some constant of Broadcast.*
-     * @param serverId The id of the server
-     * @return The created Intent
-     */
-    public static Intent createServerIntent(String broadcastType, int serverId)
-    {
-        Intent intent = new Intent(broadcastType);
+  /**
+   * Create an Intent for server broadcasting
+   *
+   * @param broadcastType The typo of the broadcast, some constant of Broadcast.*
+   * @param serverId The id of the server
+   * @return The created Intent
+   */
+  public static Intent createServerIntent(String broadcastType, int serverId) {
+    Intent intent = new Intent(broadcastType);
 
-        intent.putExtra(Extra.SERVER, serverId);
+    intent.putExtra(Extra.SERVER, serverId);
 
-        return intent;
-    }
+    return intent;
+  }
 }

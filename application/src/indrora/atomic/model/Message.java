@@ -53,416 +53,393 @@ import android.widget.TextView;
  *
  * @author Sebastian Kaspari <sebastian@yaaic.org>
  */
-public class Message
-{
-	public enum MessageColor
-	{
-		USER_EVENT,
-		CHANNEL_EVENT,
-		SERVER_EVENT,
-		TOPIC,
-		HIGHLIGHT,
-		ERROR,
-		DEFAULT,
-		NO_COLOR
-	}
-	
-    ColorScheme _scheme;
+public class Message {
+  public enum MessageColor {
+    USER_EVENT,
+    CHANNEL_EVENT,
+    SERVER_EVENT,
+    TOPIC,
+    HIGHLIGHT,
+    ERROR,
+    DEFAULT,
+    NO_COLOR
+  }
 
-    /* normal message, this is the default */
-    public static final int TYPE_MESSAGE = 0;
+  ColorScheme _scheme;
 
-    /* join, part or quit */
-    public static final int TYPE_MISC    = 1;
+  /* normal message, this is the default */
+  public static final int TYPE_MESSAGE = 0;
 
-    public static final int NO_ICON  = -1;
-    public static final int NO_TYPE  = -1;
-    public static final int NO_COLOR = -1;
+  /* join, part or quit */
+  public static final int TYPE_MISC    = 1;
 
-    private final String text;
-    private final String sender;
-    private SpannableString canvas;
-    private long timestamp;
+  public static final int NO_ICON  = -1;
+  public static final int NO_TYPE  = -1;
+  public static final int NO_COLOR = -1;
 
-    private MessageColor color = MessageColor.DEFAULT;
-    private int type  = NO_ICON;
-    private int icon  = NO_TYPE;
+  private final String text;
+  private final String sender;
+  private SpannableString canvas;
+  private long timestamp;
 
-    /**
-     * Create a new message without an icon defaulting to TYPE_MESSAGE
-     *
-     * @param text
-     */
-    public Message(String text)
-    {
-        this(text, null, TYPE_MESSAGE);
+  private MessageColor color = MessageColor.DEFAULT;
+  private int type  = NO_ICON;
+  private int icon  = NO_TYPE;
+
+  /**
+   * Create a new message without an icon defaulting to TYPE_MESSAGE
+   *
+   * @param text
+   */
+  public Message(String text) {
+    this(text, null, TYPE_MESSAGE);
+  }
+
+  /**
+   * Create a new message without an icon with a specific type
+   *
+   * @param text
+   * @param type Message type
+   */
+  public Message(String text, int type) {
+    this(text, null, type);
+  }
+
+  /**
+   * Create a new message sent by a user, without an icon,
+   * defaulting to TYPE_MESSAGE
+   *
+   * @param text
+   * @param sender
+   */
+  public Message(String text, String sender) {
+    this(text, sender, TYPE_MESSAGE);
+  }
+
+  /**
+   * Create a new message sent by a user without an icon
+   *
+   * @param text
+   * @param sender
+   * @param type Message type
+   */
+  public Message(String text, String sender, int type) {
+    this(text,sender,type,new Date().getTime());
+
+  }
+  public Message(String text, String sender, int type, long time) {
+    this.text = text;
+    this.sender = sender;
+    this.timestamp = time;
+    this.type = type;
+
+    _scheme = App.getColorScheme();
+
+  }
+
+  /**
+   * Set the message's icon
+   */
+  public void setIcon(int icon) {
+    this.icon = icon;
+  }
+
+  /**
+   * Get the message's icon
+   *
+   * @return
+   */
+  public int getIcon() {
+    return icon;
+  }
+
+  /**
+   * Get the text of this message
+   *
+   * @return
+   */
+  public String getText() {
+    return text;
+  }
+
+  /**
+   * Get the type of this message
+   *
+   * @return One of Message.TYPE_*
+   */
+  public int getType() {
+    return type;
+  }
+
+  /**
+   * Set the color of this message
+   */
+  public void setColor(MessageColor color) {
+    this.color = color;
+    //this.color = color;
+  }
+
+  private int translateColor(MessageColor c) {
+    switch(c) {
+    case CHANNEL_EVENT:
+      return _scheme.getChannelEvent();
+    case DEFAULT:
+      return _scheme.getForeground();
+    case ERROR:
+      return _scheme.getError();
+    case HIGHLIGHT:
+      return _scheme.getHighlight();
+    case SERVER_EVENT:
+      return _scheme.getServerEvent();
+    case TOPIC:
+      return _scheme.getTopic();
+    case USER_EVENT:
+      return _scheme.getUserEvent();
+    default:
+      return _scheme.getForeground();
     }
 
-    /**
-     * Create a new message without an icon with a specific type
-     *
-     * @param text
-     * @param type Message type
-     */
-    public Message(String text, int type)
-    {
-        this(text, null, type);
+  }
+
+  /**
+   * Set the timestamp of the message
+   *
+   * @param timestamp
+   */
+  public void setTimestamp(long timestamp) {
+    this.timestamp = timestamp;
+  }
+
+  /**
+   * Associate a color with a sender name
+   *
+   * @return a color hexa
+   */
+  private int getSenderColor() {
+    /* It might be worth to use some hash table here */
+    if (sender == null) {
+      return _scheme.getForeground();
     }
 
-    /**
-     * Create a new message sent by a user, without an icon,
-     * defaulting to TYPE_MESSAGE
-     *
-     * @param text
-     * @param sender
-     */
-    public Message(String text, String sender)
-    {
-        this(text, sender, TYPE_MESSAGE);
+    int color = 0;
+    int variant = sender.charAt(0);
+
+    for(int i = 0; i < sender.length(); i++) {
+      char c = sender.charAt(i);
+      if(c-33 >'Z')  variant +=(c-33)%32;
+      else variant -=(c-33)%32;
+      color += c;
     }
 
-    /**
-     * Create a new message sent by a user without an icon
-     *
-     * @param text
-     * @param sender
-     * @param type Message type
-     */
-    public Message(String text, String sender, int type)
-    {
-    	this(text,sender,type,new Date().getTime());
+    variant %= 20;
+    // We don't want the color to be the background color.
 
-    }
-    public Message(String text, String sender, int type, long time)
-    {
-        this.text = text;
-        this.sender = sender;
-        this.timestamp = time;
-        this.type = type;
-        
-        _scheme = App.getColorScheme();
+    //Log.d("Message", "Variant="+variant);
 
-    }
+    final int bg = _scheme.getBackground();
+    int tmpColor;// = _scheme.getMircColor(color);
+    do {
 
-    /**
-     * Set the message's icon
-     */
-    public void setIcon(int icon)
-    {
-        this.icon = icon;
-    }
+      float[] hsv = new float[3];
+      Color.colorToHSV(_scheme.getMircColor(color++), hsv);
+      hsv[0] += variant;
 
-    /**
-     * Get the message's icon
-     *
-     * @return
-     */
-    public int getIcon()
-    {
-        return icon;
-    }
+      tmpColor = Color.HSVToColor(hsv);
+    } while(likeness(bg, tmpColor) < 30);
 
-    /**
-     * Get the text of this message
-     *
-     * @return
-     */
-    public String getText()
-    {
-        return text;
-    }
+    return tmpColor; //colors[color];
+  }
 
-    /**
-     * Get the type of this message
-     *
-     * @return One of Message.TYPE_*
-     */
-    public int getType()
-    {
-        return type;
-    }
+  /**
+   * Calculates a likeness. This will return between 0-255
+   * on the likeness of the color.
+   * @param back
+   * @param fore
+   * @return
+   */
+  private static int likeness(int back, int fore) {
 
-    /**
-     * Set the color of this message
-     */
-	public void setColor(MessageColor color) {
-		this.color = color;
-        //this.color = color;
+
+    double gamma = 2.2; // Woo constants.
+    double backL =
+      0.2126 * Math.pow( (float)Color.red(back)/255.0,    gamma )
+      + 0.7152 * Math.pow( (float)Color.green(back)/255.0,  gamma )
+      + 0.0722 * Math.pow( (float)Color.blue(back)/255.0,   gamma );
+    double foreL =
+      0.2126 * Math.pow( (float)Color.red(fore)/255.0,    gamma )
+      + 0.7152 * Math.pow( (float)Color.green(fore)/255.0,  gamma )
+      + 0.0722 * Math.pow( (float)Color.blue(fore)/255.0,   gamma );
+    int distance = (int) (100 * Math.abs(backL-foreL));
+    //Log.d("Message", " ForeL=<"+foreL+"> backL=<"+backL+"> Color distance = "+distance);
+    return distance;
+  }
+
+  /**
+   * Render message as spannable string
+   *
+   * @return
+   */
+  public SpannableString render(Context context) {
+    Settings settings = new Settings(context);
+
+    _scheme = App.getColorScheme();
+
+    //if (canvas == null) {
+    String prefix    ="";
+    if(hasIcon()) {
+      if(settings.showIcons())
+        prefix = " ";
+      else
+        prefix = "* ";
     }
 
-	private int translateColor(MessageColor c)
-	{
-		switch(c)
-		{
-		case CHANNEL_EVENT:
-			return _scheme.getChannelEvent();
-		case DEFAULT: return _scheme.getForeground();
-		case ERROR:
-			 return _scheme.getError();
-		case HIGHLIGHT:
-			 return _scheme.getHighlight();
-		case SERVER_EVENT:
-			return _scheme.getServerEvent();
-		case TOPIC:
-			return _scheme.getTopic();
-		case USER_EVENT:
-			return _scheme.getUserEvent();
-		default:
-			return _scheme.getForeground();
-		}
+    String nick      = hasSender() ? "<" + sender + "> " : "";
+    String timestamp = settings.showTimestamp() ? renderTimeStamp(settings.use24hFormat(), settings.includeSeconds()) : "";
 
-	}
-	
-    /**
-     * Set the timestamp of the message
-     *
-     * @param timestamp
-     */
-    public void setTimestamp(long timestamp)
-    {
-        this.timestamp = timestamp;
+    canvas = new SpannableString(prefix + /*timestamp + */nick);
+    SpannableString renderedText;
+
+
+    if (settings.showMircColors()) {
+      renderedText = MircColors.toSpannable(text);
+    } else {
+      renderedText = new SpannableString(
+        MircColors.removeStyleAndColors(text)
+      );
     }
 
-    /**
-     * Associate a color with a sender name
-     *
-     * @return a color hexa
-     */
-    private int getSenderColor()
-    {
-        /* It might be worth to use some hash table here */
-        if (sender == null) {
-            return _scheme.getForeground();
+    if (settings.showGraphicalSmilies()) {
+      renderedText = Smilies.toSpannable(renderedText, context);
+    }
+
+    canvas = new SpannableString(TextUtils.concat(canvas, renderedText));
+
+    if (hasSender()) {
+      int start = prefix.length() + 1;
+      int end = start + sender.length();
+
+      if (settings.showColorsNick()) {
+        canvas.setSpan(new ForegroundColorSpan(getSenderColor()), start, end , Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+      }
+    }
+
+    if (hasIcon() && settings.showIcons()) {
+      Drawable drawable = context.getResources().getDrawable(icon);
+
+      int height = settings.getFontSize();
+      float density = context.getResources().getDisplayMetrics().density;
+      float scale = height / (float)(drawable.getMinimumHeight());
+      drawable.setBounds(0, 0, (int)(drawable.getMinimumWidth() * scale * density), (int)(height * density));
+      canvas.setSpan(new ImageSpan(drawable, ImageSpan.ALIGN_BASELINE), 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+    }
+
+    if (hasColor() && settings.showColors()) {
+      // Only apply the foreground color to areas that don't already have a foreground color.
+      ForegroundColorSpan[] spans = canvas.getSpans(0, canvas.length(), ForegroundColorSpan.class);
+      int start = 0;
+
+      for (ForegroundColorSpan span : spans) {
+        if (start > canvas.getSpanStart(span)) {
+          start = canvas.getSpanStart(span);
         }
+        canvas.setSpan(new ForegroundColorSpan( translateColor(color)), start, canvas.getSpanStart(span), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        start = canvas.getSpanEnd(span);
+      }
 
-        int color = 0;
-        int variant = sender.charAt(0);
-        
-        for(int i = 0; i < sender.length(); i++){
-            char c = sender.charAt(i);
-            if(c-33 >'Z')  variant +=(c-33)%32;
-            else variant -=(c-33)%32;
-            color += c;
-        }
-        
-        variant %= 20;
-        // We don't want the color to be the background color.
-        
-        //Log.d("Message", "Variant="+variant);
-        
-        final int bg = _scheme.getBackground();
-        int tmpColor;// = _scheme.getMircColor(color);
-        do
-        {
-        	
-        	float[] hsv = new float[3];
-        	Color.colorToHSV(_scheme.getMircColor(color++), hsv);
-        	hsv[0] += variant;
-        	
-        	tmpColor = Color.HSVToColor(hsv);
-        }while(likeness(bg, tmpColor) < 30);
-        
-        return tmpColor; //colors[color];
-    }
-    
-    /**
-     * Calculates a likeness. This will return between 0-255
-     * on the likeness of the color.
-     * @param back
-     * @param fore
-     * @return
-     */
-    private static int likeness(int back, int fore)
-    {
-
-    	
-    	double gamma = 2.2; // Woo constants.
-    	double backL =
-    			  0.2126 * Math.pow( (float)Color.red(back)/255.0,    gamma )
-    	        + 0.7152 * Math.pow( (float)Color.green(back)/255.0,  gamma )
-    	        + 0.0722 * Math.pow( (float)Color.blue(back)/255.0,   gamma );
-    	double foreL = 
-    			  0.2126 * Math.pow( (float)Color.red(fore)/255.0,    gamma )
-    	        + 0.7152 * Math.pow( (float)Color.green(fore)/255.0,  gamma )
-    	        + 0.0722 * Math.pow( (float)Color.blue(fore)/255.0,   gamma );
-    	int distance = (int) (100 * Math.abs(backL-foreL));
-    	//Log.d("Message", " ForeL=<"+foreL+"> backL=<"+backL+"> Color distance = "+distance);
-    	return distance;
+      canvas.setSpan(new ForegroundColorSpan(translateColor(color)), start, canvas.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 
-    /**
-     * Render message as spannable string
-     *
-     * @return
-     */
-    public SpannableString render(Context context)
-    {
-        Settings settings = new Settings(context);
+    // Timestamp should be there.
+    // We're prepending the timestamp so that things line up all the time.
+    // Potatoes.
+    canvas = new SpannableString(TextUtils.concat(timestamp+" ", canvas));
+    //}
 
-        _scheme = App.getColorScheme();
-		
-        //if (canvas == null) {
-            String prefix    ="";
-            if(hasIcon())
-            {
-            	if(settings.showIcons())
-                	prefix = " ";
-            	else
-                	prefix = "* ";
-            }
-            
-            String nick      = hasSender() ? "<" + sender + "> " : "";
-            String timestamp = settings.showTimestamp() ? renderTimeStamp(settings.use24hFormat(), settings.includeSeconds()) : "";
+    return canvas;
+  }
 
-            canvas = new SpannableString(prefix + /*timestamp + */nick);
-            SpannableString renderedText;
+  /**
+   * Does this message have a sender?
+   *
+   * @return
+   */
+  private boolean hasSender() {
+    return sender != null;
+  }
 
-            
-            if (settings.showMircColors()) {
-                renderedText = MircColors.toSpannable(text);
-            } else {
-                renderedText = new SpannableString(
-                    MircColors.removeStyleAndColors(text)
-                );
-            }
+  /**
+   * Does this message have a color assigned?
+   *
+   * @return
+   */
+  private boolean hasColor() {
+    return color != MessageColor.NO_COLOR;
+  }
 
-            if (settings.showGraphicalSmilies()) {
-                renderedText = Smilies.toSpannable(renderedText, context);
-            }
+  /**
+   * Does this message have an icon assigned?
+   *
+   * @return
+   */
+  private boolean hasIcon() {
+    return icon != NO_ICON;
+  }
 
-            canvas = new SpannableString(TextUtils.concat(canvas, renderedText));
+  /**
+   * Render message as text view
+   *
+   * @param context
+   * @return
 
-            if (hasSender()) {
-                int start = prefix.length() + 1;
-                int end = start + sender.length();
+  public TextView renderTextView(Context context)
+  {
+      // XXX: We should not read settings here ALWAYS for EVERY textview
+      Settings settings = new Settings(context);
 
-                if (settings.showColorsNick()) {
-                    canvas.setSpan(new ForegroundColorSpan(getSenderColor()), start, end , Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                }
-            }
+      _scheme = App.getColorScheme();
 
-            if (hasIcon() && settings.showIcons()) {
-                Drawable drawable = context.getResources().getDrawable(icon);
-                
-                int height = settings.getFontSize();
-                float density = context.getResources().getDisplayMetrics().density;
-                float scale = height / (float)(drawable.getMinimumHeight());
-                drawable.setBounds(0, 0, (int)(drawable.getMinimumWidth() * scale * density), (int)(height * density));
-                canvas.setSpan(new ImageSpan(drawable, ImageSpan.ALIGN_BASELINE), 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            }
+      TextView canvas = new TextView(context);
 
-            if (hasColor() && settings.showColors()) {
-                // Only apply the foreground color to areas that don't already have a foreground color.
-                ForegroundColorSpan[] spans = canvas.getSpans(0, canvas.length(), ForegroundColorSpan.class);
-                int start = 0;
+      canvas.setAutoLinkMask(Linkify.ALL);
+      canvas.setLinksClickable(true);
+      canvas.setLinkTextColor(_scheme.getUrl());
 
-                for (ForegroundColorSpan span : spans) {
-                    if (start > canvas.getSpanStart(span)) {
-                        start = canvas.getSpanStart(span);
-                    }
-                    canvas.setSpan(new ForegroundColorSpan( translateColor(color)), start, canvas.getSpanStart(span), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    start = canvas.getSpanEnd(span);
-                }
+      canvas.setText(this.render(context));
+      canvas.setTextSize(settings.getFontSize());
+      canvas.setTypeface(Typeface.MONOSPACE);
+      canvas.setTextColor(_scheme.getForeground());
 
-                canvas.setSpan(new ForegroundColorSpan(translateColor(color)), start, canvas.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            }
-            
-            // Timestamp should be there.
-            // We're prepending the timestamp so that things line up all the time.
-            // Potatoes.
-            canvas = new SpannableString(TextUtils.concat(timestamp+" ", canvas));
-        //}
-        
-        return canvas;
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+          setupViewForHoneycombAndLater(canvas);
+      }
+
+      return canvas;
+  }
+
+  @TargetApi(11)
+  private void setupViewForHoneycombAndLater(TextView canvas) {
+      canvas.setTextIsSelectable(true);
+  }*/
+
+  /**
+   * Generate a timestamp
+   *
+   * @param use24hFormat
+   * @return
+   */
+  public String renderTimeStamp(boolean use24hFormat, boolean includeSeconds) {
+
+    Date date = new Date(timestamp);
+    String format = "[";
+
+    format += (use24hFormat?"HH":"hh");
+    format += ":mm";
+
+    if (includeSeconds) {
+      format += ":ss";
     }
+    format += "]";
 
-    /**
-     * Does this message have a sender?
-     *
-     * @return
-     */
-    private boolean hasSender()
-    {
-        return sender != null;
-    }
-
-    /**
-     * Does this message have a color assigned?
-     *
-     * @return
-     */
-    private boolean hasColor()
-    {
-        return color != MessageColor.NO_COLOR;
-    }
-
-    /**
-     * Does this message have an icon assigned?
-     *
-     * @return
-     */
-    private boolean hasIcon()
-    {
-        return icon != NO_ICON;
-    }
-
-    /**
-     * Render message as text view
-     *
-     * @param context
-     * @return
-     
-    public TextView renderTextView(Context context)
-    {
-        // XXX: We should not read settings here ALWAYS for EVERY textview
-        Settings settings = new Settings(context);
-
-        _scheme = App.getColorScheme();
-        
-        TextView canvas = new TextView(context);
-
-        canvas.setAutoLinkMask(Linkify.ALL);
-        canvas.setLinksClickable(true);
-        canvas.setLinkTextColor(_scheme.getUrl());
-
-        canvas.setText(this.render(context));
-        canvas.setTextSize(settings.getFontSize());
-        canvas.setTypeface(Typeface.MONOSPACE);
-        canvas.setTextColor(_scheme.getForeground());
-        
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            setupViewForHoneycombAndLater(canvas);
-        }
-
-        return canvas;
-    }
-
-    @TargetApi(11)
-    private void setupViewForHoneycombAndLater(TextView canvas) {
-        canvas.setTextIsSelectable(true);
-    }*/
-
-    /**
-     * Generate a timestamp
-     *
-     * @param use24hFormat
-     * @return
-     */
-    public String renderTimeStamp(boolean use24hFormat, boolean includeSeconds)
-    {
-    	
-        Date date = new Date(timestamp);
-        String format = "[";
-        
-        format += (use24hFormat?"HH":"hh");
-        format += ":mm";
-
-        if (includeSeconds)
-        {
-        	format += ":ss";
-        }
-        format += "]";
-        
-        return (String) android.text.format.DateFormat.format(format, date);
-    }
+    return (String) android.text.format.DateFormat.format(format, date);
+  }
 }

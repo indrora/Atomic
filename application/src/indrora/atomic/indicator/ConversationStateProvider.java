@@ -26,27 +26,27 @@ package indrora.atomic.indicator;
  * state color for a position in the pager.
  */
 public interface ConversationStateProvider {
-	/**
-	 * Get the state color for all positions lower than the given position.
-	 *
-	 * @param position
-	 * @return
-	 */
-    public int getColorForLowerThan(int position);
+  /**
+   * Get the state color for all positions lower than the given position.
+   *
+   * @param position
+   * @return
+   */
+  public int getColorForLowerThan(int position);
 
-	/**
-	 * Get the state color for the given position.
-	 *
-	 * @param position
-	 * @return
-	 */
-	public int getColorAt(int position);
+  /**
+   * Get the state color for the given position.
+   *
+   * @param position
+   * @return
+   */
+  public int getColorAt(int position);
 
-	/**
-	 * Get the state color for all positions greater than the given position.
-	 *
-	 * @param position
-	 * @return
-	 */
-	public int getColorForGreaterThan(int position);
+  /**
+   * Get the state color for all positions greater than the given position.
+   *
+   * @param position
+   * @return
+   */
+  public int getColorForGreaterThan(int position);
 }

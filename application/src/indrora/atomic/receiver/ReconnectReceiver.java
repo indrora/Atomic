@@ -31,34 +31,31 @@ import android.content.Intent;
 
 /**
  * A receiver to listen for alarms and start a reconnect attempt
- * 
+ *
  * @author Steven Luo <steven+android@steven676.net>
  */
-public class ReconnectReceiver extends BroadcastReceiver
-{
-    private IRCService service;
-    private Server server;
+public class ReconnectReceiver extends BroadcastReceiver {
+  private IRCService service;
+  private Server server;
 
-    /**
-     * Create a new reconnect receiver
-     * 
-     * @param server The server to reconnect to
-     */
-    public ReconnectReceiver(IRCService service, Server server)
-    {
-        this.service = service;
-        this.server = server;
-    }
+  /**
+   * Create a new reconnect receiver
+   *
+   * @param server The server to reconnect to
+   */
+  public ReconnectReceiver(IRCService service, Server server) {
+    this.service = service;
+    this.server = server;
+  }
 
-    /**
-     * On receive broadcast
-     */
-    @Override
-    public void onReceive(Context context, Intent intent)
-    {
-        if (!intent.getAction().equals(Broadcast.SERVER_RECONNECT + server.getId())) {
-            return;
-        }
-        service.connect(server);
+  /**
+   * On receive broadcast
+   */
+  @Override
+  public void onReceive(Context context, Intent intent) {
+    if (!intent.getAction().equals(Broadcast.SERVER_RECONNECT + server.getId())) {
+      return;
     }
+    service.connect(server);
+  }
 }

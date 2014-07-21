@@ -33,50 +33,47 @@ import android.widget.ListView;
  *
  * @author Sebastian Kaspari <sebastian@yaaic.org>
  */
-public class MessageListView extends ListView
-{
-	
-	ColorScheme _scheme;
-	
-    /**
-     * Create a new MessageListView
-     *
-     * @param context
-     */
-    public MessageListView(Context context)
-    {
-        super(context);
+public class MessageListView extends ListView {
 
-        _scheme = App.getColorScheme();
-        
-        setOnItemClickListener(MessageClickListener.getInstance());
+  ColorScheme _scheme;
 
-        setDivider(null);
+  /**
+   * Create a new MessageListView
+   *
+   * @param context
+   */
+  public MessageListView(Context context) {
+    super(context);
 
-        setCacheColorHint(0x000000);
-        setVerticalFadingEdgeEnabled(false);
-        //setBackgroundResource(R.drawable.conversation_background);
-        setScrollBarStyle(SCROLLBARS_INSIDE_OVERLAY);
+    _scheme = App.getColorScheme();
 
-        setBackgroundColor(_scheme.getBackground());
-        
-        // Scale padding by screen density
-        float density = context.getResources().getDisplayMetrics().density;
-        int padding = (int) (5 * density);
-        setPadding(padding, padding, padding, padding);
+    setOnItemClickListener(MessageClickListener.getInstance());
 
-        setTranscriptMode(TRANSCRIPT_MODE_NORMAL);
-    }
+    setDivider(null);
 
-    /**
-     * Get the adapter of this MessageListView
-     * (Helper to avoid casting)
-     *
-     * @return The MessageListAdapter
-     */
-    @Override
-    public MessageListAdapter getAdapter()
-    {
-        return (MessageListAdapter) super.getAdapter();
-    }
+    setCacheColorHint(0x000000);
+    setVerticalFadingEdgeEnabled(false);
+    //setBackgroundResource(R.drawable.conversation_background);
+    setScrollBarStyle(SCROLLBARS_INSIDE_OVERLAY);
+
+    setBackgroundColor(_scheme.getBackground());
+
+    // Scale padding by screen density
+    float density = context.getResources().getDisplayMetrics().density;
+    int padding = (int) (5 * density);
+    setPadding(padding, padding, padding, padding);
+
+    setTranscriptMode(TRANSCRIPT_MODE_NORMAL);
+  }
+
+  /**
+   * Get the adapter of this MessageListView
+   * (Helper to avoid casting)
+   *
+   * @return The MessageListAdapter
+   */
+  @Override
+  public MessageListAdapter getAdapter() {
+    return (MessageListAdapter) super.getAdapter();
+  }
 }

@@ -31,44 +31,40 @@ import android.widget.AdapterView.OnItemClickListener;
 
 /**
  * Listener for clicks on conversation messages
- * 
+ *
  * @author Sebastian Kaspari <sebastian@yaaic.org>
  */
-public class MessageClickListener implements OnItemClickListener
-{
-    private static MessageClickListener instance;
+public class MessageClickListener implements OnItemClickListener {
+  private static MessageClickListener instance;
 
-    /**
-     * Private constructor
-     */
-    private MessageClickListener()
-    {
+  /**
+   * Private constructor
+   */
+  private MessageClickListener() {
+  }
+
+  /**
+   * Get global instance of message click listener
+   *
+   * @return
+   */
+  public static synchronized MessageClickListener getInstance() {
+    if (instance == null) {
+      instance = new MessageClickListener();
     }
 
-    /**
-     * Get global instance of message click listener
-     * 
-     * @return
-     */
-    public static synchronized MessageClickListener getInstance()
-    {
-        if (instance == null) {
-            instance = new MessageClickListener();
-        }
+    return instance;
+  }
 
-        return instance;
-    }
+  /**
+   * On message item clicked
+   */
+  @Override
+  public void onItemClick(AdapterView<?> group, View view, int position, long id) {
+    MessageListAdapter adapter = (MessageListAdapter) group.getAdapter();
 
-    /**
-     * On message item clicked
-     */
-    @Override
-    public void onItemClick(AdapterView<?> group, View view, int position, long id)
-    {
-        MessageListAdapter adapter = (MessageListAdapter) group.getAdapter();
-
-        Intent intent = new Intent(group.getContext(), MessageActivity.class);
-        intent.putExtra(Extra.MESSAGE, adapter.getItem(position).toString());
-        group.getContext().startActivity(intent);
-    }
+    Intent intent = new Intent(group.getContext(), MessageActivity.class);
+    intent.putExtra(Extra.MESSAGE, adapter.getItem(position).toString());
+    group.getContext().startActivity(intent);
+  }
 }

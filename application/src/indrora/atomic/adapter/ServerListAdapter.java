@@ -37,121 +37,114 @@ import android.widget.TextView;
 
 /**
  * Adapter for server lists
- * 
+ *
  * @author Sebastian Kaspari <sebastian@yaaic.org>
  */
-public class ServerListAdapter extends BaseAdapter
-{
-    private static final int COLOR_CONNECTED    = 0xFFbcbcbc;
-    private static final int COLOR_DISCONNECTED = 0xFF585858;
+public class ServerListAdapter extends BaseAdapter {
+  private static final int COLOR_CONNECTED    = 0xFFbcbcbc;
+  private static final int COLOR_DISCONNECTED = 0xFF585858;
 
-    private ArrayList<Server> servers;
+  private ArrayList<Server> servers;
 
-    /**
-     * Create a new adapter for server lists
-     */
-    public ServerListAdapter()
-    {
-        loadServers();
+  /**
+   * Create a new adapter for server lists
+   */
+  public ServerListAdapter() {
+    loadServers();
+  }
+
+  /**
+   * Load servers from database
+   *
+   * Delegate call to yaaic instance
+   */
+  public void loadServers() {
+    servers = Atomic.getInstance().getServersAsArrayList();
+    notifyDataSetChanged();
+  }
+
+  /**
+   * Get number of items
+   */
+  @Override
+  public int getCount() {
+    int size = servers.size();
+
+    // Display "Add server" item
+    if (size == 0) {
+      return 1;
     }
 
-    /**
-     * Load servers from database
-     *
-     * Delegate call to yaaic instance
-     */
-    public void loadServers()
-    {
-        servers = Atomic.getInstance().getServersAsArrayList();
-        notifyDataSetChanged();
+    return size;
+  }
+
+  /**
+   * Get item at position
+   *
+   * @param position
+   */
+  @Override
+  public Server getItem(int position) {
+    if (servers.size() == 0) {
+      return null; // No server object for the "add server" view
     }
 
-    /**
-     * Get number of items
-     */
-    @Override
-    public int getCount()
-    {
-        int size = servers.size();
+    return servers.get(position);
+  }
 
-        // Display "Add server" item
-        if (size == 0) {
-            return 1;
-        }
-
-        return size;
+  /**
+   * Get id of item at position
+   *
+   * @param position
+   */
+  @Override
+  public long getItemId(int position) {
+    if (servers.size() == 0) {
+      return 0;
     }
 
-    /**
-     * Get item at position
-     * 
-     * @param position
-     */
-    @Override
-    public Server getItem(int position)
-    {
-        if (servers.size() == 0) {
-            return null; // No server object for the "add server" view
-        }
+    return getItem(position).getId();
+  }
 
-        return servers.get(position);
+  /**
+   * Get view for item at given position
+   *
+   * @param position
+   * @param convertView
+   * @param parent
+   */
+  @Override
+  public View getView(int position, View convertView, ViewGroup parent) {
+    Server server = getItem(position);
+
+    LayoutInflater inflater = (LayoutInflater) parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+    if (server == null) {
+      // Return "Add server" view
+      return inflater.inflate(R.layout.addserveritem, null);
     }
 
-    /**
-     * Get id of item at position
-     * 
-     * @param position
-     */
-    @Override
-    public long getItemId(int position)
-    {
-        if (servers.size() == 0) {
-            return 0;
-        }
+    View v = inflater.inflate(R.layout.serveritem, null);
 
-        return getItem(position).getId();
+    TextView titleView = (TextView) v.findViewById(R.id.title);
+    titleView.setText(server.getTitle());
+
+    TextView hostView = (TextView) v.findViewById(R.id.host);
+    hostView.setText(server.getIdentity().getNickname() + "@" + server.getHost() + ":" + server.getPort());
+
+    /* This is crap. */
+    /*
+    if (server.isConnected()) {
+        titleView.setTextColor(COLOR_CONNECTED);
+        hostView.setTextColor(COLOR_CONNECTED);
+    } else {
+        titleView.setTextColor(COLOR_DISCONNECTED);
+        hostView.setTextColor(COLOR_DISCONNECTED);
     }
+    */
 
-    /**
-     * Get view for item at given position
-     * 
-     * @param position
-     * @param convertView
-     * @param parent
-     */
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent)
-    {
-        Server server = getItem(position);
+    ((ImageView) v.findViewById(R.id.status)).setImageResource(server.getStatusIcon());
 
-        LayoutInflater inflater = (LayoutInflater) parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        if (server == null) {
-            // Return "Add server" view
-            return inflater.inflate(R.layout.addserveritem, null);
-        }
-
-        View v = inflater.inflate(R.layout.serveritem, null);
-
-        TextView titleView = (TextView) v.findViewById(R.id.title);
-        titleView.setText(server.getTitle());
-
-        TextView hostView = (TextView) v.findViewById(R.id.host);
-        hostView.setText(server.getIdentity().getNickname() + "@" + server.getHost() + ":" + server.getPort());
-
-        /* This is crap. */
-        /*
-        if (server.isConnected()) {
-            titleView.setTextColor(COLOR_CONNECTED);
-            hostView.setTextColor(COLOR_CONNECTED);
-        } else {
-            titleView.setTextColor(COLOR_DISCONNECTED);
-            hostView.setTextColor(COLOR_DISCONNECTED);
-        }
-		*/
-        
-        ((ImageView) v.findViewById(R.id.status)).setImageResource(server.getStatusIcon());
-
-        return v;
-    }
+    return v;
+  }
 }

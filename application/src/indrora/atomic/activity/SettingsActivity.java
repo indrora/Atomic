@@ -31,17 +31,15 @@ import com.actionbarsherlock.app.SherlockPreferenceActivity;
  *
  * @author Sebastian Kaspari <sebastian@yaaic.org>
  */
-public class SettingsActivity extends SherlockPreferenceActivity // SherlockPreferenceActivity
-{
-    /**
-     * On create
-     */
-    @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.preferences);
-    }
+public class SettingsActivity extends SherlockPreferenceActivity { // SherlockPreferenceActivity
+  /**
+   * On create
+   */
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    addPreferencesFromResource(R.xml.preferences);
+  }
 
 
 }

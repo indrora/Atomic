@@ -22,29 +22,26 @@ package indrora.atomic.model;
 
 /**
  * ServerInfo for all messages regarding the server
- * 
+ *
  * @author Sebastian Kaspari <sebastian@yaaic.org>
  */
-public class ServerInfo extends Conversation
-{
-    public static final String DEFAULT_NAME = "";
+public class ServerInfo extends Conversation {
+  public static final String DEFAULT_NAME = "";
 
-    /**
-     * Create a new ServerInfo object
-     * 
-     * @param name
-     */
-    public ServerInfo()
-    {
-        super(DEFAULT_NAME);
-    }
+  /**
+   * Create a new ServerInfo object
+   *
+   * @param name
+   */
+  public ServerInfo() {
+    super(DEFAULT_NAME);
+  }
 
-    /**
-     * Get the type of this conversation
-     */
-    @Override
-    public int getType()
-    {
-        return Conversation.TYPE_SERVER;
-    }
+  /**
+   * Get the type of this conversation
+   */
+  @Override
+  public int getType() {
+    return Conversation.TYPE_SERVER;
+  }
 }

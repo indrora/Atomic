@@ -15,179 +15,182 @@ import android.util.Log;
 
 public class ColorScheme implements OnSharedPreferenceChangeListener {
 
-	static Context _context;
-	static Settings _settings;
+  static Context _context;
+  static Settings _settings;
 
-	private static HashMap<String, Integer> scheme_colors;
+  private static HashMap<String, Integer> scheme_colors;
 
-	private static Properties themeProps;
-	private static int[] colors = new int[16];
-	private static String lastScheme = "";
-	private static boolean isDarkTheme = true;
+  private static Properties themeProps;
+  private static int[] colors = new int[16];
+  private static String lastScheme = "";
+  private static boolean isDarkTheme = true;
 
-	public ColorScheme(Context ctx) {
-		// initialize ourselves.
-		if (ctx != null) {
-			_context = ctx;
-		}
+  public ColorScheme(Context ctx) {
+    // initialize ourselves.
+    if (ctx != null) {
+      _context = ctx;
+    }
 
-		if (_settings == null) {
-			_settings = new Settings(_context);
-			refreshColorScheme();
+    if (_settings == null) {
+      _settings = new Settings(_context);
+      refreshColorScheme();
 
-		}
-		PreferenceManager.getDefaultSharedPreferences(_context)
-				.registerOnSharedPreferenceChangeListener(this);
-	}
+    }
+    PreferenceManager.getDefaultSharedPreferences(_context)
+    .registerOnSharedPreferenceChangeListener(this);
+  }
 
-	private synchronized void loadScheme(String scheme, boolean useDarkTheme) {
-		// Load the given scheme.
-		boolean needsReload = false;
-		if( !scheme.equals(lastScheme) )
-		{	needsReload = true; }
-		if( useDarkTheme != isDarkTheme )
-		{	needsReload = true; }
-		
-		if(!needsReload) { return; }
-		
-		lastScheme = scheme;
-		isDarkTheme = useDarkTheme;
-		
-		Log.d("ColorScheme", "Reloading ColorScheme");
-		
-		synchronized (colors) {
-			// Clean up the properties file
-			themeProps = new Properties();
-			// Load the default theme; This will later be set to whatever theme
-			// we
-			// really want to load later.
-			int id = R.raw.theme_default;
-			// Attempt to load the default...
-			try {
-				themeProps.load(_context.getResources().openRawResource(id));
-			} catch (Throwable e) {
-				Log.e("ColorScheme",
-						"Failure loading default theme: " + e.toString());
-			}
-			// Now, find the real scheme.
-			Class<raw> raw_resources = R.raw.class;
-			try {
-				// get the id of the given scheme.
-				Field scheme_field = raw_resources.getField("theme_" + scheme);
-				id = scheme_field.getInt(null);
-			} catch (Throwable e) {
-				// If the given theme was wrong, use the default theme (which
-				// means
-				// we'll skip over the next bit)
-				Log.e("ColorScheme","Failure loading theme in preferences: "+e.toString());
-				id = R.raw.theme_default;
-			}
+  private synchronized void loadScheme(String scheme, boolean useDarkTheme) {
+    // Load the given scheme.
+    boolean needsReload = false;
+    if( !scheme.equals(lastScheme) ) {
+      needsReload = true;
+    }
+    if( useDarkTheme != isDarkTheme ) {
+      needsReload = true;
+    }
 
-			// If we are really loading a theme that isn't the default,
-			if (id != R.raw.theme_default) {
-				// Get the real theme.
-				InputStream themeStream = _context.getResources()
-						.openRawResource(id);
-				try {
-					themeProps.load(themeStream);
-				} catch (Throwable e) {
-					Log.d("ColorScheme", e.toString());
-				}
-			}
+    if(!needsReload) {
+      return;
+    }
 
-			// Now, clean up the colors.
-			String[] colors_tmp = themeProps.getProperty("mirc").split(";");
+    lastScheme = scheme;
+    isDarkTheme = useDarkTheme;
 
-			colors = new int[colors_tmp.length];
+    Log.d("ColorScheme", "Reloading ColorScheme");
 
-			//Log.d("ColorScheme", themeProps.getProperty("mirc"));
+    synchronized (colors) {
+      // Clean up the properties file
+      themeProps = new Properties();
+      // Load the default theme; This will later be set to whatever theme
+      // we
+      // really want to load later.
+      int id = R.raw.theme_default;
+      // Attempt to load the default...
+      try {
+        themeProps.load(_context.getResources().openRawResource(id));
+      } catch (Throwable e) {
+        Log.e("ColorScheme",
+              "Failure loading default theme: " + e.toString());
+      }
+      // Now, find the real scheme.
+      Class<raw> raw_resources = R.raw.class;
+      try {
+        // get the id of the given scheme.
+        Field scheme_field = raw_resources.getField("theme_" + scheme);
+        id = scheme_field.getInt(null);
+      } catch (Throwable e) {
+        // If the given theme was wrong, use the default theme (which
+        // means
+        // we'll skip over the next bit)
+        Log.e("ColorScheme","Failure loading theme in preferences: "+e.toString());
+        id = R.raw.theme_default;
+      }
 
-			for (int i = 0; i < colors_tmp.length; i++) {
-				if(colors_tmp[i].equals("")) continue;
-				int c = Color.parseColor(colors_tmp[i]);
-				colors[i] = c;
-			}
+      // If we are really loading a theme that isn't the default,
+      if (id != R.raw.theme_default) {
+        // Get the real theme.
+        InputStream themeStream = _context.getResources()
+                                  .openRawResource(id);
+        try {
+          themeProps.load(themeStream);
+        } catch (Throwable e) {
+          Log.d("ColorScheme", e.toString());
+        }
+      }
 
-			
+      // Now, clean up the colors.
+      String[] colors_tmp = themeProps.getProperty("mirc").split(";");
 
-			if (scheme_colors == null) {
-				scheme_colors = new HashMap<String, Integer>();
-			}
+      colors = new int[colors_tmp.length];
 
-			scheme_colors.clear();
-			// Pre-seed the color cache for the light/dark colors. 
-			scheme_colors.put("foreground", Color.parseColor(themeProps.getProperty("foreground."+(useDarkTheme?"dark":"light"))));
-			scheme_colors.put("background", Color.parseColor(themeProps.getProperty("background."+(useDarkTheme?"dark":"light"))));
+      //Log.d("ColorScheme", themeProps.getProperty("mirc"));
 
-		}
-		
-	}
+      for (int i = 0; i < colors_tmp.length; i++) {
+        if(colors_tmp[i].equals("")) continue;
+        int c = Color.parseColor(colors_tmp[i]);
+        colors[i] = c;
+      }
 
-	private synchronized static int getColorCached(String name) {
-		if(!scheme_colors.containsKey(name))
-		{
-			scheme_colors.put(name, Color.parseColor(themeProps.getProperty(name)));
-		}
-		int c = scheme_colors.get(name);
-		return c;
-	}
 
-	private synchronized void refreshColorScheme() {
 
-		String scheme = _settings.getColorScheme();
-		boolean darkTheme = _settings.getUseDarkColors();
-		loadScheme(scheme, darkTheme);
+      if (scheme_colors == null) {
+        scheme_colors = new HashMap<String, Integer>();
+      }
 
-	}
+      scheme_colors.clear();
+      // Pre-seed the color cache for the light/dark colors.
+      scheme_colors.put("foreground", Color.parseColor(themeProps.getProperty("foreground."+(useDarkTheme?"dark":"light"))));
+      scheme_colors.put("background", Color.parseColor(themeProps.getProperty("background."+(useDarkTheme?"dark":"light"))));
 
-	public int getMircColor(int idx) {
-		return colors[idx % colors.length];
-	}
+    }
 
-	public int getForeground() {
-		return getColorCached("foreground");
-	}
+  }
 
-	public int getBackground() {
-		return getColorCached("background");
-	}
+  private synchronized static int getColorCached(String name) {
+    if(!scheme_colors.containsKey(name)) {
+      scheme_colors.put(name, Color.parseColor(themeProps.getProperty(name)));
+    }
+    int c = scheme_colors.get(name);
+    return c;
+  }
 
-	public int getError() {
-		return getColorCached("error");
-	}
+  private synchronized void refreshColorScheme() {
 
-	public int getTopic() {
-		return getColorCached("topic");
-	}
+    String scheme = _settings.getColorScheme();
+    boolean darkTheme = _settings.getUseDarkColors();
+    loadScheme(scheme, darkTheme);
 
-	public int getChannelEvent() {
-		return getColorCached("channelevent");
-	}
+  }
 
-	public int getUserEvent() {
-		return getColorCached("userevent");
-	}
+  public int getMircColor(int idx) {
+    return colors[idx % colors.length];
+  }
 
-	public int getServerEvent() {
-		return getColorCached("serverevent");
-	}
+  public int getForeground() {
+    return getColorCached("foreground");
+  }
 
-	public int getHighlight() {
-		return getColorCached("highlight");
-	}
+  public int getBackground() {
+    return getColorCached("background");
+  }
 
-	public int getUrl() {
-		return getColorCached("url");
-	}
+  public int getError() {
+    return getColorCached("error");
+  }
 
-	@Override
-	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
-			String key) {
-		if (key.equals(_context.getString(R.string.key_colorscheme)) || key.equals(_context.getString(R.string.key_colorscheme_dark))) {
-			synchronized (colors) {
-				refreshColorScheme();
-			}
-		}
-	}
+  public int getTopic() {
+    return getColorCached("topic");
+  }
+
+  public int getChannelEvent() {
+    return getColorCached("channelevent");
+  }
+
+  public int getUserEvent() {
+    return getColorCached("userevent");
+  }
+
+  public int getServerEvent() {
+    return getColorCached("serverevent");
+  }
+
+  public int getHighlight() {
+    return getColorCached("highlight");
+  }
+
+  public int getUrl() {
+    return getColorCached("url");
+  }
+
+  @Override
+  public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
+                                        String key) {
+    if (key.equals(_context.getString(R.string.key_colorscheme)) || key.equals(_context.getString(R.string.key_colorscheme_dark))) {
+      synchronized (colors) {
+        refreshColorScheme();
+      }
+    }
+  }
 
 }

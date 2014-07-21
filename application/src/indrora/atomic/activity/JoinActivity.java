@@ -32,36 +32,33 @@ import android.widget.EditText;
 
 /**
  * Small dialog to show an edittext for joining channels
- * 
+ *
  * @author Sebastian Kaspari <sebastian@yaaic.org>
  *
  */
-public class JoinActivity extends Activity implements OnClickListener
-{
-    /**
-     * On create
-     */
-    @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
+public class JoinActivity extends Activity implements OnClickListener {
+  /**
+   * On create
+   */
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.join);
+    setContentView(R.layout.join);
 
-        ((Button) findViewById(R.id.join)).setOnClickListener(this);
+    ((Button) findViewById(R.id.join)).setOnClickListener(this);
 
-        ((EditText) findViewById(R.id.channel)).setSelection(1);
-    }
+    ((EditText) findViewById(R.id.channel)).setSelection(1);
+  }
 
-    /**
-     * On click
-     */
-    @Override
-    public void onClick(View v)
-    {
-        Intent intent = new Intent();
-        intent.putExtra("channel", ((EditText) findViewById(R.id.channel)).getText().toString());
-        setResult(RESULT_OK, intent);
-        finish();
-    }
+  /**
+   * On click
+   */
+  @Override
+  public void onClick(View v) {
+    Intent intent = new Intent();
+    intent.putExtra("channel", ((EditText) findViewById(R.id.channel)).getText().toString());
+    setResult(RESULT_OK, intent);
+    finish();
+  }
 }
