@@ -392,20 +392,24 @@ public class ConversationActivity extends SherlockActivity implements
 
 	private void ShuffleToHighlight(Intent inten)
 	{
-		boolean found = false;
 		// Try and find the conversation given in the intent.
 		String convo = inten.getExtras().getString(ConversationActivity.EXTRA_TARGET);
 		Log.d("ConversationActivity", "Trying to change to conversation "+convo);
 					
-		if(convo == null) {found =true; }
-		for(int idx =0; idx < pagerAdapter.getCount() && !found; idx++)
+		if(convo == null) {
+			Log.d("ConversationActivity", "Conversation given was NULL, jump invalid");
+			return;
+		}
+		for(int idx =0; idx < pagerAdapter.getCount(); idx++)
 		{
 			if(pagerAdapter.getItem(idx) == null) continue;
 			String tConvo = pagerAdapter.getItem(idx).getName();
-			if (tConvo.equals(convo))
+			Log.d("ConversationActivity", "is it "+tConvo+"?");
+			if (tConvo.toLowerCase(Locale.US).equals(convo.toLowerCase(Locale.US)))
 			{
 				pager.setCurrentItem(idx,false);
-				found = true;
+				Log.d("ConversationActivity", "Found conversation "+tConvo);
+				return;
 			}
 		}
 

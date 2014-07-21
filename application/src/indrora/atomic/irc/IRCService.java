@@ -404,10 +404,13 @@ public class IRCService extends Service
         	// I give up. Android changed how this works -- Hope it never goes away. 
             notification = new Notification(R.drawable.ic_service_icon, text, System.currentTimeMillis());
             
+            
+            Log.d("IRCService", "text="+text);
+            Log.d("IRCService", "contentText="+contentText);
             Intent notifyIntent = new Intent(this, ServersActivity.class);
             //notifyIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            
-            if (contentText == null) {
+            // contentText shouldn't be null ever anymore. there's no reaosn.
+            //if (contentText == null) {
                 if (newMentions >= 1) {
                     StringBuilder sb = new StringBuilder();
                     for (Conversation conv : mentions.values()) {
@@ -444,7 +447,7 @@ public class IRCService extends Service
 	                    contentText = getString(R.string.notification_not_connected);
 	                }
             	}
-            }
+            //}
 
             PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             notification.setLatestEventInfo(this, getText(R.string.app_name), contentText, contentIntent);
