@@ -120,6 +120,7 @@ public abstract class MircColors {
     return toSpannable(new SpannableString(text));
   }
 
+  
   /**
    * Replace the control codes
    *

@@ -35,6 +35,7 @@ import java.util.Date;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -176,7 +177,6 @@ public class Message {
    */
   public void setColor(MessageColor color) {
     this.color = color;
-    //this.color = color;
   }
 
   private int translateColor(MessageColor c) {
@@ -284,78 +284,110 @@ public class Message {
 
     _scheme = App.getColorScheme();
 
-    //if (canvas == null) {
-    String prefix    ="";
+    SpannableString nickSS;
+    SpannableString timeSS;
+    SpannableString messageSS;
+    SpannableString prefixSS;
+    
+    // format the sender name
+    if(hasSender()) {
+      // The sender name spannable is just the name of the sender
+      nickSS = new SpannableString(sender);
+      // Defaultly, the foreground color is used.
+      int senderColor = _scheme.getForeground();
+      
+      // If there is a color that is to be used, use that
+      if(hasColor() && settings.showColors()) {
+        // Translate Color maps our "message" color to an RGB hexit.
+        senderColor = translateColor(color);
+      } else if(settings.showColorsNick()) {
+        // getSenderColor does a variant color from the color scheme options.
+        senderColor = getSenderColor();
+      }
+
+      // We should now set the spannable's color.
+      nickSS.setSpan(new ForegroundColorSpan(senderColor), 0, nickSS.length(), SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
+      // and wrap it in our preferred <'s
+      nickSS = new SpannableString(TextUtils.concat("<", nickSS, ">"));
+    }
+    else
+    {
+      // There's no sender, so we give it no sender.
+      nickSS = new SpannableString("");
+    }
+    
+    // Timestamps are handled in much the same way as the Sender, however they're much simpler.
+    if(settings.showTimestamp()) {
+      timeSS = new SpannableString(renderTimeStamp(settings.use24hFormat(), settings.includeSeconds()));
+    }
+    else {
+      timeSS = new SpannableString("");
+    }
+    
+    // Prefix.
+    // this is a space normally, however it becomes a *, then is filled with the appropriate
+    // drawables.
+    prefixSS = new SpannableString(" ");
+    // If there is an icon,
     if(hasIcon()) {
-      if(settings.showIcons())
-        prefix = " ";
-      else
-        prefix = "* ";
+      // We want to handle having an icon and not wanting to show icons.
+      // this makes things a little nicer.
+      prefixSS = new SpannableString("*");
+      // If we really want to show icons...
+      if(settings.showIcons()) {
+        // the Paint object here lets us get the width of a monospaced space.
+        Paint p = new Paint();
+        p.setTypeface(Typeface.MONOSPACE);
+        float spaceWidth = p.measureText("  ");
+        // The drawable here is our icon. Internally, the icon is seriously just a reference into the
+        // resources block
+        
+        Drawable drawable = context.getResources().getDrawable(icon);
+        
+        float density = context.getResources().getDisplayMetrics().density;
+        // scale = wanted / actual
+        float scale = spaceWidth / (float)(drawable.getMinimumWidth());
+        // This call is < x,y, width,height>
+        // SpaceWidth is going to be in raw pixels, so we need to multiply it by density.
+        // Height is going to be the drawable intrinsic height * scale * density
+        drawable.setBounds(0, 0, (int)(spaceWidth * density), (int)(drawable.getIntrinsicHeight() * scale * density));
+        // And now we do the magic.
+        prefixSS.setSpan(new ImageSpan(drawable, ImageSpan.ALIGN_BASELINE), 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        
+      }
     }
 
-    String nick      = hasSender() ? "<" + sender + "> " : "";
-    String timestamp = settings.showTimestamp() ? renderTimeStamp(settings.use24hFormat(), settings.includeSeconds()) : "";
-
-    canvas = new SpannableString(prefix + /*timestamp + */nick);
-    SpannableString renderedText;
-
-
-    if (settings.showMircColors()) {
-      renderedText = MircColors.toSpannable(text);
-    } else {
-      renderedText = new SpannableString(
-        MircColors.removeStyleAndColors(text)
-      );
+    // Now to the actual message.
+    // How this works is that we're going to render it to a string,
+    // if mIRC colors
+    //   => highlight color?
+    //      => blarg the spannable.
+    //   => blarg mIRC colors into the spannable.
+    // else
+    //   => strip mIRC color tags from the text block
+    //   => highlight color?
+    //      => blarg the spannable.
+    messageSS = new SpannableString(text);
+    if(settings.showMircColors()) {
+      if(hasColor() && settings.showColors()) {
+        messageSS.setSpan(new ForegroundColorSpan(translateColor(color)), 0, messageSS.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+      }
+      messageSS = MircColors.toSpannable(messageSS);
     }
-
+    else {
+      messageSS = new SpannableString( MircColors.removeStyleAndColors(text));
+      if(hasColor() && settings.showColors()) {
+        messageSS.setSpan(new ForegroundColorSpan(translateColor(color)), 0, messageSS.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+      }
+    }
+    // Smash smileys into this.
     if (settings.showGraphicalSmilies()) {
-      renderedText = Smilies.toSpannable(renderedText, context);
+      messageSS = Smilies.toSpannable(messageSS, context);
     }
 
-    canvas = new SpannableString(TextUtils.concat(canvas, renderedText));
-
-    if (hasSender()) {
-      int start = prefix.length() + 1;
-      int end = start + sender.length();
-
-      if (settings.showColorsNick()) {
-        canvas.setSpan(new ForegroundColorSpan(getSenderColor()), start, end , Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-      }
-    }
-
-    if (hasIcon() && settings.showIcons()) {
-      Drawable drawable = context.getResources().getDrawable(icon);
-
-      int height = settings.getFontSize();
-      float density = context.getResources().getDisplayMetrics().density;
-      float scale = height / (float)(drawable.getMinimumHeight());
-      drawable.setBounds(0, 0, (int)(drawable.getMinimumWidth() * scale * density), (int)(height * density));
-      canvas.setSpan(new ImageSpan(drawable, ImageSpan.ALIGN_BASELINE), 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-    }
-
-    if (hasColor() && settings.showColors()) {
-      // Only apply the foreground color to areas that don't already have a foreground color.
-      ForegroundColorSpan[] spans = canvas.getSpans(0, canvas.length(), ForegroundColorSpan.class);
-      int start = 0;
-
-      for (ForegroundColorSpan span : spans) {
-        if (start > canvas.getSpanStart(span)) {
-          start = canvas.getSpanStart(span);
-        }
-        canvas.setSpan(new ForegroundColorSpan( translateColor(color)), start, canvas.getSpanStart(span), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        start = canvas.getSpanEnd(span);
-      }
-
-      canvas.setSpan(new ForegroundColorSpan(translateColor(color)), start, canvas.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-    }
-
-    // Timestamp should be there.
-    // We're prepending the timestamp so that things line up all the time.
-    // Potatoes.
-    canvas = new SpannableString(TextUtils.concat(timestamp+" ", canvas));
-    //}
-
-    return canvas;
+    // return all the parts glued together.
+    return new SpannableString(TextUtils.concat( timeSS, prefixSS, nickSS, " ", messageSS ));
+    
   }
 
   /**
@@ -384,42 +416,6 @@ public class Message {
   private boolean hasIcon() {
     return icon != NO_ICON;
   }
-
-  /**
-   * Render message as text view
-   *
-   * @param context
-   * @return
-
-  public TextView renderTextView(Context context)
-  {
-      // XXX: We should not read settings here ALWAYS for EVERY textview
-      Settings settings = new Settings(context);
-
-      _scheme = App.getColorScheme();
-
-      TextView canvas = new TextView(context);
-
-      canvas.setAutoLinkMask(Linkify.ALL);
-      canvas.setLinksClickable(true);
-      canvas.setLinkTextColor(_scheme.getUrl());
-
-      canvas.setText(this.render(context));
-      canvas.setTextSize(settings.getFontSize());
-      canvas.setTypeface(Typeface.MONOSPACE);
-      canvas.setTextColor(_scheme.getForeground());
-
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-          setupViewForHoneycombAndLater(canvas);
-      }
-
-      return canvas;
-  }
-
-  @TargetApi(11)
-  private void setupViewForHoneycombAndLater(TextView canvas) {
-      canvas.setTextIsSelectable(true);
-  }*/
 
   /**
    * Generate a timestamp
