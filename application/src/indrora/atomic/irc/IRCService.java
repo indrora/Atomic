@@ -365,6 +365,8 @@ public class IRCService extends Service {
     }
   }
 
+  long lastVibrationTime = 0;
+  
   /**
    * Update notification and vibrate and/or flash a LED light if needed
    *
@@ -425,10 +427,14 @@ public class IRCService extends Service {
       PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
       notification.setLatestEventInfo(this, getText(R.string.app_name), contentText, contentIntent);
 
-
+      // We only want to vibrate if it's been $ARBITRARY_AMOUNT_OF_TIME
+      // since we last buzzed.
+      
+      vibrate = vibrate && (System.currentTimeMillis() - lastVibrationTime > 2000);
 
       if (vibrate) {
         notification.defaults |= Notification.DEFAULT_VIBRATE;
+        lastVibrationTime = System.currentTimeMillis();
       }
 
       if (sound) {
