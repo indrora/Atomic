@@ -33,6 +33,7 @@ import indrora.atomic.model.ServerInfo;
 import indrora.atomic.model.Status;
 import indrora.atomic.model.Message.MessageColor;
 import indrora.atomic.utils.LatchingValue;
+import indrora.atomic.utils.MircColors;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -1300,7 +1301,7 @@ public class IRCConnection extends PircBot {
    * @return true if nickname was found, otherwise false
    */
   public boolean isMentioned(String text) {
-    return mNickMatch.matcher(text).find();
+    return mNickMatch.matcher(MircColors.removeStyleAndColors(text)).find();
   }
 
   /**
