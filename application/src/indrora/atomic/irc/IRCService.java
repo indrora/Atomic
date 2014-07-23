@@ -35,6 +35,7 @@ import indrora.atomic.model.Settings;
 import indrora.atomic.model.Status;
 import indrora.atomic.model.Message.MessageColor;
 import indrora.atomic.receiver.ReconnectReceiver;
+import indrora.atomic.utils.MircColors;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -387,42 +388,47 @@ public class IRCService extends Service {
       Intent notifyIntent = new Intent(this, ServersActivity.class);
       //notifyIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
       // contentText shouldn't be null ever anymore. there's no reaosn.
-      //if (contentText == null) {
-      if (newMentions >= 1) {
-        StringBuilder sb = new StringBuilder();
-        for (Conversation conv : mentions.values()) {
-          sb.append(conv.getName() + " (" + conv.getNewMentions() + "), ");
-        }
-        contentText = getString(R.string.notification_mentions, sb.substring(0, sb.length()-2));
-
-        // We're going to work through the mentions keys. The first half is the server ID, the other half
-        // is the channel that the mention belongs to.
-
-        int ServerID = -1;
-        String Convo = "";
-        for(String convID:mentions.keySet()) {
-          ServerID = Integer.parseInt(convID.substring(0, convID.indexOf(':')));
-          Convo = convID.substring(convID.indexOf(':')+1);
-        }
-
-        Log.d("IRCService", "Jump target is '"+Convo+"'");
-        notifyIntent.setClass(this, ConversationActivity.class);
-        notifyIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        notifyIntent.putExtra("serverId", ServerID);
-        notifyIntent.putExtra(ConversationActivity.EXTRA_TARGET, ""+Convo);
-
-      } else {
-        if (!connectedServerTitles.isEmpty()) {
+      if (contentText == null) {
+        if (newMentions >= 1) {
           StringBuilder sb = new StringBuilder();
-          for (String title : connectedServerTitles) {
-            sb.append(title + ", ");
+          for (Conversation conv : mentions.values()) {
+            sb.append(conv.getName() + " (" + conv.getNewMentions() + "), ");
           }
-          contentText = getString(R.string.notification_connected, sb.substring(0, sb.length()-2));
+          contentText = getString(R.string.notification_mentions,
+              sb.substring(0, sb.length() - 2));
+          
+          // We're going to work through the mentions keys. The first half is
+          // the server ID, the other half
+          // is the channel that the mention belongs to.
+          
+          int ServerID = -1;
+          String Convo = "";
+          for (String convID : mentions.keySet()) {
+            ServerID = Integer
+                .parseInt(convID.substring(0, convID.indexOf(':')));
+            Convo = convID.substring(convID.indexOf(':') + 1);
+          }
+          
+          Log.d("IRCService", "Jump target is '" + Convo + "'");
+          notifyIntent.setClass(this, ConversationActivity.class);
+          notifyIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+              | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+          notifyIntent.putExtra("serverId", ServerID);
+          notifyIntent.putExtra(ConversationActivity.EXTRA_TARGET, "" + Convo);
+          
         } else {
-          contentText = getString(R.string.notification_not_connected);
+          if (!connectedServerTitles.isEmpty()) {
+            StringBuilder sb = new StringBuilder();
+            for (String title : connectedServerTitles) {
+              sb.append(title + ", ");
+            }
+            contentText = getString(R.string.notification_connected,
+                sb.substring(0, sb.length() - 2));
+          } else {
+            contentText = getString(R.string.notification_not_connected);
+          }
         }
       }
-      //}
 
       PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
       notification.setLatestEventInfo(this, getText(R.string.app_name), contentText, contentIntent);
@@ -485,12 +491,8 @@ public class IRCService extends Service {
     if (!mentions.containsKey(convId)) {
       mentions.put(convId, conversation);
     }
-
-    if (newMentions == 1) {
-      updateNotification(msg, msg, vibrate, sound, light);
-    } else {
-      updateNotification(msg, null, vibrate, sound, light);
-    }
+    msg = MircColors.removeStyleAndColors(msg);
+    updateNotification(msg, null, vibrate, sound, light);
   }
 
   /**
