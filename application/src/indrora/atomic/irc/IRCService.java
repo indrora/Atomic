@@ -373,6 +373,7 @@ public class IRCService extends Service {
    *
    * @param text       The ticker text to display
    * @param contentText       The text to display in the notification dropdown
+   *                          If null, this makes the notification update to be the connection status.
    * @param vibrate True if the device should vibrate, false otherwise
    * @param sound True if the device should make sound, false otherwise
    * @param light True if the device should flash a LED light, false otherwise
@@ -382,12 +383,11 @@ public class IRCService extends Service {
       // I give up. Android changed how this works -- Hope it never goes away.
       notification = new Notification(R.drawable.ic_service_icon, text, System.currentTimeMillis());
 
-
-      Log.d("IRCService", "text="+text);
-      Log.d("IRCService", "contentText="+contentText);
       Intent notifyIntent = new Intent(this, ServersActivity.class);
       //notifyIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-      // contentText shouldn't be null ever anymore. there's no reaosn.
+      //conetntText is null when you have nothing to display; by default, if you supply any, it will
+      //use whatever is handed as the body of the notification.
+      // If you hand it null, you are given a status line that describes what is going on.
       if (contentText == null) {
         if (newMentions >= 1) {
           StringBuilder sb = new StringBuilder();
