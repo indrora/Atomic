@@ -1246,12 +1246,12 @@ public class ConversationActivity extends SherlockActivity implements
    * @return nick without statuschar
    */
   private static String removeStatusChar(String nick) {
-
-    if (nick.startsWith("@") || nick.startsWith("%")
-        || nick.startsWith("&") || nick.startsWith("~")
-        || nick.startsWith("+"))
-      return nick.substring(1);
-    return nick;
+    String prefixes = "!@&%+";
+    int idx =0;
+    while( -1 != prefixes.indexOf (nick.charAt(idx)) ) {
+    	idx++;
+    }
+    return nick.substring(idx);
   }
 
   @Override
