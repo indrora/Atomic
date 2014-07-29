@@ -52,7 +52,7 @@ public class MeHandler extends BaseHandler {
       String action = BaseHandler.mergeParams(params);
       String nickname = service.getConnection(server.getId()).getNick();
 
-      Message message = new Message(nickname + " " + action);
+      Message message = new Message(action, nickname, Message.TYPE_ACTION);
       message.setIcon(R.drawable.action);
       server.getConversation(conversation.getName()).addMessage(message);
 

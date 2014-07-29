@@ -71,6 +71,8 @@ public class Message {
   /* normal message, this is the default */
   public static final int TYPE_MESSAGE = 0;
 
+  public static final int TYPE_ACTION = 2;
+  
   /* join, part or quit */
   public static final int TYPE_MISC    = 1;
 
@@ -84,8 +86,8 @@ public class Message {
   private long timestamp;
 
   private MessageColor color = MessageColor.DEFAULT;
-  private int type  = NO_ICON;
-  private int icon  = NO_TYPE;
+  private int type  = NO_TYPE;
+  private int icon  = NO_ICON;
 
   /**
    * Create a new message without an icon defaulting to TYPE_MESSAGE
@@ -269,8 +271,7 @@ public class Message {
       0.2126 * Math.pow( (float)Color.red(fore)/255.0,    gamma )
       + 0.7152 * Math.pow( (float)Color.green(fore)/255.0,  gamma )
       + 0.0722 * Math.pow( (float)Color.blue(fore)/255.0,   gamma );
-    int distance = (int) (100 * Math.abs(backL-foreL));
-    //Log.d("Message", " ForeL=<"+foreL+"> backL=<"+backL+"> Color distance = "+distance);
+    int distance = (int) (255 * Math.abs(backL-foreL));
     return distance;
   }
 
@@ -296,19 +297,19 @@ public class Message {
       // Defaultly, the foreground color is used.
       int senderColor = _scheme.getForeground();
       
-      // If there is a color that is to be used, use that
-      if(hasColor() && settings.showColors()) {
-        // Translate Color maps our "message" color to an RGB hexit.
-        senderColor = translateColor(color);
-      } else if(settings.showColorsNick()) {
-        // getSenderColor does a variant color from the color scheme options.
-        senderColor = getSenderColor();
-      }
+      
+      if(settings.showColorsNick()) {
+          // getSenderColor does a variant color from the color scheme options.
+          senderColor = getSenderColor();
+        }
+      
 
       // We should now set the spannable's color.
       nickSS.setSpan(new ForegroundColorSpan(senderColor), 0, nickSS.length(), SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
       // and wrap it in our preferred <'s
-      nickSS = new SpannableString(TextUtils.concat("<", nickSS, ">"));
+      if(type == TYPE_MESSAGE) {
+    	nickSS = new SpannableString(TextUtils.concat("<", nickSS, ">"));
+      }
     }
     else
     {

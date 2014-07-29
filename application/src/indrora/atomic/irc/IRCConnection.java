@@ -258,7 +258,7 @@ public class IRCConnection extends PircBot {
   protected void onAction(String sender, String login, String hostname, String target, String action) {
     Conversation conversation;
 
-    Message message = new Message(sender + " " + action);
+    Message message = new Message(action, sender, Message.TYPE_ACTION);
     message.setIcon(R.drawable.action);
 
     String queryNick = target;
@@ -313,7 +313,7 @@ public class IRCConnection extends PircBot {
 
     if (mentioned) {
       // highlight
-      message.setColor(Message.MessageColor.ERROR);
+      message.setColor(Message.MessageColor.HIGHLIGHT);
       conversation.setStatus(Conversation.STATUS_HIGHLIGHT);
     }
   }

@@ -882,6 +882,7 @@ public class ConversationActivity extends SherlockActivity implements
   @Override
   public void onTopicChanged(String target) {
     // No implementation
+	  
   }
 
   /**
