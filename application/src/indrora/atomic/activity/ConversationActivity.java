@@ -901,11 +901,11 @@ public class ConversationActivity extends SherlockActivity implements
 
       /*
        *
-       * If we are disconnected, we should have two times where we don't care to pop up the dialog:
+       * If we are disconnected, we should have three times where we don't care to pop up the dialog:
        *
        * * Total network loss has occurred and we're working on reconnecting a server (it happens!)
        * * The network is transient and we're waiting on the network to become not-transient.
-       *
+       * * The server is in the preconnecting phases
        */
 
       if (
@@ -914,6 +914,7 @@ public class ConversationActivity extends SherlockActivity implements
           (settings.reconnectLoss() && binder.getService().isReconnecting(server.getId()) )
           ||  (settings.reconnectTransient() && binder.getService().isNetworkTransient() )
         )
+        || server.getStatus() == Status.CONNECTING
       ) {
         return;
       }
