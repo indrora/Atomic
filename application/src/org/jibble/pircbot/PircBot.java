@@ -1051,7 +1051,7 @@ public abstract class PircBot implements ReplyConstants {
         this.onVersion(sourceNick, sourceLogin, sourceHostname, target);
       } else if (request.startsWith("ACTION ")) {
         // ACTION request
-        this.onAction(sourceNick, sourceLogin, sourceHostname, target, request.substring(7));
+        this.onAction(messageDate, sourceNick, sourceLogin, sourceHostname, target, request.substring(7));
       } else if (request.startsWith("PING ")) {
         // PING request
         this.onPing(sourceNick, sourceLogin, sourceHostname, target, request.substring(5));
@@ -1389,6 +1389,7 @@ public abstract class PircBot implements ReplyConstants {
    *  <p>
    * The implementation of this method in the PircBot abstract class
    * performs no actions and may be overridden as required.
+   * @param messageDate Date when the action happened.
    *
    * @param sender The nick of the user that sent the action.
    * @param login The login of the user that sent the action.
@@ -1396,7 +1397,7 @@ public abstract class PircBot implements ReplyConstants {
    * @param target The target of the action, be it a channel or our nick.
    * @param action The action carried out by the user.
    */
-  protected void onAction(String sender, String login, String hostname, String target, String action) {}
+  protected void onAction(Date messageDate, String sender, String login, String hostname, String target, String action) {}
 
 
   /**

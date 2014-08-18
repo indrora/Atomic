@@ -255,10 +255,10 @@ public class IRCConnection extends PircBot {
    * On channel action
    */
   @Override
-  protected void onAction(String sender, String login, String hostname, String target, String action) {
+  protected void onAction(Date messageDate, String sender, String login, String hostname, String target, String action) {
     Conversation conversation;
 
-    Message message = new Message(action, sender, Message.TYPE_ACTION);
+    Message message = new Message(action, sender, Message.TYPE_ACTION, messageDate.getTime());
     message.setIcon(R.drawable.action);
 
     String queryNick = target;
