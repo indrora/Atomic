@@ -1,6 +1,7 @@
 language: android
 android:
   components:
+    - build-tools-20.0.0
     - android-19
     - android-7
     - android-14
