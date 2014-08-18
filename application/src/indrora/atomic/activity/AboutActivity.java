@@ -20,9 +20,15 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
  */
 package indrora.atomic.activity;
 
+import java.text.SimpleDateFormat;
+import java.util.TimeZone;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+
 import com.actionbarsherlock.app.SherlockActivity;
 
 import indrora.atomic.R;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
@@ -49,8 +55,23 @@ public class AboutActivity extends SherlockActivity {
       
       PackageInfo pi = getPackageManager().getPackageInfo(getPackageName(), 0);
       
+      String info = String.format("Version %1$s (r%2$d)", pi.versionName,pi.versionCode);
+
+      try{
+        ApplicationInfo ai = getPackageManager().getApplicationInfo(getPackageName(), 0);
+        ZipFile zf = new ZipFile(ai.sourceDir);
+        ZipEntry ze = zf.getEntry("META-INF/MANIFEST.MF");
+        long time = ze.getTime();
+        SimpleDateFormat formatter = (SimpleDateFormat) SimpleDateFormat.getInstance();
+        formatter.setTimeZone(TimeZone.getTimeZone("gmt"));
+        String s = formatter.format(new java.util.Date(time));
+        info += "\nBuilt on: "+s;
+        zf.close();
+     }catch(Exception e){
+     }
+
       ((TextView)findViewById(R.id.version_label)).setText(
-          String.format("Version %1$s (r%2$d)", pi.versionName,pi.versionCode)
+          info
        );
     } catch (NameNotFoundException e) {
       ((TextView)findViewById(R.id.version_label)).setText("Dev release???");

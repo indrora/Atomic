@@ -49,9 +49,9 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
 
         <TextView
             android:id="@+id/version_label"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
             android:text="@string/app_version"
             android:textSize="12sp" />
 
