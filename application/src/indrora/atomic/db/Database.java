@@ -618,7 +618,7 @@ public class Database extends SQLiteOpenHelper {
       identity = new Identity();
 
       identity.setNickname(cursor.getString(cursor.getColumnIndex(IdentityConstants.NICKNAME)));
-      identity.setIdent(cursor.getString(cursor.getColumnIndex(IdentityConstants.IDENT)));
+      identity.setUsername(cursor.getString(cursor.getColumnIndex(IdentityConstants.IDENT)));
       identity.setRealName(cursor.getString(cursor.getColumnIndex(IdentityConstants.REALNAME)));
 
       identity.setAliases(getAliasesByIdentityId(identityId));

@@ -33,7 +33,7 @@ import java.util.List;
 public class Identity {
   private String nickname;
   private final List<String> aliases = new ArrayList<String>();
-  private String ident;
+  private String username;
   private String realname;
 
   /**
@@ -78,8 +78,8 @@ public class Identity {
    *
    * @param ident The ident to be set
    */
-  public void setIdent(String ident) {
-    this.ident = ident;
+  public void setUsername(String ident) {
+    this.username = ident;
   }
 
   /**
@@ -88,7 +88,7 @@ public class Identity {
    * @return The identity
    */
   public String getIdent() {
-    return ident;
+    return username;
   }
 
   /**

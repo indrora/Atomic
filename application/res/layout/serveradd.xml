@@ -134,13 +134,13 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/ident" />
+            android:text="@string/username" />
 
         <EditText
-            android:id="@+id/ident"
+            android:id="@+id/username"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:contentDescription="@string/ident"
+            android:contentDescription="@string/username"
             android:inputType="textNoSuggestions"
             android:singleLine="true"
             android:text="yaaic" />

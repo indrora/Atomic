@@ -137,7 +137,7 @@ public class AddServerActivity extends SherlockActivity implements OnClickListen
       ((EditText) findViewById(R.id.password)).setText(server.getPassword());
 
       ((EditText) findViewById(R.id.nickname)).setText(server.getIdentity().getNickname());
-      ((EditText) findViewById(R.id.ident)).setText(server.getIdentity().getIdent());
+      ((EditText) findViewById(R.id.username)).setText(server.getIdentity().getIdent());
       ((EditText) findViewById(R.id.realname)).setText(server.getIdentity().getRealName());
       ((CheckBox) findViewById(R.id.useSSL)).setChecked(server.useSSL());
       ((CheckBox) findViewById(R.id.autoconnect)).setChecked(server.getAutoconnect());
@@ -408,12 +408,12 @@ public class AddServerActivity extends SherlockActivity implements OnClickListen
    */
   private Identity getIdentityFromView() {
     String nickname = ((EditText) findViewById(R.id.nickname)).getText().toString().trim();
-    String ident = ((EditText) findViewById(R.id.ident)).getText().toString().trim();
+    String username = ((EditText) findViewById(R.id.username)).getText().toString().trim();
     String realname = ((EditText) findViewById(R.id.realname)).getText().toString().trim();
 
     Identity identity = new Identity();
     identity.setNickname(nickname);
-    identity.setIdent(ident);
+    identity.setUsername(username);
     identity.setRealName(realname);
 
     identity.setAliases(aliases);
@@ -468,14 +468,14 @@ public class AddServerActivity extends SherlockActivity implements OnClickListen
    */
   private void validateIdentity() throws ValidationException {
     String nickname = ((EditText) findViewById(R.id.nickname)).getText().toString();
-    String ident = ((EditText) findViewById(R.id.ident)).getText().toString();
+    String username = ((EditText) findViewById(R.id.username)).getText().toString();
     String realname = ((EditText) findViewById(R.id.realname)).getText().toString();
 
     if (nickname.trim().equals("")) {
       throw new ValidationException(getResources().getString(R.string.validation_blank_nickname));
     }
 
-    if (ident.trim().equals("")) {
+    if (username.trim().equals("")) {
       throw new ValidationException(getResources().getString(R.string.validation_blank_ident));
     }
 
@@ -494,7 +494,7 @@ public class AddServerActivity extends SherlockActivity implements OnClickListen
 
     // We currently only allow chars, numbers and some special chars for ident
     Pattern identPattern = Pattern.compile("^[a-zA-Z0-9\\[\\]\\-_/]+$");
-    if (!identPattern.matcher(ident).matches()) {
+    if (!identPattern.matcher(username).matches()) {
       throw new ValidationException(getResources().getString(R.string.validation_invalid_ident));
     }
   }
