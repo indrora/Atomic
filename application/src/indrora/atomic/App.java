@@ -45,7 +45,10 @@ public class App extends Application {
       runIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
       this.startActivity(runIntent);
     }
-
+    
+    String ll = _settings.getDefaultNick();
+    ll = ll.trim();
+    
     super.onCreate();
   }
 }

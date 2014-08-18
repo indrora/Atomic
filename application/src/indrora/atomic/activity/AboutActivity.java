@@ -23,6 +23,8 @@ package indrora.atomic.activity;
 import com.actionbarsherlock.app.SherlockActivity;
 
 import indrora.atomic.R;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.text.Html;
 import android.widget.TextView;
@@ -43,6 +45,16 @@ public class AboutActivity extends SherlockActivity {
 
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+    try {
+      
+      PackageInfo pi = getPackageManager().getPackageInfo(getPackageName(), 0);
+      
+      ((TextView)findViewById(R.id.version_label)).setText(
+          String.format("Version %1$s (r%2$d)", pi.versionName,pi.versionCode)
+       );
+    } catch (NameNotFoundException e) {
+      ((TextView)findViewById(R.id.version_label)).setText("Dev release???");
+    }
 
     TextView licenseDetails = (TextView) findViewById(R.id.about_license_info);
     licenseDetails.setText(Html.fromHtml(getString(R.string.licence_info)));

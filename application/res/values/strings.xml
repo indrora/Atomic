@@ -362,8 +362,13 @@
     <string name="settings_reconnect_loss_title">Reconnect after network loss</string>
     <string name="settings_reconnect_loss_desc">Re-establish connections after network outage</string>
     
-    <string name="settings_default_nick">Default Nickname</string>
-    <string name="settings_default_username">Default Username</string>
+    <string name="settings_default_nickname_title">Default Nickname</string>
+    <string name="settings_default_username_title">Default Username</string>
+    <string name="settings_default_realname_title">Default Realname</string>
+    
+    <string name="settings_defaults_title">Server Defaults</string>
+    <string name="settings_defaults_desc">These settings are used for new connections.</string>
+
     
     <string name="network_reconnecting_lost">Waiting for network…</string>
     <string name="network_reconnecting_transient">Network in transition…</string>

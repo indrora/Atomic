@@ -27,6 +27,7 @@ import indrora.atomic.model.Authentication;
 import indrora.atomic.model.Extra;
 import indrora.atomic.model.Identity;
 import indrora.atomic.model.Server;
+import indrora.atomic.model.Settings;
 import indrora.atomic.model.Status;
 
 import java.io.UnsupportedEncodingException;
@@ -77,6 +78,8 @@ public class AddServerActivity extends SherlockActivity implements OnClickListen
   private ArrayList<String> channels;
   private ArrayList<String> commands;
 
+  private Settings s;
+  
   /**
    * On create
    */
@@ -84,6 +87,8 @@ public class AddServerActivity extends SherlockActivity implements OnClickListen
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
+    s = new Settings(this);
+    
     setContentView(R.layout.serveradd);
 
     ActionBar actionBar = getSupportActionBar();
@@ -111,6 +116,11 @@ public class AddServerActivity extends SherlockActivity implements OnClickListen
       _action = getIntent().getAction();
     }
 
+    ((EditText) findViewById(R.id.username)).setText(s.getDefaultUsername());
+    ((EditText) findViewById(R.id.nickname)).setText(s.getDefaultNick());
+    ((EditText) findViewById(R.id.realname)).setText(s.getDefaultRealname());
+
+    
     Bundle extras = getIntent().getExtras();
     if (extras != null && extras.containsKey(Extra.SERVER)) {
 

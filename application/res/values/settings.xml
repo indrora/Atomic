@@ -89,4 +89,10 @@
     <string name="key_reconnect_loss">reconnect_loss</string>
     <string name="default_reconnect_loss">true</string>
     
+    <string name="key_default_nickname">default_nickname</string>
+    <string name="key_default_username">default_username</string>
+    <string name="default_default_username">atomic</string>
+    <string name="key_default_realname">default_realname</string>
+    <string name="default_default_realname">Atomic User</string>
+        
 </resources>
