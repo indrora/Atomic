@@ -457,7 +457,13 @@ public class ConversationActivity extends SherlockActivity implements
     Intent intent = new Intent(this, IRCService.class);
     intent.setAction(IRCService.ACTION_FOREGROUND);
     startService(intent);
-    bindService(intent, this, 0);
+    int flags = 0;
+    if(android.os.Build.VERSION.SDK_INT > 13)
+    {
+      flags |= Context.BIND_ABOVE_CLIENT;
+      flags |= Context.BIND_IMPORTANT;
+    }
+    bindService(intent, this, flags);
 
     // Let's be explicit about this.
     ((EditText) findViewById(R.id.input)).setEnabled(true);

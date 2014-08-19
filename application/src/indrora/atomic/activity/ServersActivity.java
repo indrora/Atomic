@@ -41,6 +41,7 @@ import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.Service;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -127,7 +128,12 @@ public class ServersActivity extends SherlockActivity implements ServiceConnecti
     Intent intent = new Intent(this, IRCService.class);
     intent.setAction(IRCService.ACTION_BACKGROUND);
     startService(intent);
-    bindService(intent, this, 0);
+    int flags = 0;
+    if(android.os.Build.VERSION.SDK_INT >= 14)
+    {
+      flags |= Context.BIND_ABOVE_CLIENT;
+    }
+    bindService(intent, this, flags);
 
     receiver = new ServerReceiver(this);
     registerReceiver(receiver, new IntentFilter(Broadcast.SERVER_UPDATE));
