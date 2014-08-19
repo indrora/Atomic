@@ -459,11 +459,9 @@ public class ConversationActivity extends SherlockActivity implements
     startService(intent);
     bindService(intent, this, 0);
 
-    if (!server.isConnected()) {
-      ((EditText) findViewById(R.id.input)).setEnabled(false);
-    } else {
-      ((EditText) findViewById(R.id.input)).setEnabled(true);
-    }
+    // Let's be explicit about this.
+    ((EditText) findViewById(R.id.input)).setEnabled(true);
+    
 
     // Optimization - cache field lookup
     Collection<Conversation> mConversations = server.getConversations();
