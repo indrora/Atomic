@@ -68,6 +68,8 @@ public class AboutActivity extends SherlockActivity {
         info += "\nBuilt on: "+s;
         zf.close();
      }catch(Exception e){
+       System.out.println("That was odd: I couldn't get the date I was built.");
+       System.out.println(e.toString());
      }
 
       ((TextView)findViewById(R.id.version_label)).setText(
