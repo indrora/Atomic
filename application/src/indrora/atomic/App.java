@@ -18,11 +18,16 @@ public class App extends Application {
   private static LatchingValue<Boolean> autoconnectComplete;
 
   private static ColorScheme _c;
+  private static Settings _s;
 
   public static ColorScheme getColorScheme() {
     return _c;
   }
 
+  public static Settings getSettings() {
+    return _s;
+  }
+  
   public static Boolean doAutoconnect() {
     return autoconnectComplete.getValue();
   }
@@ -32,9 +37,10 @@ public class App extends Application {
     Atomic.getInstance().loadServers(getApplicationContext());
 
     indrora.atomic.model.Settings _settings = new Settings(this);
+    _s = _settings;
     // Release 16 changes things for colors.
-    // Later, I plan on having a
-    if(_settings.getColorScheme().equals("monokai") || _settings.getColorScheme().equals("solarized")) {
+    // This is a much more elegant solution than I had here. Be glad.
+    if( _s.getLastRunVersion() < 16 ) {
       _settings.setColorScheme("default");
     }
 

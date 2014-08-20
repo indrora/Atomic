@@ -275,14 +275,21 @@ public class Message {
     return distance;
   }
 
+  private SpannableString _cache = null;
+  private String _lastRenderedWith = "";
+  
   /**
    * Render message as spannable string
    *
    * @return
    */
   public SpannableString render(Context context) {
-    Settings settings = new Settings(context);
+    Settings settings = App.getSettings();
 
+    if(_lastRenderedWith.equals(settings.getColorScheme()) && _cache != null){
+      return _cache;
+    }
+    
     _scheme = App.getColorScheme();
 
     SpannableString nickSS;
@@ -386,8 +393,15 @@ public class Message {
       messageSS = Smilies.toSpannable(messageSS, context);
     }
 
-    // return all the parts glued together.
-    return new SpannableString(TextUtils.concat( timeSS, prefixSS, nickSS, " ", messageSS ));
+    // An optimization is finished here:
+    // If we don't cache what we print, we begin to have an O(2N) problem at best,
+    // but if we set _cache (which is owned by us) to what we will now return,
+    // when we come back, we can return our cached version
+    // our cache is invalidated when _lastRenderedWith changes.
+    
+    _cache =  new SpannableString(TextUtils.concat( timeSS, prefixSS, nickSS, " ", messageSS ));
+    _lastRenderedWith = settings.getColorScheme();
+    return _cache;
     
   }
 
