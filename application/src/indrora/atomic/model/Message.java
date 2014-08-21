@@ -70,8 +70,8 @@ public class Message {
 
   /* normal message, this is the default */
   public static final int TYPE_MESSAGE = 0;
-
   public static final int TYPE_ACTION = 2;
+  public static final int TYPE_SERVER = 3;
   
   /* join, part or quit */
   public static final int TYPE_MISC    = 1;
@@ -82,7 +82,6 @@ public class Message {
 
   private final String text;
   private final String sender;
-  private SpannableString canvas;
   private long timestamp;
 
   private MessageColor color = MessageColor.DEFAULT;
@@ -140,6 +139,8 @@ public class Message {
 
   }
 
+  
+  
   /**
    * Set the message's icon
    */
@@ -174,6 +175,10 @@ public class Message {
     return type;
   }
 
+  public void setType(int t) {
+    this.type = t;
+  }
+  
   /**
    * Set the color of this message
    */
@@ -283,7 +288,7 @@ public class Message {
    *
    * @return
    */
-  public SpannableString render(Context context) {
+  public SpannableString render() {
     Settings settings = App.getSettings();
 
     if(_lastRenderedWith.equals(settings.getColorScheme()) && _cache != null){
@@ -350,9 +355,9 @@ public class Message {
         // The drawable here is our icon. Internally, the icon is seriously just a reference into the
         // resources block
         
-        Drawable drawable = context.getResources().getDrawable(icon);
+        Drawable drawable = App.getSResources().getDrawable(icon);
         
-        float density = context.getResources().getDisplayMetrics().density;
+        float density = App.getSResources().getDisplayMetrics().density;
         // scale = wanted / actual
         float scale = spaceWidth / (float)(drawable.getMinimumWidth());
         // This call is < x,y, width,height>
@@ -376,21 +381,23 @@ public class Message {
     //   => highlight color?
     //      => blarg the spannable.
     messageSS = new SpannableString(text);
-    if(settings.showMircColors()) {
-      if(hasColor() && settings.showColors()) {
-        messageSS.setSpan(new ForegroundColorSpan(translateColor(color)), 0, messageSS.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+    if (settings.showMircColors()) {
+      if (hasColor() && settings.showColors()) {
+        messageSS.setSpan(new ForegroundColorSpan(translateColor(color)), 0,
+            messageSS.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
       }
       messageSS = MircColors.toSpannable(messageSS);
-    }
-    else {
-      messageSS = new SpannableString( MircColors.removeStyleAndColors(text));
-      if(hasColor() && settings.showColors()) {
-        messageSS.setSpan(new ForegroundColorSpan(translateColor(color)), 0, messageSS.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+    } else {
+      messageSS = new SpannableString(MircColors.removeStyleAndColors(text));
+      if (hasColor() && settings.showColors()) {
+        messageSS.setSpan(new ForegroundColorSpan(translateColor(color)), 0,
+            messageSS.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
       }
     }
-    // Smash smileys into this.
-    if (settings.showGraphicalSmilies()) {
-      messageSS = Smilies.toSpannable(messageSS, context);
+    // Smash smileys into this, but only if we're not a server message..
+    if (settings.showGraphicalSmilies() && this.type != TYPE_SERVER) {
+      messageSS = Smilies.toSpannable(messageSS, App.getAppContext());
     }
 
     // An optimization is finished here:

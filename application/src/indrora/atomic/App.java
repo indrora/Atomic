@@ -4,7 +4,9 @@ import indrora.atomic.model.ColorScheme;
 import indrora.atomic.model.Settings;
 import indrora.atomic.utils.LatchingValue;
 import android.app.Application;
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 
 public class App extends Application {
 
@@ -20,6 +22,12 @@ public class App extends Application {
   private static ColorScheme _c;
   private static Settings _s;
 
+  private static Context _ctx;
+  
+  public static Context getAppContext() {
+    return _ctx;
+  }
+  
   public static ColorScheme getColorScheme() {
     return _c;
   }
@@ -31,10 +39,22 @@ public class App extends Application {
   public static Boolean doAutoconnect() {
     return autoconnectComplete.getValue();
   }
+  
+  private static Resources _r;
+  
+  public static Resources getSResources() {
+    return _r;
+  }
+  
+  
+  
   @Override
   public void onCreate() {
     // Context exists here.
-    Atomic.getInstance().loadServers(getApplicationContext());
+    
+    _ctx = getApplicationContext();
+    
+    Atomic.getInstance().loadServers(_ctx);
 
     indrora.atomic.model.Settings _settings = new Settings(this);
     _s = _settings;
@@ -44,7 +64,9 @@ public class App extends Application {
       _settings.setColorScheme("default");
     }
 
-    _c = new ColorScheme(getApplicationContext());
+    _r = getResources();
+    
+    _c = new ColorScheme(_ctx);
 
     if(_settings.getCurrentVersion() > _settings.getLastRunVersion()) {
       Intent runIntent = new Intent(this,FirstRunActivity.class);

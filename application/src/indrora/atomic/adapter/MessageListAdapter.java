@@ -71,7 +71,7 @@ public class MessageListAdapter extends BaseAdapter {
     int mSize = mHistory.size();
 
     for (int i = 0; i < mSize; i++) {
-      messages.add(mHistory.get(i).render(context));
+      messages.add(mHistory.get(i).render());
     }
 
 
@@ -92,7 +92,7 @@ public class MessageListAdapter extends BaseAdapter {
    * @param message
    */
   public void addMessage(Message message) {
-    messages.add(message.render(context));
+    messages.add(message.render());
 
     if (messages.size() > historySize) {
       messages.remove(0);
@@ -112,7 +112,7 @@ public class MessageListAdapter extends BaseAdapter {
     int mSize = messages.size();
 
     for (int i = mSize - 1; i > -1; i--) {
-      mMessages.add(messages.get(i).render(mContext));
+      mMessages.add(messages.get(i).render());
 
       if (mMessages.size() > historySize) {
         mMessages.remove(0);

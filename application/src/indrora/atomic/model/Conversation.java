@@ -108,9 +108,15 @@ public abstract class Conversation implements Comparable<Conversation> {
    * Add a message to the channel
    */
   public void addMessage(Message message) {
+    // Don't parse smileys and colors and such if we're in a server view.
+    if(this.getType() == TYPE_SERVER) {
+      message.setType(Message.TYPE_SERVER);
+    }
     buffer.add(0, message);
     history.add(message);
 
+    message.render(); // Optimization: Render it as early as possible.
+    
     if (history.size() > historySize) {
       history.remove(0);
     }
