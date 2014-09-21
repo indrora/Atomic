@@ -362,7 +362,7 @@ public abstract class PircBot implements ReplyConstants {
    * @param channel The name of the channel to leave.
    */
   public final void partChannel(String channel) {
-    this.sendRawLine("PART " + channel);
+    _outQueue.addFront("part " + channel);
   }
 
 
@@ -373,7 +373,7 @@ public abstract class PircBot implements ReplyConstants {
    * @param reason  The reason for parting the channel.
    */
   public final void partChannel(String channel, String reason) {
-    this.sendRawLine("PART " + channel + " :" + reason);
+    _outQueue.addFront("PART " + channel + " :" + reason);
   }
 
 

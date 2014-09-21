@@ -621,8 +621,11 @@ public class ConversationActivity extends SherlockActivity implements
                                          .getCurrentItem());
       // Make sure we part a channel when closing the channel conversation
       if (conversationToClose.getType() == Conversation.TYPE_CHANNEL) {
-        binder.getService().getConnection(serverId)
-        .partChannel(conversationToClose.getName());
+        IRCConnection conn = binder.getService().getConnection(serverId);
+        conn.partChannel(conversationToClose.getName());
+        //server.removeConversation(conversationToClose.getName());
+        //onRemoveConversation(conversationToClose.getName());
+        
       } else if (conversationToClose.getType() == Conversation.TYPE_QUERY) {
         server.removeConversation(conversationToClose.getName());
         onRemoveConversation(conversationToClose.getName());
@@ -877,6 +880,8 @@ public class ConversationActivity extends SherlockActivity implements
 
     if (position != -1) {
       pagerAdapter.removeConversation(position);
+      pager.setCurrentItem(position-1);
+
     }
   }
 
