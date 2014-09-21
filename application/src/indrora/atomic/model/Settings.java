@@ -25,6 +25,7 @@ import indrora.atomic.R;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.preference.PreferenceManager;
@@ -44,6 +45,8 @@ public class Settings {
   private final Resources         resources;
   private int                     currentRelease;
 
+  private long lastSettingsUpdate = 0;
+  
   /**
    * Create a new Settings instance
    * 
@@ -58,8 +61,23 @@ public class Settings {
     } catch (Exception ex) {
       this.currentRelease = 99;
     }
+    
+    this.preferences.registerOnSharedPreferenceChangeListener(new OnSharedPreferenceChangeListener() {
+      
+      @Override
+      public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
+          String key) {
+        lastSettingsUpdate = System.currentTimeMillis();
+        
+      }
+    });
+    
   }
 
+  public boolean shouldRerender(Long messageRenderTime) {
+    return lastSettingsUpdate > messageRenderTime;
+  }
+  
   /**
    * Prefix all messages with a timestamp?
    * 

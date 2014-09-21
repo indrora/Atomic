@@ -281,7 +281,7 @@ public class Message {
   }
 
   private SpannableString _cache = null;
-  private String _lastRenderedWith = "";
+  private long lastRenderedMillis= -1;
   
   /**
    * Render message as spannable string
@@ -291,7 +291,7 @@ public class Message {
   public SpannableString render() {
     Settings settings = App.getSettings();
 
-    if(_lastRenderedWith.equals(settings.getColorScheme()) && _cache != null){
+    if( !settings.shouldRerender(lastRenderedMillis) && _cache != null ){
       return _cache;
     }
     
@@ -407,7 +407,7 @@ public class Message {
     // our cache is invalidated when _lastRenderedWith changes.
     
     _cache =  new SpannableString(TextUtils.concat( timeSS, prefixSS, nickSS, " ", messageSS ));
-    _lastRenderedWith = settings.getColorScheme();
+    lastRenderedMillis = System.currentTimeMillis();
     return _cache;
     
   }
