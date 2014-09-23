@@ -433,6 +433,10 @@ public class ConversationActivity extends SherlockActivity implements
     registerReceiver(channelReceiver, new IntentFilter(
                        Broadcast.CONVERSATION_TOPIC));
 
+    registerReceiver(channelReceiver, new IntentFilter(
+        Broadcast.CONVERSATION_CLEAR));
+
+    
     serverReceiver = new ServerReceiver(this);
     registerReceiver(serverReceiver, new IntentFilter(
                        Broadcast.SERVER_UPDATE));
@@ -858,6 +862,14 @@ public class ConversationActivity extends SherlockActivity implements
     pager.setCurrentItem(pagerAdapter.getPositionByName(target));
   }
 
+  @Override
+  public synchronized void onClearConversation(String target) {
+
+    pagerAdapter.getItem( pagerAdapter.getPositionByName(target) ).clearHistory();
+    pagerAdapter.getItemAdapter(target).clear();
+    Log.d("ConversationActivity", "Cleared conversation "+target);
+  }
+  
   /**
    * Create a new conversation in the pager adapter for the given target
    * conversation.

@@ -191,6 +191,13 @@ public class MessageListAdapter extends BaseAdapter {
     canvas.setTextIsSelectable(true);
   }
 
+  /**
+   * Clears the conversation of any messages.
+   */
+  public void clear() {
+    messages.clear();
+    notifyDataSetChanged();
+  }
 
   /**
    * XXX This is almost certainly covering up a bug elsewhere -- find it!

@@ -23,6 +23,7 @@ package indrora.atomic.command;
 import indrora.atomic.command.handler.AMsgHandler;
 import indrora.atomic.command.handler.AwayHandler;
 import indrora.atomic.command.handler.BackHandler;
+import indrora.atomic.command.handler.ClearHandler;
 import indrora.atomic.command.handler.CloseHandler;
 import indrora.atomic.command.handler.DCCHandler;
 import indrora.atomic.command.handler.DeopHandler;
@@ -99,6 +100,7 @@ public class CommandParser {
     commands.put("msg", new MsgHandler());
     commands.put("quote", new RawHandler());
     commands.put("amsg", new AMsgHandler());
+    commands.put("clear", new ClearHandler());
 
     aliases = new HashMap<String, String>();
 

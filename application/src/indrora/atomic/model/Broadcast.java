@@ -35,6 +35,7 @@ public abstract class Broadcast {
   public static final String CONVERSATION_NEW        = "indrora.atomic.conversation.new";
   public static final String CONVERSATION_REMOVE    = "indrora.atomic.conversation.remove";
   public static final String CONVERSATION_TOPIC    = "indrora.atomic.conversation.topic";
+  public static final String CONVERSATION_CLEAR    = "indrora.atomic.conversation.clear";
 
   /**
    * Create an Intent for conversation broadcasting

@@ -53,4 +53,10 @@ public interface ConversationListener {
    * @param target
    */
   public void onTopicChanged(String target);
+
+  /**
+   * Clear the given target conversation.
+   * @param target
+   */
+  public void onClearConversation(String target);
 }

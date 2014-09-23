@@ -237,6 +237,13 @@ public abstract class Conversation implements Comparable<Conversation> {
   }
 
   /**
+   * Clears the history of a conversation.
+   */
+  public void clearHistory() {
+    history.clear();
+  }
+  
+  /**
    * Set this conversation's history size.
    *
    * @param size
