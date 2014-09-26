@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/indrora/Atomic.png?label=ready&title=Ready)](https://waffle.io/indrora/Atomic)
 
 [![Build Status](https://travis-ci.org/indrora/Atomic.svg?branch=master)](https://travis-ci.org/indrora/Atomic) [![Crowdin](https://d322cqt584bo4o.cloudfront.net/atomic/localized.png)](https://crowdin.net/project/atomic)
 
