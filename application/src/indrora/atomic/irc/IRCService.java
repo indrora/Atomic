@@ -224,6 +224,7 @@ public class IRCService extends Service {
         sendBroadcast(cIntent);
 
         this.getConnection(reconnect_server).disconnect();
+        
         connect(s);
 
 

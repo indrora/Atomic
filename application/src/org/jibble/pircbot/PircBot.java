@@ -190,6 +190,12 @@ public abstract class PircBot implements ReplyConstants {
       _socket =  new Socket(hostname, port);
     }
 
+    
+    // This makes the socket timeout on read operations after 5 minutes.
+    // Maybe in some future version I will let the user change this at runtime.
+    _socket.setSoTimeout(5 * 60 * 1000);
+
+    
     _inetAddress = _socket.getLocalAddress();
 
     InputStreamReader inputStreamReader = null;
@@ -208,59 +214,75 @@ public abstract class PircBot implements ReplyConstants {
     BufferedReader breader = new BufferedReader(inputStreamReader);
     BufferedWriter bwriter = new BufferedWriter(outputStreamWriter);
 
+    
+    // Now start the outputThread that will be used to send all messages.
+    if (_outputThread == null) {
+      _outputThread = new OutputThread(this, _outQueue);
+      _outputThread.start();
+    }
+
+    
+    // Set up the input thread.
+    _inputThread = new InputThread(this, _socket, breader, bwriter);
+    // Now start the InputThread to read all other lines from the server.
+    _inputThread.start();
+
+
+    
     // Attempt to join the server.
     if (password != null && !password.equals("")) {
-      OutputThread.sendRawLine(this, bwriter, "PASS " + password);
+      this._inputThread.sendRawLine( "PASS " + password);
     }
     String nick = this.getName();
 
 
 
     // Capabilities negotiation
-    OutputThread.sendRawLine(this, bwriter, "CAP LS");
-    String[] wanted_caps = { "sasl", "multi-prefix", "znc.in/server-time-iso", "server-time" };
+    this._inputThread.sendRawLine("CAP LS");
+    // For whatever reason, some IRCDs want this NAO.
+    this._inputThread.sendRawLine("NICK " + nick);
+    this._inputThread.sendRawLine("USER " + this.getLogin() + " 8 * :" + this.getVersion());
+    this._inputThread.sendRawLine("");
+    bwriter.flush();
 
-    for(String cap : wanted_caps) {
-      OutputThread.sendRawLine(this, bwriter, "CAP REQ :"+cap);
+    try {
+      Thread.sleep(128);
+    } catch (InterruptedException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
     }
-    OutputThread.sendRawLine(this, bwriter, "CAP END");
+    
+    
+    bwriter.flush();
 
-    if (saslUsername != null) {
-    }
-
-    OutputThread.sendRawLine(this, bwriter, "NICK " + nick);
-    OutputThread.sendRawLine(this, bwriter, "USER " + this.getLogin() + " 8 * :" + this.getVersion());
-
-    _inputThread = new InputThread(this, _socket, breader, bwriter);
+    
 
     // XXX: PircBot Patch - Set nick before loop. otherwise we overwrite it in the loop again and again
     //                      But maybe we got a new nickname from the server (bouncers!)
     this.setNick(nick);
 
+    
+    
     // Read stuff back from the server to see if we connected.
     String line = null;
     line = breader.readLine();
+
+    
+    if (saslUsername != null) {
+      doSaslAuth(saslUsername, saslPassword);
+    }
 
     // XXX: PircBot patch - We are not connected to server if nothing received
     if (line == null) {
       throw new IOException("Could not connect to server");
     }
 
+    
     // Send the first line to handleLine before the InputThread is started.
     this.handleLine(line);
 
-    // This makes the socket timeout on read operations after 5 minutes.
-    // Maybe in some future version I will let the user change this at runtime.
-    _socket.setSoTimeout(5 * 60 * 1000);
 
-    // Now start the InputThread to read all other lines from the server.
-    _inputThread.start();
 
-    // Now start the outputThread that will be used to send all messages.
-    if (_outputThread == null) {
-      _outputThread = new OutputThread(this, _outQueue);
-      _outputThread.start();
-    }
 
     this.onConnect();
   }
@@ -409,9 +431,9 @@ public abstract class PircBot implements ReplyConstants {
    * @param line The raw line to send to the IRC server.
    */
   public final synchronized void sendRawLine(String line) {
-    if (isConnected()) {
+      if(_inputThread == null || _outputThread == null) return;
+      
       _inputThread.sendRawLine(line);
-    }
   }
 
   /**
@@ -904,14 +926,27 @@ public abstract class PircBot implements ReplyConstants {
     }
     Matcher m = Pattern.compile(CAP_ACK_REGEX).matcher(line);
 
+    
     if(m.matches()) {
+      Log.d("pIRCbot", "Got a "+m.group(3)+" on "+m.group(4));
       if(m.group(3).equals("NAK")) return;
-      if(m.group(3).equals("LS")) return;
-      String acked_cap = m.group(4);
-      Log.d("pIRCbot", "Got cap from server:"+acked_cap);
-      if(acked_cap.equals("sasl") && this.saslUsername != null) {
-        Log.d("pIRCbot", "Doing SASL authentication");
-        doSaslAuth(saslUsername, saslPassword);
+      if(m.group(3).equals("LS"))
+      {
+        
+        this._inputThread.sendRawLine("CAP REQ :"+m.group(4));
+        this._inputThread.sendRawLine("CAP END");
+        this._inputThread.sendRawLine("");
+      }
+      if(m.group(3).equals("ACK"))
+      {
+        
+        // { "sasl", "multi-prefix", "znc.in/server-time-iso", "server-time" };
+
+        List<String> acked_caps = Arrays.asList( m.group(4).split("\\s+"));
+        if(acked_caps.contains("sasl"))
+        {
+          doSaslAuth(saslUsername, saslPassword);
+        }
       }
       return;
     }

@@ -16,6 +16,8 @@ package org.jibble.pircbot;
 
 import java.io.*;
 
+import android.util.Log;
+
 /**
  * A Thread which is responsible for sending messages to the IRC server.
  * Messages are obtained from the outgoing message queue and sent
@@ -62,6 +64,7 @@ public class OutputThread extends Thread {
     }
     synchronized(bwriter) {
       try {
+        bwriter.flush();
         bwriter.write(line + "\r\n");
         bwriter.flush();
       } catch (Exception e) {
