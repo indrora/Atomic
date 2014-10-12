@@ -117,6 +117,7 @@ public class IRCService extends Service {
    *
    */
   private class NetworkTransitionHandler extends BroadcastReceiver {
+    // Sets up the Transition handler -- the context here is so that the connectivity manager can be found.
     private NetworkTransitionHandler(Context ctx) {
       NetworkInfo networkInfo = ((ConnectivityManager)(ctx.getSystemService(Service.CONNECTIVITY_SERVICE))).getActiveNetworkInfo();
       if(networkInfo == null)
@@ -124,15 +125,18 @@ public class IRCService extends Service {
       else
         lastNetworkType = networkInfo.getType();
     }
+    // previous network kind we were on (-1 => We do not know yet)
     private int lastNetworkType = -1;
+    
     private static final String TAG = "NetworkTransitions";
+    // This is called when we get an intent for connectivty
     @Override
     public void onReceive(Context context, Intent intent) {
       String action = intent.getAction();
       if (!action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
         return;
       }
-
+      // _isTransient means "network is in transition -> we should know this.
       IRCService.this._isTransient = true;
 
       NetworkInfo networkInfo = ((ConnectivityManager)(context.getSystemService(Service.CONNECTIVITY_SERVICE))).getActiveNetworkInfo();
@@ -140,6 +144,7 @@ public class IRCService extends Service {
       if(networkInfo == null) {
         Log.d(TAG,"Lost all connectivity.");
         lastNetworkType =-1;
+        // There's a bug here when no network is availible at all -- I'm not certain what is really going on.
         _isTransient = false;
         return;
       } else if (networkInfo.isConnected()) {
@@ -191,6 +196,7 @@ public class IRCService extends Service {
       reconnectNextNetwork.clear();
       for(int sid : connections.keySet()) {
         reconnectNextNetwork.add(sid);
+        
         Intent sIntent = Broadcast.createServerIntent(Broadcast.SERVER_UPDATE, sid);
         sendBroadcast(sIntent);
       }
@@ -205,10 +211,19 @@ public class IRCService extends Service {
             reconnectNextNetwork.add(sid);
         }
       }
+      
       final Integer[] new_servers = (Integer[]) reconnectNextNetwork.toArray(new Integer[reconnectNextNetwork.size()]);
       for(int reconnect_server : new_servers) {
 
         Server s = Atomic.getInstance().getServerById(reconnect_server);
+
+        this.getConnection(reconnect_server).disconnect();
+        
+        s.setStatus(Status.PRE_CONNECTING);
+        Intent sIntent = Broadcast.createServerIntent(Broadcast.SERVER_UPDATE, reconnect_server);
+        
+        sendBroadcast(sIntent);
+        
 
         Message message = new Message("Waiting on network connectivity");
         message.setIcon(R.drawable.info);
@@ -223,7 +238,6 @@ public class IRCService extends Service {
                          );
         sendBroadcast(cIntent);
 
-        this.getConnection(reconnect_server).disconnect();
         
         connect(s);
 

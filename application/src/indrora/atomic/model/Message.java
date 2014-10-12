@@ -282,6 +282,13 @@ public class Message {
 
   private SpannableString _cache = null;
   private long lastRenderedMillis= -1;
+
+
+  Conversation _parent;
+  protected void setConversation(Conversation p)
+  {
+    _parent = p;
+  }
   
   /**
    * Render message as spannable string
@@ -291,6 +298,7 @@ public class Message {
   public SpannableString render() {
     Settings settings = App.getSettings();
 
+    
     if( !settings.shouldRerender(lastRenderedMillis) && _cache != null ){
       return _cache;
     }

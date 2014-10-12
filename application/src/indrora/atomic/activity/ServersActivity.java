@@ -256,8 +256,9 @@ public class ServersActivity extends SherlockActivity implements ServiceConnecti
     server.clearConversations();
     server.setStatus(Status.DISCONNECTED);
     server.setMayReconnect(false);
+    
     binder.getService().removeReconnection(server.getId());
-    binder.getService().getConnection(server.getId()).quitServer();
+    binder.getService().getConnection(server.getId()).disconnect();
 
   }
 
@@ -276,9 +277,10 @@ public class ServersActivity extends SherlockActivity implements ServiceConnecti
     // This lets us change if we're going to CONNECT or DISCONNECT from a server from the long-press menu.
     int mangleString = R.string.connect;
 
-    if(server.getStatus() == Status.CONNECTED) {
+    if(server.getStatus() != Status.DISCONNECTED) {
       mangleString = R.string.disconnect;
     }
+    
     final int fMangleString = mangleString;
 
     final CharSequence[] items = {

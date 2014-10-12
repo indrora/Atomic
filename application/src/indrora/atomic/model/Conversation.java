@@ -34,7 +34,7 @@ public abstract class Conversation implements Comparable<Conversation> {
   public static final int TYPE_CHANNEL = 1;
   public static final int TYPE_QUERY = 2;
   public static final int TYPE_SERVER = 3;
-
+  
   public static final int STATUS_DEFAULT = 1;
   public static final int STATUS_SELECTED = 2;
   public static final int STATUS_MESSAGE = 3;
@@ -43,6 +43,14 @@ public abstract class Conversation implements Comparable<Conversation> {
 
   private static final int DEFAULT_HISTORY_SIZE = 30;
 
+  
+  private Server _server;
+  
+  public void setOwningServer(Server s)
+  {
+    _server = s;
+  }
+  
   private final LinkedList<Message> buffer;
   private final LinkedList<Message> history;
   private final String name;
@@ -114,10 +122,11 @@ public abstract class Conversation implements Comparable<Conversation> {
     }
     buffer.add(0, message);
     history.add(message);
-
+    
     message.render(); // Optimization: Render it as early as possible.
     
     if (history.size() > historySize) {
+      history.get(0).setConversation(null);
       history.remove(0);
     }
   }
@@ -146,6 +155,7 @@ public abstract class Conversation implements Comparable<Conversation> {
    */
   public Message pollBufferedMessage() {
     Message message = buffer.get(buffer.size() - 1);
+    buffer.get(buffer.size() -1).setConversation(null);
     buffer.remove(buffer.size() - 1);
     return message;
   }

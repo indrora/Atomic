@@ -404,8 +404,11 @@ public abstract class PircBot implements ReplyConstants {
    *
    * @param line The raw line to send to the IRC server.
    */
-  public final synchronized void sendRawLine(String line) {
-      if(_inputThread == null || _outputThread == null) return;
+  public final void sendRawLine(String line) {
+      if(_inputThread == null || _outputThread == null)
+      {
+        Log.d("pIRCbot", "Tried sending message on null threads?");
+      }
       _inputThread.sendRawLine(line);
   }
 
@@ -420,6 +423,11 @@ public abstract class PircBot implements ReplyConstants {
     }
     if (isConnected()) {
       _outQueue.add(line);
+    }
+    else
+    {
+      // We're not yet connected. This should be shoved right onto the stack.
+      this._inputThread.sendRawLine(line);
     }
   }
 
@@ -905,6 +913,7 @@ public abstract class PircBot implements ReplyConstants {
       if(m.group(3).equals("LS"))
       {
         // Request all CAPs back. (?)
+        Log.d("pIRCbot", "Requesting "+m.group(4));
         sendRawLine("CAP REQ :"+m.group(4));
       }
       if(m.group(3).equals("ACK"))
@@ -918,6 +927,7 @@ public abstract class PircBot implements ReplyConstants {
       }
       if(m.group(3).equals("NAK") || m.group(3).equals("ACK")) {
         // Finish the negotiation
+        Log.d("pIRCbot", "Finishing up cap negs");
         sendRawLine("CAP END");
       }
       return;

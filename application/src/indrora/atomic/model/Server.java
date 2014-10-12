@@ -339,6 +339,7 @@ public class Server implements Comparable<Server> {
    * @param conversation The conversation to add
    */
   public void addConversation(Conversation conversation) {
+    conversation.setOwningServer(this);
     conversations.put(conversation.getName().toLowerCase(), conversation);
   }
 
@@ -348,6 +349,7 @@ public class Server implements Comparable<Server> {
    * @param name
    */
   public void removeConversation(String name) {
+    conversations.get(name.toLowerCase()).setOwningServer(null);
     conversations.remove(name.toLowerCase());
   }
 

@@ -45,7 +45,7 @@ public class Settings {
   private final Resources         resources;
   private int                     currentRelease;
 
-  private long lastSettingsUpdate = 0;
+  private long lastSettingsUpdate = 1;
   
   /**
    * Create a new Settings instance
@@ -75,7 +75,7 @@ public class Settings {
   }
 
   public boolean shouldRerender(Long messageRenderTime) {
-    return lastSettingsUpdate > messageRenderTime;
+    return lastSettingsUpdate >= messageRenderTime;
   }
   
   /**

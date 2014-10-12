@@ -211,7 +211,7 @@ public class ConversationActivity extends SherlockActivity implements
 
     serverId = getIntent().getExtras().getInt("serverId");
     server = Atomic.getInstance().getServerById(serverId);
-    settings = new Settings(this);
+    settings = App.getSettings();
 
     // Finish activity if server does not exist anymore - See #55
     if (server == null) {
@@ -221,6 +221,7 @@ public class ConversationActivity extends SherlockActivity implements
     ActionBar actionBar = getSupportActionBar();
     actionBar.setDisplayHomeAsUpEnabled(true);
 
+    
     setTitle(server.getTitle());
 
     setContentView(R.layout.conversations);
