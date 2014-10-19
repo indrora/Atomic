@@ -448,4 +448,8 @@ public class Settings {
     preferences.edit().putString(resources.getString(R.string.key_default_realname), name).commit();
   }
   
+  public int getHighlightLEDColor() {
+    return preferences.getInt(resources.getString(R.string.key_led_color), 0xFFFFFFFF);
+  }
+  
 }

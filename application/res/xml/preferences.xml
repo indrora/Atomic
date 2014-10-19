@@ -206,6 +206,15 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
                 android:key="@string/key_led_highlight"
                 android:summary="@string/settings_led_highlight_desc"
                 android:title="@string/settings_led_highlight_title" />
+			<afzkl.development.colorpickerview.preference.ColorPickerPreference
+	            android:defaultValue="@color/default_led_color"
+	            android:key="@string/key_led_color"
+	            android:summary="@string/settings_led_color_desc"
+	            android:title="@string/settings_led_color_title"
+	            android:dependency="@string/key_led_highlight"
+	             />
+	            
+            
         </PreferenceScreen>
         <PreferenceScreen android:title="@string/settings_misc" >
             <CheckBoxPreference

@@ -465,7 +465,7 @@ public class IRCService extends Service {
       }
 
       if (light) {
-        notification.ledARGB   = NOTIFICATION_LED_COLOR;
+        notification.ledARGB   = settings.getHighlightLEDColor();
         notification.ledOnMS   = NOTIFICATION_LED_ON_MS;
         notification.ledOffMS  = NOTIFICATION_LED_OFF_MS;
         notification.flags    |= Notification.FLAG_SHOW_LIGHTS;
