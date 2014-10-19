@@ -29,6 +29,7 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 /**
  * The settings class is a helper class to access the different preferences via
@@ -45,7 +46,9 @@ public class Settings {
   private final Resources         resources;
   private int                     currentRelease;
 
-  private long lastSettingsUpdate = 1;
+  // This is static so that all instances of the Settings object will
+  // keep in sync.
+  private static long lastSettingsUpdate = 1;
   
   /**
    * Create a new Settings instance
@@ -75,7 +78,7 @@ public class Settings {
   }
 
   public boolean shouldRerender(Long messageRenderTime) {
-    return lastSettingsUpdate >= messageRenderTime;
+    return lastSettingsUpdate - messageRenderTime > 0;
   }
   
   /**

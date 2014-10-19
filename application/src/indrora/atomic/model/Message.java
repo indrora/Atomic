@@ -281,7 +281,7 @@ public class Message {
   }
 
   private SpannableString _cache = null;
-  private long lastRenderedMillis= -1;
+  private long lastRenderedMillis= 0;
 
 
   Conversation _parent;
