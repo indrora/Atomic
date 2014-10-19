@@ -1288,6 +1288,14 @@ public abstract class PircBot implements ReplyConstants {
           prefix = "%";
         }
         nick = nick.substring(prefix.length());
+        // Some IRC servers send just the nick, others send the format <Nick>!<username>@<host>
+        // This is unfortunately, not part of the original IRC standard, which defines the pattern to be
+        // [=*@](channel)\ \:[@+](nick)(\ [@+](nick))+?
+        // Somehow, ZNC started doing odd things. I fixed it.
+        // I heavily suspect that this is caused by multi-prefix?
+        if(nick.contains("!")) {
+          nick = nick.substring(0,nick.indexOf("!"));
+        }
         this.addUser(channel, new User(prefix, nick));
       }
     } else if (code == RPL_ENDOFNAMES) {
