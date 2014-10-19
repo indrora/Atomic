@@ -26,8 +26,6 @@ crowdin.yaml
 # NO.
 lint.xml
 **/lint.xml 
-application/project.properties
-*.classpath
-*.properties
+**/.classpath
 libs/ActionBarSherlock/.classpath
 libs/ActionBarSherlock/.classpath
