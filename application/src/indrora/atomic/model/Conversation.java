@@ -155,7 +155,9 @@ public abstract class Conversation implements Comparable<Conversation> {
    */
   public Message pollBufferedMessage() {
     Message message = buffer.get(buffer.size() - 1);
-    buffer.get(buffer.size() -1).setConversation(null);
+    if(buffer.get(buffer.size() -1) != null) {
+      buffer.get(buffer.size() -1).setConversation(null);
+    }
     buffer.remove(buffer.size() - 1);
     return message;
   }
