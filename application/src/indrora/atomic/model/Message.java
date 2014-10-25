@@ -25,6 +25,7 @@ import indrora.atomic.utils.MircColors;
 import indrora.atomic.utils.Smilies;
 
 import java.util.Date;
+import java.util.Locale;
 
 
 
@@ -466,6 +467,6 @@ public class Message {
     }
     format += "]";
 
-    return (String) android.text.format.DateFormat.format(format, date);
+    return (String) ( new java.text.SimpleDateFormat(format, Locale.US)).format(date);
   }
 }
