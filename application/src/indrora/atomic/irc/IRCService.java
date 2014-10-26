@@ -457,9 +457,9 @@ public class IRCService extends Service {
       // We only want to vibrate if it's been $ARBITRARY_AMOUNT_OF_TIME
       // since we last buzzed.
       
-      vibrate = vibrate && (System.currentTimeMillis() - lastVibrationTime > 2000);
+      boolean actual_vibrate = vibrate && (System.currentTimeMillis() - lastVibrationTime > 2000);
 
-      if (vibrate) {
+      if (actual_vibrate) {
         notification.defaults |= Notification.DEFAULT_VIBRATE;
         lastVibrationTime = System.currentTimeMillis();
       }
