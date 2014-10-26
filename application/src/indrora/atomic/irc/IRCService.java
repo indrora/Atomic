@@ -65,6 +65,7 @@ import android.net.NetworkInfo.State;
 import android.os.Build;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationCompat.Builder;
 import android.util.Log;
 import de.duenndns.ssl.MemorizingTrustManager;
 
@@ -395,14 +396,19 @@ public class IRCService extends Service {
    */
   private void updateNotification(String text, String contentText, boolean vibrate, boolean sound, boolean light) {
     if (foreground) {
-      // I give up. Android changed how this works -- Hope it never goes away.
-      notification = new Notification(R.drawable.ic_service_icon, text, System.currentTimeMillis());
+      
+      // NotificationCompat does the right things for ICS
+      // and other various variants. Seriously, Google?
 
+      notification =  new NotificationCompat.Builder(getBaseContext())
+      .setSmallIcon(R.drawable.ic_service_icon)
+      .setWhen(System.currentTimeMillis()).build();
+
+      
       Intent notifyIntent = new Intent(this, ServersActivity.class);
-      //notifyIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-      //conetntText is null when you have nothing to display; by default, if you supply any, it will
-      //use whatever is handed as the body of the notification.
-      // If you hand it null, you are given a status line that describes what is going on.
+
+      // If contentText is null, there's nothing to show
+      // However, if it isn't null, display that.
       if (contentText == null) {
         if (newMentions >= 1) {
           StringBuilder sb = new StringBuilder();
