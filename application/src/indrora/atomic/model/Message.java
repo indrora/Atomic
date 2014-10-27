@@ -291,6 +291,17 @@ public class Message {
   Conversation _parent;
   protected void setConversation(Conversation p)
   {
+    // We're going to render here, just as an optimization
+    Runnable r = new Thread() {
+      
+      @Override
+      public void run() {
+        
+        _cache = render();
+        
+      }
+    };
+    r.run();
     _parent = p;
   }
   
@@ -305,14 +316,12 @@ public class Message {
     // An optimization starts here:
     // RenderParams defines a "render snapshot".
     // If RenderParams changes, we should invalidate the cache and set our new rendering parameters.
-    if(settings.getRenderParams().equals(currentParams) == false)
-    {
-      _cache = null;
-      currentParams = settings.getRenderParams();
-    }
     
     if(_cache != null ){
-      return _cache;
+      if(settings.getRenderParams().equals(currentParams)) {
+        return _cache;
+      }
+      
     }
     
     _scheme = App.getColorScheme();
@@ -426,6 +435,7 @@ public class Message {
     // when we come back, we can return our cached version
     
     _cache =  new SpannableString(TextUtils.concat( timeSS, prefixSS, nickSS, " ", messageSS ));
+    currentParams = settings.getRenderParams();
     return _cache;
     
   }

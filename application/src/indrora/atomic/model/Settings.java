@@ -24,12 +24,10 @@ package indrora.atomic.model;
 import indrora.atomic.R;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 /**
  * The settings class is a helper class to access the different preferences via
@@ -46,6 +44,7 @@ public class Settings {
   private final Resources         resources;
   private int                     currentRelease;
 
+  
   // This is static so that all instances of the Settings object will
   // keep in sync.
 
@@ -62,7 +61,10 @@ public class Settings {
           context.getPackageName(), 0).versionCode;
     } catch (Exception ex) {
       this.currentRelease = 99;
-    }    
+    }
+    
+    
+    
   }
 
   
@@ -436,6 +438,7 @@ public class Settings {
   public int getHighlightLEDColor() {
     return preferences.getInt(resources.getString(R.string.key_led_color), 0xFFFFFFFF);
   }
+  
   
   public MessageRenderParams getRenderParams() {
     MessageRenderParams params = new MessageRenderParams();

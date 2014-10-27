@@ -45,8 +45,7 @@ import android.widget.TextView;
  * @author Sebastian Kaspari <sebastian@yaaic.org>
  */
 public class MessageListAdapter extends BaseAdapter {
-  private final LinkedList<CharSequence> messages;
-  private final Context context;
+  private final LinkedList<Message> messages;
   private int historySize;
 
   private ColorScheme _colorScheme;
@@ -62,16 +61,16 @@ public class MessageListAdapter extends BaseAdapter {
   public MessageListAdapter(Conversation conversation, Context context) {
 
     _colorScheme = App.getColorScheme();
-    _settings = new Settings(context);
+    _settings = App.getSettings();
 
-    LinkedList<CharSequence> messages = new LinkedList<CharSequence>();
+    LinkedList<Message> messages = new LinkedList<Message>();
 
     // Optimization - cache field lookups
     LinkedList<Message> mHistory =  conversation.getHistory();
     int mSize = mHistory.size();
 
     for (int i = 0; i < mSize; i++) {
-      messages.add(mHistory.get(i).render());
+      messages.add(mHistory.get(i));
     }
 
 
@@ -81,7 +80,6 @@ public class MessageListAdapter extends BaseAdapter {
     conversation.clearBuffer();
 
     this.messages = messages;
-    this.context = context;
     historySize = conversation.getHistorySize();
   }
 
@@ -92,7 +90,7 @@ public class MessageListAdapter extends BaseAdapter {
    * @param message
    */
   public void addMessage(Message message) {
-    messages.add(message.render());
+    messages.add(message);
 
     if (messages.size() > historySize) {
       messages.remove(0);
@@ -107,12 +105,11 @@ public class MessageListAdapter extends BaseAdapter {
    * @param messages
    */
   public void addBulkMessages(LinkedList<Message> messages) {
-    LinkedList<CharSequence> mMessages = this.messages;
-    Context mContext = this.context;
+    LinkedList<Message> mMessages = this.messages;
     int mSize = messages.size();
 
     for (int i = mSize - 1; i > -1; i--) {
-      mMessages.add(messages.get(i).render());
+      mMessages.add(messages.get(i));
 
       if (mMessages.size() > historySize) {
         mMessages.remove(0);
@@ -140,7 +137,7 @@ public class MessageListAdapter extends BaseAdapter {
    */
   @Override
   public CharSequence getItem(int position) {
-    return messages.get(position);
+    return messages.get(position).render();
   }
 
   /**
@@ -167,7 +164,7 @@ public class MessageListAdapter extends BaseAdapter {
 
     TextView view = (TextView)convertView;
     if (view == null) {
-      view = new TextView(context);
+      view = new TextView(parent.getContext());
 
       view.setAutoLinkMask(Linkify.ALL);
       view.setLinksClickable(true);

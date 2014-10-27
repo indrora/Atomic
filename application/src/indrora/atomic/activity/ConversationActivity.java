@@ -54,6 +54,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.ComponentName;
@@ -82,7 +83,9 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.View.OnKeyListener;
+import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -1322,11 +1325,10 @@ public class ConversationActivity extends SherlockActivity implements
     ab.setSubtitle(newName);
 
   }
-
+  
   private void setupIndicator() {
     // This either:
     // * Hides the pager indicator (by setting its visibility to GONE)
-
     // * Hides the subtitle (by calling hideSubtitle() )
 
 
@@ -1335,7 +1337,7 @@ public class ConversationActivity extends SherlockActivity implements
     SpannableString st = new SpannableString(server.getTitle());
     st.setSpan(new ForegroundColorSpan(App.getColorScheme().getForeground()), 0, st.length(), SpannableString.SPAN_INCLUSIVE_INCLUSIVE);
     ab.setTitle(st); // This mostly is to make sure things
-
+    
     if (settings.showChannelBar()) {
       indicator.setVisibility(View.VISIBLE);
       hideSubtitle();
