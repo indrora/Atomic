@@ -452,4 +452,17 @@ public class Settings {
     return preferences.getInt(resources.getString(R.string.key_led_color), 0xFFFFFFFF);
   }
   
+  public MessageRenderParams getRenderParams() {
+    MessageRenderParams params = new MessageRenderParams();
+    params.colorScheme = this.getColorScheme();
+    params.icons = this.showIcons();
+    params.messageColors = this.showMircColors();
+    params.smileys = this.showGraphicalSmilies();
+    params.nickColors = this.showColorsNick();
+    params.timestamps = this.showTimestamp();
+    params.useDarkScheme = this.getUseDarkColors();
+    
+    return params;
+  }
+  
 }

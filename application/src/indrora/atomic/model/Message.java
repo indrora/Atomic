@@ -67,6 +67,9 @@ public class Message {
     NO_COLOR
   }
 
+  private static Settings settings;
+  
+  
   ColorScheme _scheme;
 
   /* normal message, this is the default */
@@ -135,7 +138,9 @@ public class Message {
     this.sender = sender;
     this.timestamp = time;
     this.type = type;
-
+    if(settings == null) {
+      settings = App.getSettings();
+    }
     _scheme = App.getColorScheme();
 
   }
@@ -242,8 +247,6 @@ public class Message {
     variant %= 20;
     // We don't want the color to be the background color.
 
-    //Log.d("Message", "Variant="+variant);
-
     final int bg = _scheme.getBackground();
     int tmpColor;// = _scheme.getMircColor(color);
     do {
@@ -282,8 +285,8 @@ public class Message {
   }
 
   private SpannableString _cache = null;
-  private long lastRenderedMillis= 0;
 
+  MessageRenderParams currentParams = new MessageRenderParams();
 
   Conversation _parent;
   protected void setConversation(Conversation p)
@@ -297,10 +300,18 @@ public class Message {
    * @return
    */
   public SpannableString render() {
-    Settings settings = App.getSettings();
 
     
-    if( !settings.shouldRerender(lastRenderedMillis) && _cache != null ){
+    // An optimization starts here:
+    // RenderParams defines a "render snapshot".
+    // If RenderParams changes, we should invalidate the cache and set our new rendering parameters.
+    if(settings.getRenderParams().equals(currentParams) == false)
+    {
+      _cache = null;
+      currentParams = settings.getRenderParams();
+    }
+    
+    if(_cache != null ){
       return _cache;
     }
     
@@ -413,10 +424,8 @@ public class Message {
     // If we don't cache what we print, we begin to have an O(2N) problem at best,
     // but if we set _cache (which is owned by us) to what we will now return,
     // when we come back, we can return our cached version
-    // our cache is invalidated when _lastRenderedWith changes.
     
     _cache =  new SpannableString(TextUtils.concat( timeSS, prefixSS, nickSS, " ", messageSS ));
-    lastRenderedMillis = System.currentTimeMillis();
     return _cache;
     
   }
