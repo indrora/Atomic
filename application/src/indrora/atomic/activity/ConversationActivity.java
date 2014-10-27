@@ -67,6 +67,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -74,7 +75,9 @@ import android.speech.RecognizerIntent;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.text.InputType;
+import android.text.SpannableString;
 import android.text.method.TextKeyListener;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -205,13 +208,16 @@ public class ConversationActivity extends SherlockActivity implements
    */
   @Override
   protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
+
 
     _scheme = App.getColorScheme();
 
     serverId = getIntent().getExtras().getInt("serverId");
     server = Atomic.getInstance().getServerById(serverId);
     settings = App.getSettings();
+    setTheme(settings.getUseDarkColors()?indrora.atomic.R.style.AppThemeDark:indrora.atomic.R.style.AppThemeLight);
+
+    super.onCreate(savedInstanceState);
 
     // Finish activity if server does not exist anymore - See #55
     if (server == null) {
@@ -252,13 +258,13 @@ public class ConversationActivity extends SherlockActivity implements
     indicator.setTypeface(Typeface.MONOSPACE);
     indicator.setViewPager(pager);
 
-    indicator.setFooterColor(0xFF31B6E7);
+    indicator.setFooterColor(_scheme.getForeground());
     indicator.setFooterLineHeight(1 * density);
     indicator.setFooterIndicatorHeight(3 * density);
     indicator.setFooterIndicatorStyle(IndicatorStyle.Underline);
-    indicator.setSelectedColor(0xFFFFFFFF);
+    indicator.setSelectedColor(_scheme.getForeground());
     indicator.setSelectedBold(true);
-    indicator.setBackgroundColor(0xFF181818);
+    indicator.setBackgroundColor(_scheme.getBackground());
 
     indicator.setVisibility(View.GONE);
 
@@ -1323,9 +1329,12 @@ public class ConversationActivity extends SherlockActivity implements
 
     // * Hides the subtitle (by calling hideSubtitle() )
 
+
     ActionBar ab = getSupportActionBar();
-    ab.setTitle(server.getTitle()); // This mostly is to make sure things
-    // are in the right place.
+    ab.setBackgroundDrawable(new ColorDrawable(App.getColorScheme().getBackground()));
+    SpannableString st = new SpannableString(server.getTitle());
+    st.setSpan(new ForegroundColorSpan(App.getColorScheme().getForeground()), 0, st.length(), SpannableString.SPAN_INCLUSIVE_INCLUSIVE);
+    ab.setTitle(st); // This mostly is to make sure things
 
     if (settings.showChannelBar()) {
       indicator.setVisibility(View.VISIBLE);

@@ -3,10 +3,22 @@
 <!-- Generated with http://android-holo-colors.com -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-  <style name="AppTheme" parent="Theme.Sherlock">
+    <style name="AppTheme" parent="Theme.Sherlock">
+        <item name="android:editTextStyle">@style/EditTextAppTheme</item>
+    </style>
 
-    <item name="android:editTextStyle">@style/EditTextAppTheme</item>
+    <style name="AppThemeDark" parent="Theme.Sherlock">
+        <item name="AT_AddConversation">@drawable/ic_action_add_conversation_dark</item>
+        <item name="AT_CloseConversation">@drawable/ic_action_close_conversation_dark</item>
+        <item name="AT_ConversationList">@drawable/ic_action_conversations_dark</item>
+        <item name="AT_UserList">@drawable/ic_action_users_dark</item>
+    </style>
 
-  </style>
+    <style name="AppThemeLight" parent="Theme.Sherlock.Light">
+        <item name="AT_AddConversation">@drawable/ic_action_add_conversation_light</item>
+        <item name="AT_CloseConversation">@drawable/ic_action_close_conversation_light</item>
+        <item name="AT_ConversationList">@drawable/ic_action_conversations_light</item>
+        <item name="AT_UserList">@drawable/ic_action_users_light</item>
+    </style>
 
 </resources>

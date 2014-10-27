@@ -3,7 +3,13 @@
 <!-- Generated with http://android-holo-colors.com -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-  <style name="EditTextAppTheme" parent="android:Widget.EditText">
+  <attr name="AT_AddConversation" format="reference" />
+  <attr name="AT_CloseConversation" format="reference" />
+  <attr name="AT_ConversationList" format="reference" />
+  <attr name="AT_UserList" format="reference" />
+    
+  
+  <style name="EditTextAppTheme" parent="android:Widget.EditText"> 
 	  <item name="android:background">@drawable/apptheme_edit_text_holo_dark</item>
 	  <item name="android:textColor">#ffffff</item>
   </style>

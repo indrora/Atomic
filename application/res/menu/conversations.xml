@@ -23,22 +23,22 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
     <item
         android:id="@+id/join"
         android:title="@string/join_channel"
-        android:icon="@drawable/ic_action_add"
+        android:icon="?attr/AT_AddConversation"
         android:showAsAction="never" />
     <item
         android:id="@+id/chooseConversation"
-        android:icon="@drawable/ic_action_conversations"
+        android:icon="?attr/AT_ConversationList"
         android:title="Conversations"
         android:showAsAction="ifRoom|withText" />
     <item
         android:id="@+id/users"
         android:title="@string/users"
-        android:icon="@drawable/ic_action_users"
+        android:icon="?attr/AT_UserList"
         android:showAsAction="ifRoom|withText" />
     <item
         android:id="@+id/close"
         android:title="@string/close"
-        android:icon="@drawable/ic_action_close_conversation"
+        android:icon="?attr/AT_CloseConversation"
         android:showAsAction="ifRoom|withText" />
     <item
         android:id="@+id/disconnect"

@@ -48,8 +48,7 @@ public class Settings {
 
   // This is static so that all instances of the Settings object will
   // keep in sync.
-  private static long lastSettingsUpdate = 1;
-  
+
   /**
    * Create a new Settings instance
    * 
@@ -63,23 +62,9 @@ public class Settings {
           context.getPackageName(), 0).versionCode;
     } catch (Exception ex) {
       this.currentRelease = 99;
-    }
-    
-    this.preferences.registerOnSharedPreferenceChangeListener(new OnSharedPreferenceChangeListener() {
-      
-      @Override
-      public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
-          String key) {
-        lastSettingsUpdate = System.currentTimeMillis();
-        
-      }
-    });
-    
+    }    
   }
 
-  public boolean shouldRerender(Long messageRenderTime) {
-    return lastSettingsUpdate - messageRenderTime > 0;
-  }
   
   /**
    * Prefix all messages with a timestamp?
