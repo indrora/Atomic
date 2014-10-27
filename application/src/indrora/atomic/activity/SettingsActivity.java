@@ -24,14 +24,12 @@ import indrora.atomic.R;
 
 import android.os.Bundle;
 
-import com.actionbarsherlock.app.SherlockPreferenceActivity;
-
 /**
  * Settings
  *
  * @author Sebastian Kaspari <sebastian@yaaic.org>
  */
-public class SettingsActivity extends SherlockPreferenceActivity { // SherlockPreferenceActivity
+public class SettingsActivity extends com.actionbarsherlock.app.SherlockPreferenceActivity {
   /**
    * On create
    */
