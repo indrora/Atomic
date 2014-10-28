@@ -122,9 +122,7 @@ public abstract class Conversation implements Comparable<Conversation> {
     }
     buffer.add(0, message);
     history.add(message);
-    
-    message.render(); // Optimization: Render it as early as possible.
-    
+        
     if (history.size() > historySize) {
       history.get(0).setConversation(null);
       history.remove(0);

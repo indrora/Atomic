@@ -291,17 +291,6 @@ public class Message {
   Conversation _parent;
   protected void setConversation(Conversation p)
   {
-    // We're going to render here, just as an optimization
-    Runnable r = new Thread() {
-      
-      @Override
-      public void run() {
-        
-        _cache = render();
-        
-      }
-    };
-    r.run();
     _parent = p;
   }
   
