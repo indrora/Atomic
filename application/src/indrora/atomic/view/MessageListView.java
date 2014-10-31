@@ -51,9 +51,10 @@ public class MessageListView extends ListView {
 
     setDivider(null);
 
-    setCacheColorHint(0x000000);
+    setFastScrollEnabled(true);
+    
+    setCacheColorHint(_scheme.getBackground());
     setVerticalFadingEdgeEnabled(false);
-    //setBackgroundResource(R.drawable.conversation_background);
     setScrollBarStyle(SCROLLBARS_INSIDE_OVERLAY);
 
     setBackgroundColor(_scheme.getBackground());
