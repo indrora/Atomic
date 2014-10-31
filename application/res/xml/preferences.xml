@@ -87,6 +87,12 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
                     android:key="@string/key_colorscheme_dark"
                     android:summary="@string/settings_colorscheme_dark_desc"
                     android:title="@string/settings_colorscheme_dark_title" />
+                <CheckBoxPreference 
+                    android:key="@string/key_tint_actionbar"
+                    android:title="@string/settings_colorscheme_tint_actionbar_title"
+                    android:summary="@string/settings_colorscheme_tint_actionbar_desc"
+                    android:defaultValue="@string/default_tint_actionbar"
+                    />
                 <CheckBoxPreference
                     android:defaultValue="@string/default_mirc_colors"
                     android:key="@string/key_mirc_colors"

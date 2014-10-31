@@ -453,4 +453,11 @@ public class Settings {
     return params;
   }
   
+  public boolean tintActionbar() {
+    return preferences.getBoolean(
+        resources.getString(R.string.key_tint_actionbar),
+        Boolean.parseBoolean(resources.getString(R.string.default_tint_actionbar))
+        );
+    
+  }
 }

@@ -218,8 +218,12 @@ public class ConversationActivity extends SherlockActivity implements
     serverId = getIntent().getExtras().getInt("serverId");
     server = Atomic.getInstance().getServerById(serverId);
     settings = App.getSettings();
-    setTheme(settings.getUseDarkColors()?indrora.atomic.R.style.AppThemeDark:indrora.atomic.R.style.AppThemeLight);
-
+    if(settings.tintActionbar()) {
+      setTheme(settings.getUseDarkColors()?indrora.atomic.R.style.AppThemeDark:indrora.atomic.R.style.AppThemeLight);
+    }
+    else {
+      setTheme(indrora.atomic.R.style.AppThemeDark);
+    }
     super.onCreate(savedInstanceState);
 
     // Finish activity if server does not exist anymore - See #55
@@ -404,7 +408,10 @@ public class ConversationActivity extends SherlockActivity implements
       Log.d("ConversationActivity", "Conversation given was NULL, jump invalid");
       return;
     }
-    for(int idx =0; idx < pagerAdapter.getCount(); idx++) {
+    
+    int convCount = pagerAdapter.getCount();
+    
+    for(int idx =0; idx < convCount; idx++) {
       if(pagerAdapter.getItem(idx) == null) continue;
       String tConvo = pagerAdapter.getItem(idx).getName();
       Log.d("ConversationActivity", "is it "+tConvo+"?");
@@ -414,10 +421,28 @@ public class ConversationActivity extends SherlockActivity implements
         return;
       }
     }
-
+    Log.d("ConversationActivity", "Didn't find conversation!?!?!!?");
   }
 
   private void setupColors() {
+    if(settings.tintActionbar()) {
+      // the ActionBar can be tinted. This is really cool.
+      // Get the ActionBar
+      ActionBar ab = getSupportActionBar();
+      // Make its background drawable a ColorDrawable
+      ab.setBackgroundDrawable(new ColorDrawable(App.getColorScheme().getBackground()));
+      // Create a SpannableString from the current server.
+      SpannableString st = new SpannableString(server.getTitle());
+      // Make its forground color (through a ForgroundColorSpan) to be the foreground of the scheme.
+      // This is because you can't guarantee that the ActionBar text color and actionbar color aren't going to be the same.
+      st.setSpan(new ForegroundColorSpan(App.getColorScheme().getForeground()), 0, st.length(), SpannableString.SPAN_INCLUSIVE_INCLUSIVE);
+      // Now, set our spannable to be the ActionBar title.
+      ab.setTitle(st); 
+    }
+    else
+    {
+      (getSupportActionBar()).setTitle(server.getTitle());
+    }
     EditText input = (EditText) findViewById(R.id.input);
     LinearLayout lll = (LinearLayout) (input.getParent());
     lll.setBackgroundColor(_scheme.getBackground());
@@ -487,6 +512,8 @@ public class ConversationActivity extends SherlockActivity implements
     Collection<Conversation> mConversations = server.getConversations();
     MessageListAdapter mAdapter;
 
+    
+    
     // Fill view with messages that have been buffered while paused
     for (Conversation conversation : mConversations) {
       String name = conversation.getName();
@@ -512,7 +539,7 @@ public class ConversationActivity extends SherlockActivity implements
         startService(ackIntent);
       }
     }
-
+  
     // Remove views for conversations that ended while we were paused
     int numViews = pagerAdapter.getCount();
     if (numViews > mConversations.size()) {
@@ -543,6 +570,11 @@ public class ConversationActivity extends SherlockActivity implements
     openSoftKeyboard(findViewById(R.id.input));
 
     server.setIsForeground(true);
+    
+    if(this.getIntent().hasExtra(ConversationActivity.EXTRA_TARGET)) {
+      Log.d("ConversationActivity", "onResume: "+(this.getIntent().getStringExtra(EXTRA_TARGET)));
+    }
+    
   }
 
   /**
@@ -1332,11 +1364,6 @@ public class ConversationActivity extends SherlockActivity implements
     // * Hides the subtitle (by calling hideSubtitle() )
 
 
-    ActionBar ab = getSupportActionBar();
-    ab.setBackgroundDrawable(new ColorDrawable(App.getColorScheme().getBackground()));
-    SpannableString st = new SpannableString(server.getTitle());
-    st.setSpan(new ForegroundColorSpan(App.getColorScheme().getForeground()), 0, st.length(), SpannableString.SPAN_INCLUSIVE_INCLUSIVE);
-    ab.setTitle(st); // This mostly is to make sure things
     
     if (settings.showChannelBar()) {
       indicator.setVisibility(View.VISIBLE);

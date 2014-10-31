@@ -87,14 +87,20 @@
     <string name="key_colorscheme_dark">colorscheme_dark</string>
     <string name="default_colorscheme_dark">true</string>
     
+    <string name="key_tint_actionbar">tint_actionbar</string>
+    <string name="default_tint_actionbar">false</string>
+    
     <string name="key_reconnect_transient">reconnect_transient</string>
     <string name="default_reconnect_transient">false</string>
     <string name="key_reconnect_loss">reconnect_loss</string>
     <string name="default_reconnect_loss">true</string>
     
     <string name="key_default_nickname">default_nickname</string>
+    <!--  the default value of default_nickname will be mangled on first run -->
+    <!--  It also gets force-set if there is no "valid" name, so we're 100% OK -->
     <string name="key_default_username">default_username</string>
     <string name="default_default_username">atomic</string>
+    
     <string name="key_default_realname">default_realname</string>
     <string name="default_default_realname">Atomic User</string>
         
