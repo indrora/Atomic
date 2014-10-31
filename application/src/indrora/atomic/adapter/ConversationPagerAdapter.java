@@ -29,6 +29,7 @@ import indrora.atomic.view.MessageListView;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Locale;
 
 
 import android.content.Context;
@@ -185,8 +186,11 @@ public class ConversationPagerAdapter extends PagerAdapter implements Conversati
     int mSize = conversations.size();
     LinkedList<ConversationInfo> mItems = this.conversations;
 
+    name = name.toLowerCase(Locale.US);
+    
     for (int i = 0; i <  mSize; i++) {
-      if (mItems.get(i).conv.getName().equalsIgnoreCase(name)) {
+      ConversationInfo ci = mItems.get(i);
+      if (ci.conv.getName().toLowerCase(Locale.US).equals(name)) {
         return i;
       }
     }
