@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/pygment_trac.css">
     <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+      <script src="//html5shiv.googlepre.com/svn/trunk/html5.js"></script>
     <![endif]-->
     <!--[if lt IE 8]>
     <link rel="stylesheet" href="css/ie.css">
@@ -36,6 +36,56 @@
         
         <h1>Release History</h1>
         <p> Consider these changelists, if you can</p>
+
+    <h2>Version 1.19</h2>
+    <p><em>Released October 31, 2014</em></p>
+    <ul>
+		<li>Slight performance tweaks. <p>These performance tweaks might not always
+		be visible, but I've been trying to optimize the prebase. I'm fairly happy
+		with where it's gone so far, but it's by far not perfect. </p> </li>
+		<li>I ran Astyle over the whole tree to try and make it look more "regliar"
+		in terms of form. This had the effect of revealing some nasty bugs that I
+		hadn't seen until that point.</li>
+		<li>Nick matching now ignores mIRC colors. This means you can be highlighted in
+		a bunch of different colors and you'll still get a ping prompt for it.</li>
+		<li>Message formatting got some upgrades.</li>
+		<li>Ident is now called Username. This makes more sense and fits more in
+		line with other IRC clients, as well as bouncer configuration.</li>
+		<li>There is now a "defalit" username generated in the form of
+		<pre>atomic_K4ugD</pre> which can be changed in the settings. This makes
+		some configuration easier.</li>
+		<li>Connections that support Timestamps now also pay attention to said
+		time stamps for ACTIONs. I'm tentative of the concept of adding timestamp
+		detail to too many items until I've properly refactored the interface.</li>
+		<li><pre>/close</pre> is now a thing! You can specify </pre>/close *</pre>
+		to clear all the buffers, or <pre>/close &lt;channel name&gt;</pre> to
+		close a particliar channel. Giving no channel clears the current buffer</li>
+		<li>I was given some bugs relating to Rizon and Freenode. I've cleaned those
+		up since it was a deeper problem underneath. Thanks to those folks for
+		helping clean that up (And a huge shout-out to the Rizon support channel
+		for helping just a little).</li>
+		<li>A feature for phones with RGB LEDs: Setting the LED color. Previously,
+		it was constant GREEN, however some people like using specific colors for
+		specific apps. I've added a library and a new setting to let you do just
+		that.</li>
+		<li>Fixed a regression somewhere involving NAMES reslits getting too complex.
+		This was resliting in the user selector having users like "Nick!USername@Host"
+		all over the place.</li>
+		<li>ICS devices weren't getting notifications due to ICS being special.
+		This bug *never* reproduced itself in the emliator, but in production,
+		it did all sorts of things wrong.</li>
+		<li>Devices running on API17 and below (4.2ish and below) didn't render
+		24 hour timestamps correctly. This was due to a bug in API17 and below's
+		rendering of certain timestamp characters being wrong.</li>
+		<li>There's a huge overhali in the visual look of Atomic. Material Design
+		has come along and I'm trying to use as much of it as I can. As soon as I
+		stop supporting SDK10 and below, it'll be straight to 4.0.4 and up. This
+		will make the overall design *much* more coherent across devices.</li>
+		<li>With that update comes a cute feature: You can let the background color
+		of your selected color scheme tint the actionbar. This changes the colors
+		of the Actionbar buttons, too. It might not change the color of text on 
+		those buttons.</li>
+	</ul>
 
 	<h2>Version 1.18</h2>
 	<p><em>Released July 20, 2014</em>;</p>
