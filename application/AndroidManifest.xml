@@ -23,7 +23,7 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
     package="indrora.atomic"
     android:installLocation="auto"
     android:versionCode="19"
-    android:versionName="1.19-DEV" >
+    android:versionName="1.19" >
 
     <uses-sdk
         android:minSdkVersion="7"
