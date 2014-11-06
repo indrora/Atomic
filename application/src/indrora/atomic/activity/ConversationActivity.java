@@ -50,6 +50,7 @@ import indrora.atomic.receiver.ConversationReceiver;
 import indrora.atomic.receiver.ServerReceiver;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
@@ -1310,9 +1311,9 @@ public class ConversationActivity extends SherlockActivity implements
    * @return nick without statuschar
    */
   private static String removeStatusChar(String nick) {
-    String prefixes = "!@&%~+";
+    List<Character> prefixes = Arrays.asList(new Character[] { '~','&','@','%','+' });
     int idx =0;
-    while( -1 != prefixes.indexOf (nick.charAt(idx)) ) {
+    while( prefixes.contains(nick.charAt(idx)) ) {
     	idx++;
     }
     return nick.substring(idx);

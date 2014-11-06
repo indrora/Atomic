@@ -1284,21 +1284,11 @@ public abstract class PircBot implements ReplyConstants {
       while (tokenizer.hasMoreTokens()) {
         String nick = tokenizer.nextToken();
         String prefix = "";
-        if (nick.startsWith("@")) {
-          // User is an operator in this channel.
-          prefix = "@";
-        } else if (nick.startsWith("+")) {
-          // User is voiced in this channel.
-          prefix = "+";
-        } else if (nick.startsWith(".")) {
-          // Some wibbly status I've never seen before...
-          prefix = ".";
+        List<Character> prefixes = Arrays.asList(new Character[] {'~','@','+','.','%' } );
+        if(prefixes.contains(nick.charAt(0))) {
+          prefix = ""+nick.charAt(0);
+          nick = nick.substring(1);
         }
-        // XXX: PircBot Patch - Recognize % as prefix - Often used as "half-operator" prefix
-        else if (nick.startsWith("%")) {
-          prefix = "%";
-        }
-        nick = nick.substring(prefix.length());
         // Some IRC servers send just the nick, others send the format <Nick>!<username>@<host>
         // This is unfortunately, not part of the original IRC standard, which defines the pattern to be
         // [=*@](channel)\ \:[@+](nick)(\ [@+](nick))+?
