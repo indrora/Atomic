@@ -30,6 +30,11 @@ package org.jibble.pircbot;
 public interface ReplyConstants {
 
 
+  public static final int RPL_WELCOME = 001;
+  public static final int RPL_YOURHOST = 002;
+  public static final int RPL_CREATED = 003;
+  public static final int RPL_MYINFO = 004;
+  
   // Error Replies.
   public static final int ERR_NOSUCHNICK = 401;
   public static final int ERR_NOSUCHSERVER = 402;

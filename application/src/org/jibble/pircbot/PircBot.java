@@ -408,6 +408,7 @@ public abstract class PircBot implements ReplyConstants {
       if(_inputThread == null || _outputThread == null)
       {
         Log.d("pIRCbot", "Tried sending message on null threads?");
+        return;
       }
       _inputThread.sendRawLine(line);
   }
@@ -1221,8 +1222,17 @@ public abstract class PircBot implements ReplyConstants {
    * @param response The full response from the IRC server.
    */
   private final void processServerResponse(int code, String response) {
-
-    if (code == RPL_LIST) {
+    //android.util.Log.d("PIRCBot", "Server response code => "+code);
+    
+    if(code == RPL_WELCOME) {
+      // This will tell us what our real nick is.
+      String real_nick = response.substring(0,response.indexOf(' '));
+      if(!real_nick.equals(_nick)) {
+        // Our nick has been adjusted or changed by the server.
+        this.setNick(real_nick);
+        this.onUnknown("Your nick has been changed by the server to " + real_nick); 
+      }
+    } else if (code == RPL_LIST) {
       // This is a bit of information about a channel.
       int firstSpace = response.indexOf(' ');
       int secondSpace = response.indexOf(' ', firstSpace + 1);
