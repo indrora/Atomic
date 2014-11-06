@@ -223,17 +223,26 @@ public class Message {
     this.timestamp = timestamp;
   }
 
+
+  private int getSenderColor() { 
+    return getSenderColor(this.sender);
+  }
+  
   /**
    * Associate a color with a sender name
    *
    * @return a color hexa
    */
-  private int getSenderColor() {
+  public static int getSenderColor(String sender) {
     /* It might be worth to use some hash table here */
     if (sender == null) {
-      return _scheme.getForeground();
+      return App.getColorScheme().getForeground();
     }
 
+    if(!App.getSettings().showColorsNick()) {
+      return App.getColorScheme().getForeground();
+    }
+    
     int color = 0;
     int variant = sender.charAt(0);
 
@@ -247,12 +256,12 @@ public class Message {
     variant %= 20;
     // We don't want the color to be the background color.
 
-    final int bg = _scheme.getBackground();
+    final int bg = App.getColorScheme().getBackground();
     int tmpColor;// = _scheme.getMircColor(color);
     do {
 
       float[] hsv = new float[3];
-      Color.colorToHSV(_scheme.getMircColor(color++), hsv);
+      Color.colorToHSV(App.getColorScheme().getMircColor(color++), hsv);
       hsv[0] += variant;
 
       tmpColor = Color.HSVToColor(hsv);
