@@ -55,6 +55,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
+import org.jibble.pircbot.NickConstants;
+
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -1311,9 +1313,8 @@ public class ConversationActivity extends SherlockActivity implements
    * @return nick without statuschar
    */
   private static String removeStatusChar(String nick) {
-    List<Character> prefixes = Arrays.asList(new Character[] { '~','&','@','%','+' });
     int idx =0;
-    while( prefixes.contains(nick.charAt(idx)) ) {
+    while( NickConstants.nickPrefixes.contains(nick.charAt(idx)) ) {
     	idx++;
     }
     return nick.substring(idx);

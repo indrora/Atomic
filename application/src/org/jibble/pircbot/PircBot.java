@@ -1284,10 +1284,11 @@ public abstract class PircBot implements ReplyConstants {
       while (tokenizer.hasMoreTokens()) {
         String nick = tokenizer.nextToken();
         String prefix = "";
-        List<Character> prefixes = Arrays.asList(new Character[] {'~','@','+','.','%' } );
-        if(prefixes.contains(nick.charAt(0))) {
+        if(NickConstants.nickPrefixes.contains(nick.charAt(0))) {
           prefix = ""+nick.charAt(0);
-          nick = nick.substring(1);
+          while(NickConstants.nickPrefixes.contains(nick.charAt(0))) {
+            nick = nick.substring(1);
+          }
         }
         // Some IRC servers send just the nick, others send the format <Nick>!<username>@<host>
         // This is unfortunately, not part of the original IRC standard, which defines the pattern to be
