@@ -456,7 +456,7 @@ public class ConversationActivity extends SherlockActivity implements
    */
   @Override
   public void onResume() {
-    // register the receivers as early as possible, otherwise we may loose a
+    // register the receivers as early as possible, otherwise we may drop a
     // broadcast message
     channelReceiver = new ConversationReceiver(server.getId(), this);
     registerReceiver(channelReceiver, new IntentFilter(
@@ -467,9 +467,8 @@ public class ConversationActivity extends SherlockActivity implements
                        Broadcast.CONVERSATION_REMOVE));
     registerReceiver(channelReceiver, new IntentFilter(
                        Broadcast.CONVERSATION_TOPIC));
-
     registerReceiver(channelReceiver, new IntentFilter(
-        Broadcast.CONVERSATION_CLEAR));
+                       Broadcast.CONVERSATION_CLEAR));
 
     
     serverReceiver = new ServerReceiver(this);
