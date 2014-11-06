@@ -1,6 +1,6 @@
-[![Stories in Ready](https://badge.waffle.io/indrora/Atomic.png?label=ready&title=Ready)](https://waffle.io/indrora/Atomic)
+[![Stories in Ready](https://badge.waffle.io/indrora/Atomic.png?label=ready&title=Ready)](https://waffle.io/indrora/Atomic) [![Build Status](https://travis-ci.org/indrora/Atomic.svg?branch=master)](https://travis-ci.org/indrora/Atomic) [![Crowdin](https://d322cqt584bo4o.cloudfront.net/atomic/localized.png)](https://crowdin.net/project/atomic)
 
-[![Build Status](https://travis-ci.org/indrora/Atomic.svg?branch=master)](https://travis-ci.org/indrora/Atomic) [![Crowdin](https://d322cqt584bo4o.cloudfront.net/atomic/localized.png)](https://crowdin.net/project/atomic)
+ [![F-Droid](https://f-droid.org/wiki/images/0/0f/F-Droid-button_smaller.png)](https://f-droid.org/repository/browse/?fdid=indrora.atomic) (Coming soon to the Android and Amazon app markets!)
 
 Atomic - a Fork of Yaaic
 ========================
