@@ -1310,7 +1310,7 @@ public class ConversationActivity extends SherlockActivity implements
    * @return nick without statuschar
    */
   private static String removeStatusChar(String nick) {
-    String prefixes = "!@&%+";
+    String prefixes = "!@&%~+";
     int idx =0;
     while( -1 != prefixes.indexOf (nick.charAt(idx)) ) {
     	idx++;
