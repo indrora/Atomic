@@ -39,7 +39,6 @@ import indrora.atomic.model.ColorScheme;
 import indrora.atomic.model.Conversation;
 import indrora.atomic.model.Extra;
 import indrora.atomic.model.Message;
-import indrora.atomic.model.Message.MessageColor;
 import indrora.atomic.model.Query;
 import indrora.atomic.model.Scrollback;
 import indrora.atomic.model.Server;
@@ -50,14 +49,13 @@ import indrora.atomic.receiver.ConversationReceiver;
 import indrora.atomic.receiver.ServerReceiver;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
 import org.jibble.pircbot.NickConstants;
 
-import android.annotation.TargetApi;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.ComponentName;
@@ -88,9 +86,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.View.OnKeyListener;
-import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -112,16 +108,16 @@ import com.actionbarsherlock.view.MenuItem;
 public class ConversationActivity extends SherlockActivity implements
     ServiceConnection, ServerListener, ConversationListener,
     OnPageChangeListener {
-  public static final int    REQUEST_CODE_SPEECH          = 99;
+  public static final int REQUEST_CODE_SPEECH = 99;
 
-  private static final int   REQUEST_CODE_JOIN            = 1;
+  private static final int REQUEST_CODE_JOIN = 1;
   @SuppressWarnings("unused")
-  private static final int   REQUEST_CODE_USERS           = 2;
+  private static final int REQUEST_CODE_USERS = 2;
   @SuppressWarnings("unused")
-  private static final int   REQUEST_CODE_USER            = 3;
-  private static final int   REQUEST_CODE_NICK_COMPLETION = 4;
+  private static final int REQUEST_CODE_USER = 3;
+  private static final int REQUEST_CODE_NICK_COMPLETION = 4;
 
-  public static final String EXTRA_TARGET                 = "target";
+  public static final String EXTRA_TARGET = "target";
 
   private static ColorScheme _scheme;
 
@@ -129,17 +125,17 @@ public class ConversationActivity extends SherlockActivity implements
     return _scheme;
   }
 
-  private int                      serverId;
-  private Server                   server;
-  private IRCBinder                binder;
-  private ConversationReceiver     channelReceiver;
-  private ServerReceiver           serverReceiver;
+  private int serverId;
+  private Server server;
+  private IRCBinder binder;
+  private ConversationReceiver channelReceiver;
+  private ServerReceiver serverReceiver;
 
-  private ViewPager                pager;
-  private ConversationIndicator    indicator;
+  private ViewPager pager;
+  private ConversationIndicator indicator;
   private ConversationPagerAdapter pagerAdapter;
 
-  private Scrollback               scrollback;
+  private Scrollback scrollback;
 
   // XXX: This is ugly. This is a buffer for a channel that should be joined
   // after showing the
@@ -151,85 +147,72 @@ public class ConversationActivity extends SherlockActivity implements
   // will save the
   // channel name in onActivityResult() and run the join command in
   // onResume().
-  private String                   joinChannelBuffer;
+  private String joinChannelBuffer;
 
-  private int                      historySize;
+  private int historySize;
 
-  private boolean                  reconnectDialogActive = false;
+  private boolean reconnectDialogActive = false;
 
-  private final OnKeyListener      inputKeyListener      = new OnKeyListener() {
-                                                           /**
-                                                            * On key pressed
-                                                            * (input line)
-                                                            */
-                                                           @Override
-                                                           public boolean onKey(
-                                                               View view,
-                                                               int keyCode,
-                                                               KeyEvent event) {
-                                                             EditText input = (EditText) view;
+  private final OnKeyListener inputKeyListener = new OnKeyListener()
+  {
+    /**
+     * On key pressed (input line)
+     */
+    @Override
+    public boolean onKey(View view, int keyCode, KeyEvent event) {
+      EditText input = (EditText) view;
 
-                                                             if (event
-                                                                 .getAction() != KeyEvent.ACTION_DOWN) {
-                                                               return false;
-                                                             }
+      if (event.getAction() != KeyEvent.ACTION_DOWN) {
+        return false;
+      }
 
-                                                             if (keyCode == KeyEvent.KEYCODE_DPAD_UP) {
-                                                               String message = scrollback
-                                                                   .goBack();
-                                                               if (message != null) {
-                                                                 input
-                                                                     .setText(message);
-                                                               }
-                                                               return true;
-                                                             }
+      if (keyCode == KeyEvent.KEYCODE_DPAD_UP) {
+        String message = scrollback.goBack();
+        if (message != null) {
+          input.setText(message);
+        }
+        return true;
+      }
 
-                                                             if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
-                                                               String message = scrollback
-                                                                   .goForward();
-                                                               if (message != null) {
-                                                                 input
-                                                                     .setText(message);
-                                                               }
-                                                               return true;
-                                                             }
+      if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
+        String message = scrollback.goForward();
+        if (message != null) {
+          input.setText(message);
+        }
+        return true;
+      }
 
-                                                             if (keyCode == KeyEvent.KEYCODE_ENTER) {
-                                                               sendMessage(input
-                                                                   .getText()
-                                                                   .toString());
+      if (keyCode == KeyEvent.KEYCODE_ENTER) {
+        sendMessage(input.getText().toString());
 
-                                                               // Workaround for
-                                                               // a race
-                                                               // condition in
-                                                               // EditText
-                                                               // Instead of
-                                                               // calling
-                                                               // input.setText("");
-                                                               // See:
-                                                               // -
-                                                               // https://github.com/pocmo/Yaaic/issues/67
-                                                               // -
-                                                               // http://code.google.com/p/android/issues/detail?id=17508
-                                                               TextKeyListener
-                                                                   .clear(input
-                                                                       .getText());
+        // Workaround for
+        // a race
+        // condition in
+        // EditText
+        // Instead of
+        // calling
+        // input.setText("");
+        // See:
+        // -
+        // https://github.com/pocmo/Yaaic/issues/67
+        // -
+        // http://code.google.com/p/android/issues/detail?id=17508
+        TextKeyListener.clear(input.getText());
 
-                                                               return true;
-                                                             }
+        return true;
+      }
 
-                                                             // Nick completion
-                                                             if (keyCode == KeyEvent.KEYCODE_SEARCH
-                                                                 || keyCode == KeyEvent.KEYCODE_TAB) {
-                                                               doNickCompletion(input);
-                                                               return true;
-                                                             }
+      // Nick completion
+      if (keyCode == KeyEvent.KEYCODE_SEARCH || keyCode == KeyEvent.KEYCODE_TAB) {
+        doNickCompletion(input);
+        return true;
+      }
 
-                                                             return false;
-                                                           }
-                                                         };
+      return false;
+    }
+  };
 
-  Settings                         settings;
+  Settings settings;
 
   /**
    * On create
@@ -269,7 +252,8 @@ public class ConversationActivity extends SherlockActivity implements
 
     // Fix from https://groups.google.com/forum/#!topic/yaaic/Z4bXZXvW7UM
 
-    input.setOnClickListener(new EditText.OnClickListener() {
+    input.setOnClickListener(new EditText.OnClickListener()
+    {
       public void onClick(View v) {
         openSoftKeyboard(v);
       }
@@ -362,7 +346,8 @@ public class ConversationActivity extends SherlockActivity implements
     // Magic.
     final EditText tt = input;
     final ConversationActivity cv = this;
-    input.setOnTouchListener(new View.OnTouchListener() {
+    input.setOnTouchListener(new View.OnTouchListener()
+    {
 
       @Override
       public boolean onTouch(View v, MotionEvent event) {
@@ -372,6 +357,10 @@ public class ConversationActivity extends SherlockActivity implements
 
         if (event.getAction() == MotionEvent.ACTION_UP && tappedX) {
           cv.doNickCompletion(tt);
+        }
+        else
+        {
+          (v).performClick();
         }
         return false;
       }
@@ -473,6 +462,7 @@ public class ConversationActivity extends SherlockActivity implements
   /**
    * On resume
    */
+  @SuppressLint("InlinedApi")
   @Override
   public void onResume() {
     // register the receivers as early as possible, otherwise we may drop a
@@ -513,7 +503,7 @@ public class ConversationActivity extends SherlockActivity implements
     intent.setAction(IRCService.ACTION_FOREGROUND);
     startService(intent);
     int flags = 0;
-    if (android.os.Build.VERSION.SDK_INT > 13) {
+    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
       flags |= Context.BIND_ABOVE_CLIENT;
       flags |= Context.BIND_IMPORTANT;
     }
@@ -566,7 +556,8 @@ public class ConversationActivity extends SherlockActivity implements
     // Join channel that has been selected in JoinActivity
     // (onActivityResult())
     if (joinChannelBuffer != null) {
-      new Thread() {
+      new Thread()
+      {
         @Override
         public void run() {
           binder.getService().getConnection(serverId)
@@ -718,14 +709,16 @@ public class ConversationActivity extends SherlockActivity implements
 
           userlistBuilder.setTitle("Users");
 
-          OnClickListener NickSelectorListener = new OnClickListener() {
+          OnClickListener NickSelectorListener = new OnClickListener()
+          {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
               final String nick = nicks[which];
               // This is the OnClickListener to actually do something.
 
-              OnClickListener NickActionListener = new OnClickListener() {
+              OnClickListener NickActionListener = new OnClickListener()
+              {
 
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -828,13 +821,17 @@ public class ConversationActivity extends SherlockActivity implements
               }
               Drawable d = getResources().getDrawable(drawableRes);
               d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
-              ss.setSpan(new ImageSpan(d), 0, 1, SpannableString.SPAN_INCLUSIVE_EXCLUSIVE);
+              ss.setSpan(new ImageSpan(d), 0, 1,
+                  SpannableString.SPAN_INCLUSIVE_EXCLUSIVE);
             }
-            ss.setSpan(new ForegroundColorSpan(Message.getSenderColor(nick)), 0, nick.length(), SpannableString.SPAN_INCLUSIVE_INCLUSIVE);
+            ss.setSpan(new ForegroundColorSpan(Message.getSenderColor(nick)),
+                0, nick.length(), SpannableString.SPAN_INCLUSIVE_INCLUSIVE);
             coloredNicks.add(ss);
           }
 
-          userlistBuilder.setItems(coloredNicks.toArray(new CharSequence[coloredNicks.size()]), NickSelectorListener);
+          userlistBuilder.setItems(
+              coloredNicks.toArray(new CharSequence[coloredNicks.size()]),
+              NickSelectorListener);
           userlistBuilder.show();
 
         } else {
@@ -847,20 +844,26 @@ public class ConversationActivity extends SherlockActivity implements
       case R.id.chooseConversation:
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Choose Conversation");
-        CharSequence[] conversationsArr = new CharSequence[pagerAdapter.getCount()];
+        CharSequence[] conversationsArr = new CharSequence[pagerAdapter
+            .getCount()];
         for (int i = 0; i < pagerAdapter.getCount(); i++) {
           Conversation c = pagerAdapter.getItem(i);
-          CharSequence title = ( c.getName().equals("")?server.getTitle():c.getName() );
-          if(c.getNewMentions()>0)
-          {
-            SpannableString unread = new SpannableString ("("+c.getNewMentions()+")");
-            unread.setSpan(new ForegroundColorSpan(getResources().getColor(android.R.color.secondary_text_dark_nodisable)), 0, unread.length(), SpannableString.SPAN_INCLUSIVE_INCLUSIVE);
-            title = TextUtils.concat(title," ", unread);
+          CharSequence title = (c.getName().equals("") ? server.getTitle() : c
+              .getName());
+          if (c.getNewMentions() > 0) {
+            SpannableString unread = new SpannableString("("
+                + c.getNewMentions() + ")");
+            unread.setSpan(
+                new ForegroundColorSpan(getResources().getColor(
+                    android.R.color.secondary_text_dark_nodisable)), 0,
+                unread.length(), SpannableString.SPAN_INCLUSIVE_INCLUSIVE);
+            title = TextUtils.concat(title, " ", unread);
           }
           conversationsArr[i] = title;
         }
 
-        OnClickListener listener = new OnClickListener() {
+        OnClickListener listener = new OnClickListener()
+        {
 
           @Override
           public void onClick(DialogInterface dialog, int which) {
@@ -1030,7 +1033,8 @@ public class ConversationActivity extends SherlockActivity implements
                 getResources().getString(R.string.reconnect_after_disconnect,
                     server.getTitle()))
             .setCancelable(false)
-            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+            {
               @Override
               public void onClick(DialogInterface dialog, int id) {
                 if (!server.isDisconnected()) {
@@ -1045,7 +1049,8 @@ public class ConversationActivity extends SherlockActivity implements
               }
             })
             .setNegativeButton(getString(R.string.negative_button),
-                new DialogInterface.OnClickListener() {
+                new DialogInterface.OnClickListener()
+                {
                   @Override
                   public void onClick(DialogInterface dialog, int id) {
                     server.setMayReconnect(false);
@@ -1267,7 +1272,8 @@ public class ConversationActivity extends SherlockActivity implements
         }
         // Now, take that list of possible user and let someone choose
         // who wins.
-        b.setItems(extra, new OnClickListener() {
+        b.setItems(extra, new OnClickListener()
+        {
 
           @Override
           public void onClick(DialogInterface dialog, int which) {
@@ -1305,7 +1311,8 @@ public class ConversationActivity extends SherlockActivity implements
     // put cursor after inserted text
     input.setSelection(start + nick.length());
     input.clearComposingText();
-    input.post(new Runnable() {
+    input.post(new Runnable()
+    {
       @Override
       public void run() {
         // make the softkeyboard come up again (only if no hw keyboard
