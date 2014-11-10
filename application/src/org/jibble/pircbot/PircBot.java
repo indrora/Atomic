@@ -173,23 +173,41 @@ public abstract class PircBot implements ReplyConstants {
 
     // Connect to the server.
 
-    // XXX: PircBot Patch for SSL
-    if (_useSSL) {
-      try {
-        this.onConnectionMessage("Opening SSL connection...");
-        SSLContext context = SSLContext.getInstance("TLS");
-        context.init(null, _trustManagers , new SecureRandom());
-        SSLSocketFactory factory = context.getSocketFactory();
-        SSLSocket ssocket = (SSLSocket) factory.createSocket(hostname, port);
-        ssocket.startHandshake();
-        _socket = ssocket;
-      } catch(Exception e) {
-        throw new SSLException("SSL certificate denied: "+e.getMessage(), e);
-      }
-    } else {
-      _socket =  new Socket(hostname, port);
-    }
+    try {
 
+      // XXX: PircBot Patch for SSL
+      if (_useSSL) {
+        try {
+          this.onConnectionMessage("Opening SSL connection...");
+          SSLContext context = SSLContext.getInstance("TLS");
+          context.init(null, _trustManagers, new SecureRandom());
+          SSLSocketFactory factory = context.getSocketFactory();
+          SSLSocket ssocket;
+          try {
+            ssocket = (SSLSocket) factory.createSocket(hostname, port);
+          } catch (Exception exx) {
+            throw new IOException("Error opening socket: "+exx.toString(), exx);
+          }
+          try {
+            ssocket.startHandshake();
+          } catch(Exception exx) {
+            throw new SSLException("SSL handshake failed: "+exx.toString(), exx);
+          }
+          _socket = ssocket;
+        } catch (Exception e) {
+          throw new SSLException("SSL connection failed: " + e.getMessage(), e);
+        }
+
+      } else {
+        try {
+          _socket = new Socket(hostname, port);
+        } catch (Exception exx) {
+          throw new IOException("Error opening socket: "+exx.toString(), exx);
+        }
+      }
+    } catch (IOException ex) {
+      throw new IOException("Problem connecting to server: "+ex.toString());
+    }
 
     // This makes the socket timeout on read operations after 5 minutes.
     // Maybe in some future version I will let the user change this at runtime.

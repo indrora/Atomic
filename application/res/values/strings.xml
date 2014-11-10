@@ -287,8 +287,8 @@
     
     <string name="settings_connection">Connection</string>
     
-    <string name="settings_reconnect_title">Reconnect</string>
-    <string name="settings_reconnect_desc">Automatically reconnect on disconnect</string>
+    <string name="settings_reconnect_error_title">Reconnect on error</string>
+    <string name="settings_reconnect_error_desc">Reconnect on network issue</string>
     
     <string name="settings_reconnect_interval_title">Reconnect interval</string>
     

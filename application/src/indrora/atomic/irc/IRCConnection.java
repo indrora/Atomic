@@ -1148,11 +1148,23 @@ public class IRCConnection extends PircBot {
 
     hasDoneAutorun.reset(); // Reset so that autorun will happen.
 
+    // This is a somewhat scary proposition
+    // Basically, if the settings say "reconnect on problem" and
+    // the server is in a non-disconnect status
+    // reconnect it immediately. 
     if (service.getSettings().isReconnectEnabled() && server.getStatus() != Status.DISCONNECTED) {
       setAutojoinChannels(server.getCurrentChannelNames());
 
-      server.setStatus(Status.CONNECTING);
+      server.setStatus(Status.RECONNECTING);
+      
+      Intent sIntent = Broadcast.createServerIntent(Broadcast.SERVER_UPDATE, server.getId());
+      service.sendBroadcast(sIntent);
+
+      service.checkServiceStatus();
+      
       service.connect(server);
+
+      
     } else {
       server.setStatus(Status.DISCONNECTED);
     }

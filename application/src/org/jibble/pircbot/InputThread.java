@@ -17,6 +17,10 @@ package org.jibble.pircbot;
 import java.io.*;
 import java.net.*;
 
+import javax.net.ssl.SSLException;
+
+import android.util.Log;
+
 /**
  * A Thread which reads lines from the IRC server.  It then
  * passes these lines to the PircBot without changing them.
@@ -106,9 +110,26 @@ public class InputThread extends Thread {
           // So we shall send it a ping to check that we are still connected.
           this.sendRawLine("PING " + (System.currentTimeMillis() / 1000));
           // Now we go back to listening for stuff from the server...
+        } catch (SSLException ssle) {
+          running = false;
+          try {
+            _socket.close();
+            _isConnected = false;
+          } catch (Exception e) {
+            ;
+          }
+          _bot.onDisconnect();
+          return;
+        } catch(IOException ee) {
+          _socket.close();
+          _isConnected = false;
+          running = false;
+          _bot.onDisconnect();
+          return;
         }
       }
     } catch (Exception e) {
+      Log.e("pIRCbot", "inputThread had a booboo", e);
       // Do nothing.
     }
 

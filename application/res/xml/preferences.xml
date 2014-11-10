@@ -50,20 +50,10 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
                 android:summary="@string/settings_reconnect_loss_desc"
                 android:title="@string/settings_reconnect_loss_title" />
             <CheckBoxPreference
-                android:defaultValue="@string/default_reconnect"
-                android:key="@string/key_reconnect"
-                android:summary="@string/settings_reconnect_desc"
-                android:title="@string/settings_reconnect_title" />
-
-            <ListPreference
-                android:defaultValue="@string/default_reconnect_interval"
-                android:dependency="@string/key_reconnect"
-                android:dialogTitle="@string/settings_reconnect_interval_dialog_title"
-                android:entries="@array/reconnect_interval_labels"
-                android:entryValues="@array/reconnect_interval_values"
-                android:key="@string/key_reconnect_interval"
-                android:summary="@string/settings_reconnect_interval_desc"
-                android:title="@string/settings_reconnect_interval_title" />
+                android:defaultValue="@string/default_reconnect_error"
+                android:key="@string/key_reconnect_error"
+                android:summary="@string/settings_reconnect_error_desc"
+                android:title="@string/settings_reconnect_error_title" />
 
             <CheckBoxPreference
                 android:defaultValue="@string/default_ignore_motd"

@@ -63,6 +63,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.NetworkInfo.State;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationCompat.Builder;
@@ -107,10 +109,6 @@ public class IRCService extends Service {
   private final Object[] mStopForegroundArgs = new Object[1];
   private Notification notification;
   private Settings settings;
-
-  private HashMap<Integer, PendingIntent> alarmIntents;
-  private HashMap<Integer, ReconnectReceiver> alarmReceivers;
-  private final Object alarmIntentsLock;
 
   /****
    *
@@ -176,9 +174,7 @@ public class IRCService extends Service {
     this.binder = new IRCBinder(this);
     this.connectedServerTitles = new ArrayList<String>();
     this.mentions = new LinkedHashMap<String, Conversation>();
-    this.alarmIntents = new HashMap<Integer, PendingIntent>();
-    this.alarmReceivers = new HashMap<Integer, ReconnectReceiver>();
-    this.alarmIntentsLock = new Object();
+
     reconnectNextNetwork = new ArrayList<Integer>();
   }
 
@@ -367,6 +363,7 @@ public class IRCService extends Service {
       .setWhen(System.currentTimeMillis())
       .setContentText(getText(R.string.notification_running))
       .setTicker(getText(R.string.notification_not_connected))
+      .setContentTitle(getText(R.string.app_name))
       .setContentIntent(contentIntent)
       .build();
 
@@ -450,7 +447,6 @@ public class IRCService extends Service {
       }
 
       PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-      //notification.setLatestEventInfo(this, getText(R.string.app_name), contentText, contentIntent);
 
       notificationB.setContentIntent(contentIntent);
       notificationB.setContentTitle(getText(R.string.app_name));
@@ -643,7 +639,6 @@ public class IRCService extends Service {
    */
   public void connect(final Server server) {
     final int serverId = server.getId();
-    final int reconnectInterval = settings.getReconnectInterval()*60000;
     final IRCService service = this;
 
     if (settings.isReconnectEnabled()) {
@@ -653,20 +648,13 @@ public class IRCService extends Service {
     new Thread("Connect thread for " + server.getTitle()) {
       @Override
       public void run() {
-        synchronized(alarmIntentsLock) {
-          if(alarmIntents == null) return;
-          alarmIntents.remove(serverId);
-          ReconnectReceiver lastReceiver = alarmReceivers.remove(serverId);
-          if (lastReceiver != null) {
-            unregisterReceiver(lastReceiver);
-          }
-        }
 
         if (settings.isReconnectEnabled() && !server.mayReconnect()) {
           return;
         }
 
         try {
+          I_AM_A_HORRIBLE_BASTARD: ;
           IRCConnection connection = getConnection(serverId);
 
           connection.setNickname(server.getIdentity().getNickname());
@@ -706,7 +694,7 @@ public class IRCService extends Service {
           Intent sIntent = Broadcast.createServerIntent(Broadcast.SERVER_UPDATE, serverId);
           sendBroadcast(sIntent);
 
-          IRCConnection connection = getConnection(serverId);
+          final IRCConnection connection = getConnection(serverId);
 
           Message message;
 
@@ -721,18 +709,39 @@ public class IRCService extends Service {
             // We should check what really happened.
             message = new Message("SSL negotiation failed: "+e.toString());
           } else {
-            message = new Message(getString(R.string.could_not_connect, server.getHost(), server.getPort()) +":\n"+e.getMessage());
+            message = new Message(getString(R.string.could_not_connect, server.getHost(), server.getPort()) +":\n"+e.toString());
 
             if (settings.isReconnectEnabled()) {
-              Intent rIntent = new Intent(Broadcast.SERVER_RECONNECT + serverId);
-              PendingIntent pendingRIntent = PendingIntent.getBroadcast(service, 0, rIntent, 0);
-              AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
-              ReconnectReceiver receiver = new ReconnectReceiver(service, server);
-              synchronized(alarmIntentsLock) {
-                alarmReceivers.put(serverId, receiver);
-                registerReceiver(receiver, new IntentFilter(Broadcast.SERVER_RECONNECT + serverId));
-                am.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + reconnectInterval, pendingRIntent);
-                alarmIntents.put(serverId, pendingRIntent);
+
+              server.setStatus(Status.RECONNECTING);
+              IRCService.this.sendBroadcast(Broadcast.createServerIntent(
+                  Broadcast.SERVER_UPDATE, serverId));
+
+              if (_isTransient && ( settings.reconnectTransient() || settings.reconnectLoss() )) {
+                reconnectNextNetwork.add(serverId);
+                message = new Message(
+                    "Connection will be established once network is connected");
+              } else {
+                message = new Message("Reconnecting to server... ");
+                Runnable r = new Runnable()
+                {
+
+                  @Override
+                  public void run() {
+                    Log.d("IRCService", "In reconnect thread!");
+                    connection.disconnect();
+                    try {
+                      Thread.sleep(5000);
+                    } catch (Exception eee) {
+                      ;
+                      ;
+                    }
+                    if (server.getStatus() != Status.DISCONNECTED) {
+                      connect(server);
+                    }
+                  }
+                };
+                (new Thread(r)).run();
               }
             }
           }
@@ -752,6 +761,10 @@ public class IRCService extends Service {
     } .start();
   }
 
+  private void runRunnable(Runnable r) {
+    (new Handler()).post(r);
+  }
+  
   /**
    * Get connection for given server
    *
@@ -798,21 +811,6 @@ public class IRCService extends Service {
           }
           connections.remove(serverId);
         }
-
-        synchronized(alarmIntentsLock) {
-          // XXX: alarmIntents can be null
-          PendingIntent pendingRIntent = alarmIntents.get(serverId);
-          if (pendingRIntent != null) {
-            AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
-            am.cancel(pendingRIntent);
-            alarmIntents.remove(serverId);
-          }
-          ReconnectReceiver receiver = alarmReceivers.get(serverId);
-          if (receiver != null) {
-            unregisterReceiver(receiver);
-            alarmReceivers.remove(serverId);
-          }
-        }
       } else {
         shutDown = false;
       }
@@ -835,19 +833,6 @@ public class IRCService extends Service {
       stopForegroundCompat(R.string.app_name);
     }
 
-    AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
-    synchronized(alarmIntentsLock) {
-      for (PendingIntent pendingRIntent : alarmIntents.values()) {
-        am.cancel(pendingRIntent);
-      }
-      for (ReconnectReceiver receiver : alarmReceivers.values()) {
-        unregisterReceiver(receiver);
-      }
-      alarmIntents.clear();
-      alarmIntents = null;
-      alarmReceivers.clear();
-      alarmReceivers = null;
-    }
     unregisterReceiver(_netTransitionHandler);
   }
 

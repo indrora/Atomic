@@ -18,8 +18,8 @@
     <string name="key_include_seconds" translatable="false">include_seconds</string>
     <string name="default_include_seconds" translatable="false">true</string>
 
-    <string name="key_reconnect" translatable="false">reconnect</string>
-    <string name="default_reconnect" translatable="false">false</string>
+    <string name="key_reconnect_error" translatable="false">reconnect_error</string>
+    <string name="default_reconnect_error" translatable="false">false</string>
     
     <string name="key_reconnect_interval" translatable="false">reconnect_interval</string>
     <string name="default_reconnect_interval" translatable="false">5</string>

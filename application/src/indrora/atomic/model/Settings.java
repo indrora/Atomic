@@ -138,20 +138,10 @@ public class Settings {
    * @return
    */
   public boolean isReconnectEnabled() {
-    return preferences.getBoolean(resources.getString(R.string.key_reconnect),
-        Boolean.parseBoolean(resources.getString(R.string.default_reconnect)));
+    return preferences.getBoolean(resources.getString(R.string.key_reconnect_error),
+        Boolean.parseBoolean(resources.getString(R.string.default_reconnect_error)));
   }
 
-  /**
-   * Get the reconnect interval
-   * 
-   * @return The reconnect interval in minutes
-   */
-  public int getReconnectInterval() {
-    return Integer.parseInt(preferences.getString(
-        resources.getString(R.string.key_reconnect_interval),
-        resources.getString(R.string.default_reconnect_interval)));
-  }
 
   /**
    * Ignore the automatic MOTD?
