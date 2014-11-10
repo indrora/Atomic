@@ -23,13 +23,15 @@ package indrora.atomic.activity;
 import indrora.atomic.R;
 
 import android.os.Bundle;
+import android.preference.PreferenceActivity;
 
 /**
  * Settings
  *
  * @author Sebastian Kaspari <sebastian@yaaic.org>
  */
-public class SettingsActivity extends com.actionbarsherlock.app.SherlockPreferenceActivity {
+public class SettingsActivity extends PreferenceActivity
+{
   /**
    * On create
    */
@@ -38,6 +40,4 @@ public class SettingsActivity extends com.actionbarsherlock.app.SherlockPreferen
     super.onCreate(savedInstanceState);
     addPreferencesFromResource(R.xml.preferences);
   }
-
-
 }

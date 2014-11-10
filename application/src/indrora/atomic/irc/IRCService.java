@@ -354,25 +354,21 @@ public class IRCService extends Service {
       }
       foreground = true;
 
+      
+      Intent notifyIntent = new Intent(this, ServersActivity.class);
+      notifyIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+      PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notifyIntent, 0);
+
+      
       // Set the icon, scrolling text and timestamp
       // now using NotificationCompat for Linter happiness
       notification = new NotificationCompat.Builder(getBaseContext())
       .setSmallIcon(R.drawable.ic_service_icon)
       .setWhen(System.currentTimeMillis())
       .setContentText(getText(R.string.notification_running))
+      .setTicker(getText(R.string.notification_not_connected))
+      .setContentIntent(contentIntent)
       .build();
-      //notification = new Notification(R.drawable.ic_service_icon, getText(R.string.notification_running), System.currentTimeMillis());
-
-      // The PendingIntent to launch our activity if the user selects this notification
-      Intent notifyIntent = new Intent(this, ServersActivity.class);
-      notifyIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-      PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notifyIntent, 0);
-
-      // Set the info for the views that show in the notification panel.
-      notification.setLatestEventInfo(this,
-                                      getText(R.string.app_name),
-                                      getText(R.string.notification_not_connected),
-                                      contentIntent);
 
       startForegroundCompat(FOREGROUND_NOTIFICATION, notification);
     } else if (ACTION_BACKGROUND.equals(intent.getAction()) && !foreground) {
@@ -382,7 +378,7 @@ public class IRCService extends Service {
     }
   }
 
-  long lastVibrationTime = 0;
+  long lastYellTime = 0;
   
   /**
    * Update notification and vibrate and/or flash a LED light if needed
@@ -400,9 +396,10 @@ public class IRCService extends Service {
       // NotificationCompat does the right things for ICS
       // and other various variants. Seriously, Google?
 
-      notification =  new NotificationCompat.Builder(getBaseContext())
+      
+      NotificationCompat.Builder notificationB =  new NotificationCompat.Builder(getBaseContext())
       .setSmallIcon(R.drawable.ic_service_icon)
-      .setWhen(System.currentTimeMillis()).build();
+      .setWhen(System.currentTimeMillis());
 
       
       Intent notifyIntent = new Intent(this, ServersActivity.class);
@@ -424,12 +421,13 @@ public class IRCService extends Service {
           
           int ServerID = -1;
           String Convo = "";
-          for (String convID : mentions.keySet()) {
+          
+          String convID = ((String)(mentions.keySet().toArray()[mentions.size()-1]));
             ServerID = Integer
                 .parseInt(convID.substring(0, convID.indexOf(':')));
             Convo = convID.substring(convID.indexOf(':') + 1);
-          }
           
+
           Log.d("IRCService", "Jump target is '" + Convo + "'");
           notifyIntent.setClass(this, ConversationActivity.class);
           notifyIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
@@ -452,22 +450,36 @@ public class IRCService extends Service {
       }
 
       PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-      notification.setLatestEventInfo(this, getText(R.string.app_name), contentText, contentIntent);
+      //notification.setLatestEventInfo(this, getText(R.string.app_name), contentText, contentIntent);
 
+      notificationB.setContentIntent(contentIntent);
+      notificationB.setContentTitle(getText(R.string.app_name));
+      notificationB.setOngoing(true);
+      notificationB.setContentText(contentText);
+      if(text != null) {
+        notificationB.setTicker(text);
+      }
+      
       // We only want to vibrate if it's been $ARBITRARY_AMOUNT_OF_TIME
       // since we last buzzed.
       
-      boolean actual_vibrate = vibrate && (System.currentTimeMillis() - lastVibrationTime > 2000);
+      boolean be_loud = (lastYellTime + 2000 < System.currentTimeMillis());
+      
+      // At this point we need to do some magic.
+      notification = notificationB.build();
 
-      if (actual_vibrate) {
-        notification.defaults |= Notification.DEFAULT_VIBRATE;
-        lastVibrationTime = System.currentTimeMillis();
-      }
+      if (be_loud) {
 
-      if (sound) {
-        // buzz the user with an audible sound.
-        notification.sound = settings.getHighlightSoundLocation();
+        if (vibrate) {
+          notification.defaults |= Notification.DEFAULT_VIBRATE;
+        }
 
+        if (sound) {
+          // buzz the user with an audible sound.
+          notification.sound = settings.getHighlightSoundLocation();
+
+        }
+        lastYellTime = System.currentTimeMillis();
       }
 
       if (light) {
@@ -476,8 +488,6 @@ public class IRCService extends Service {
         notification.ledOffMS  = NOTIFICATION_LED_OFF_MS;
         notification.flags    |= Notification.FLAG_SHOW_LIGHTS;
       }
-
-
 
       notification.number = newMentions;
 

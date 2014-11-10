@@ -37,6 +37,7 @@ import indrora.atomic.utils.LatchingValue;
 import java.util.ArrayList;
 
 import indrora.atomic.R;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.Service;
@@ -52,6 +53,9 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.text.format.Time;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -59,17 +63,13 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 
 /**
  * List of servers
  *
  * @author Sebastian Kaspari <sebastian@yaaic.org>
  */
-public class ServersActivity extends SherlockActivity implements ServiceConnection, ServerListener, OnItemClickListener, OnItemLongClickListener {
+public class ServersActivity extends Activity implements ServiceConnection, ServerListener, OnItemClickListener, OnItemLongClickListener {
   private IRCBinder binder;
   private ServerReceiver receiver;
   private ServerListAdapter adapter;

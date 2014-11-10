@@ -25,9 +25,9 @@ import java.util.TimeZone;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import com.actionbarsherlock.app.SherlockActivity;
 
 import indrora.atomic.R;
+import android.app.Activity;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -40,7 +40,7 @@ import android.widget.TextView;
  *
  * @author Sebastian Kaspari <sebastian@yaaic.org>
  */
-public class AboutActivity extends SherlockActivity {
+public class AboutActivity extends Activity {
   /**
    * On activity getting created.
    */
@@ -49,7 +49,7 @@ public class AboutActivity extends SherlockActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.about);
 
-    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    getActionBar().setDisplayHomeAsUpEnabled(true);
 
     try {
       

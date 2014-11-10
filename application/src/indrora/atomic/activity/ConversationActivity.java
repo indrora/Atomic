@@ -56,6 +56,8 @@ import java.util.Locale;
 import org.jibble.pircbot.NickConstants;
 
 import android.annotation.SuppressLint;
+import android.app.ActionBar;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.ComponentName;
@@ -84,6 +86,9 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnKeyListener;
@@ -94,18 +99,12 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
-
 /**
  * The server view with a scrollable list of all channels
  * 
  * @author Sebastian Kaspari <sebastian@yaaic.org>
  */
-public class ConversationActivity extends SherlockActivity implements
+public class ConversationActivity extends Activity implements
     ServiceConnection, ServerListener, ConversationListener,
     OnPageChangeListener {
   public static final int REQUEST_CODE_SPEECH = 99;
@@ -238,7 +237,7 @@ public class ConversationActivity extends SherlockActivity implements
       this.finish();
     }
 
-    ActionBar actionBar = getSupportActionBar();
+    ActionBar actionBar = getActionBar();
     actionBar.setDisplayHomeAsUpEnabled(true);
 
     setTitle(server.getTitle());
@@ -434,7 +433,7 @@ public class ConversationActivity extends SherlockActivity implements
     if (settings.tintActionbar()) {
       // the ActionBar can be tinted. This is really cool.
       // Get the ActionBar
-      ActionBar ab = getSupportActionBar();
+      ActionBar ab = getActionBar();
       // Make its background drawable a ColorDrawable
       ab.setBackgroundDrawable(new ColorDrawable(App.getColorScheme()
           .getBackground()));
@@ -449,7 +448,7 @@ public class ConversationActivity extends SherlockActivity implements
       // Now, set our spannable to be the ActionBar title.
       ab.setTitle(st);
     } else {
-      (getSupportActionBar()).setTitle(server.getTitle());
+      (getActionBar()).setTitle(server.getTitle());
     }
     EditText input = (EditText) findViewById(R.id.input);
     LinearLayout lll = (LinearLayout) (input.getParent());
@@ -1353,7 +1352,7 @@ public class ConversationActivity extends SherlockActivity implements
   }
 
   private void hideSubtitle() {
-    ActionBar ab = getSupportActionBar();
+    ActionBar ab = getActionBar();
     CharSequence t = ab.getTitle();
     ab.setDisplayShowTitleEnabled(false);
     ab.setSubtitle(null);
@@ -1362,7 +1361,7 @@ public class ConversationActivity extends SherlockActivity implements
   }
 
   private void showSubtitle() {
-    ActionBar ab = getSupportActionBar();
+    ActionBar ab = getActionBar();
     ab.setTitle(server.getTitle());
 
     Conversation c = pagerAdapter.getItem(pager.getCurrentItem());

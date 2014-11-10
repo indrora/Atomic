@@ -36,10 +36,15 @@ import java.util.regex.Pattern;
 
 import indrora.atomic.R;
 
+import android.app.ActionBar;
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -49,18 +54,12 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
-
 /**
  * Add a new server to the list
  *
  * @author Sebastian Kaspari <sebastian@yaaic.org>
  */
-public class AddServerActivity extends SherlockActivity implements OnClickListener {
+public class AddServerActivity extends Activity implements OnClickListener {
   private static final int REQUEST_CODE_CHANNELS       = 1;
   private static final int REQUEST_CODE_COMMANDS       = 2;
   private static final int REQUEST_CODE_ALIASES        = 3;
@@ -91,7 +90,7 @@ public class AddServerActivity extends SherlockActivity implements OnClickListen
     
     setContentView(R.layout.serveradd);
 
-    ActionBar actionBar = getSupportActionBar();
+    ActionBar actionBar = getActionBar();
     actionBar.setDisplayHomeAsUpEnabled(true);
 
     authentication = new Authentication();
@@ -224,7 +223,7 @@ public class AddServerActivity extends SherlockActivity implements OnClickListen
     return super.onMenuItemSelected(featureId, item);
   }
 
-  /**
+  /** 
    * On activity result
    */
   @Override
