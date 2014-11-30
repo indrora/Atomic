@@ -1,12 +1,14 @@
 package indrora.atomic;
 
 import indrora.atomic.model.ColorScheme;
+import indrora.atomic.model.ColorSchemeManager;
 import indrora.atomic.model.Settings;
 import indrora.atomic.utils.LatchingValue;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.preference.PreferenceManager;
 
 public class App extends Application {
 
@@ -16,10 +18,10 @@ public class App extends Application {
 
     autoconnectComplete = new LatchingValue<Boolean>(true, false);
   }
-
+  
   private static LatchingValue<Boolean> autoconnectComplete;
 
-  private static ColorScheme _c;
+  private static ColorSchemeManager _csMgr;
   private static Settings _s;
 
   private static Context _ctx;
@@ -29,7 +31,7 @@ public class App extends Application {
   }
   
   public static ColorScheme getColorScheme() {
-    return _c;
+    return _csMgr.getCurrentScheme();
   }
 
   public static Settings getSettings() {
@@ -55,6 +57,7 @@ public class App extends Application {
     _ctx = getApplicationContext();
     
     Atomic.getInstance().loadServers(_ctx);
+    
 
     indrora.atomic.model.Settings _settings = new Settings(this);
     _s = _settings;
@@ -66,8 +69,11 @@ public class App extends Application {
 
     _r = getResources();
     
-    _c = new ColorScheme(_ctx);
+    _csMgr = new ColorSchemeManager();
 
+    PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(_csMgr);
+
+    
     if(_settings.getCurrentVersion() > _settings.getLastRunVersion()) {
       Intent runIntent = new Intent(this,FirstRunActivity.class);
       runIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

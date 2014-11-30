@@ -712,7 +712,7 @@ public class IRCService extends Service {
             message = new Message(getString(R.string.could_not_connect, server.getHost(), server.getPort()) +":\n"+e.toString());
 
             if (settings.isReconnectEnabled()) {
-
+              updateNotification("Reconnecting.", "Reconnection queued", false, false, false);
               server.setStatus(Status.RECONNECTING);
               IRCService.this.sendBroadcast(Broadcast.createServerIntent(
                   Broadcast.SERVER_UPDATE, serverId));
