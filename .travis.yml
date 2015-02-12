@@ -8,7 +8,3 @@ android:
     - android-16
   licenses:
     - 'android\-sdk\-license\-.*'
-script:
-  - cd application
-  - android update project -p . --name Atomic --subprojects --target android-19
-  - ant clean debug

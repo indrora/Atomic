@@ -48,24 +48,7 @@ Current/future features/changes
 Building Atomic
 ===============
 
-You will need to generate a keystore for Atomic:
-
-     keytool -genkey -keystore application/keystore -alias <alias>
-
-and go and add the following to application/ant.properties
-
-    key.store=keystore
-    key.alias=<alias>
-    key.store.password=<password>
-    key.alias.password=<password>
-
-run
-
-    cd application
-    android update project -p . -n Atomic -s --target android-19
-    ant installd
-
-Your connected device will now get a debug signed 
+Atomic is built on Gradle. You should be fine.
 
 Fork Details
 ============

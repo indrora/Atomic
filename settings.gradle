@@ -1,0 +1,4 @@
+include ':colorPickerView'
+include ':memorizingTrustManager'
+include ':viewPagerIndicator'
+include ':atomic'

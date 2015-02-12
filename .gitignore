@@ -4,6 +4,7 @@
 **/bin/
 **/gen/
 **/R.java
+**/build/**
 
 # Ignore the key file.
 
