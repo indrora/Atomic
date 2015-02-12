@@ -32,3 +32,6 @@ libs/ActionBarSherlock/.classpath
 libs/ActionBarSherlock/.classpath
 local.properties
 **/proguard-project.txt
+
+.gradle/
+.gradle/**

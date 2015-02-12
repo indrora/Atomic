@@ -7,6 +7,10 @@ android {
     defaultConfig {
     }
 
+		lintOptions {
+			abortOnError false
+		}
+
     buildTypes {
         release {
             minifyEnabled false
