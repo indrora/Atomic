@@ -25,6 +25,7 @@ public class ColorScheme {
   private String _name;
   
   public ColorScheme(String name, boolean useDark) {
+    _context = App.getAppContext();
     loadScheme(name, useDark);
   }
   
