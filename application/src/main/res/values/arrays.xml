@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="fontsize_labels" translatable="false">
+        <item>8px</item>
+        <item>9px</item>
+        <item>10px</item>
+        <item>11px</item>
+        <item>12px</item>
+        <item>13px</item>
+        <item>14px</item>
+        <item>15px</item>
+        <item>16px</item>
+        <item>17px</item>
+        <item>18px</item>
+        <item>19px</item>
+        <item>20px</item>
+    </string-array>
+    <string-array name="fontsize_values" translatable="false">
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>18</item>
+        <item>19</item>
+        <item>20</item>
+    </string-array>
+    <string-array name="reconnect_interval_labels">
+        <item>@string/minute_1</item>
+        <item>@string/minutes_5</item>
+        <item>@string/minutes_10</item>
+        <item>@string/minutes_15</item>
+        <item>@string/minutes_20</item>
+        <item>@string/minutes_30</item>
+    </string-array>
+    <string-array name="reconnect_interval_values" translatable="false">
+        <item>1</item>
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+        <item>20</item>
+        <item>30</item>
+    </string-array>
+
+    <string-array name="user_actions">
+        <item>@string/user_action_reply</item>
+        <item>@string/user_action_query</item>
+        <item>@string/user_action_op</item>
+        <item>@string/user_action_deop</item>
+        <item>@string/user_action_voice</item>
+        <item>@string/user_action_devoice</item>
+        <item>@string/user_action_ban</item>
+        <item>@string/user_action_kick</item>
+    </string-array>
+
+</resources>
