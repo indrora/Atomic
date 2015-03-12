@@ -108,7 +108,7 @@ public class IRCService extends Service {
   private Method mStopForeground;
   private final Object[] mStartForegroundArgs = new Object[2];
   private final Object[] mStopForegroundArgs = new Object[1];
-  private Notification notification;
+  //private Notification notification;
   private Settings settings;
 
   /**
@@ -192,7 +192,7 @@ public class IRCService extends Service {
     // If new network is -1, we need to configure reconnecting.
     _isTransient = true;
     if( newNetworkType == -1 && settings.reconnectLoss() ) {
-      updateNotification(getString(R.string.notification_not_connected), "Waiting for network", false, false, false);
+      updateNotification(getString(R.string.notification_not_connected), "Waiting for network", Notification.PRIORITY_LOW, false, false, false);
       reconnectNextNetwork.clear();
       for( int sid : connections.keySet() ) {
         reconnectNextNetwork.add(sid);
@@ -204,7 +204,7 @@ public class IRCService extends Service {
     } else {
       // We're changing between networks, not losing our network entirely.
       if( settings.reconnectTransient() ) {
-        updateNotification(getString(R.string.notification_not_connected), "Network in transition", false, false, false);
+        updateNotification(getString(R.string.notification_not_connected), "Network in transition", Notification.PRIORITY_LOW, false, false, false);
         for( int sid : connections.keySet() ) {
           connections.get(sid).disconnect(); // Disconnect and clean up.
           if( !reconnectNextNetwork.contains(sid) )
@@ -361,13 +361,14 @@ public class IRCService extends Service {
 
       // Set the icon, scrolling text and timestamp
       // now using NotificationCompat for Linter happiness
-      notification = new NotificationCompat.Builder(getBaseContext())
+      Notification notification = new NotificationCompat.Builder(this)
           .setSmallIcon(R.drawable.ic_service_icon)
           .setWhen(System.currentTimeMillis())
           .setContentText(getText(R.string.notification_running))
           .setTicker(getText(R.string.notification_not_connected))
           .setContentTitle(getText(R.string.app_name))
           .setContentIntent(contentIntent)
+          .setPriority(Notification.PRIORITY_MIN)
           .build();
 
       startForegroundCompat(FOREGROUND_NOTIFICATION, notification);
@@ -377,8 +378,6 @@ public class IRCService extends Service {
       ackNewMentions(intent.getIntExtra(EXTRA_ACK_SERVERID, -1), intent.getStringExtra(EXTRA_ACK_CONVTITLE));
     }
   }
-
-  long lastYellTime = 0;
 
   /**
    * Update notification and vibrate and/or flash a LED light if needed
@@ -390,17 +389,17 @@ public class IRCService extends Service {
    * @param sound       True if the device should make sound, false otherwise
    * @param light       True if the device should flash a LED light, false otherwise
    */
-  private void updateNotification(String text, String contentText, boolean vibrate, boolean sound, boolean light) {
+  private void updateNotification(String text, String contentText, int priority, boolean vibrate, boolean sound, boolean light) {
     if( foreground ) {
 
       // NotificationCompat does the right things for ICS
       // and other various variants. Seriously, Google?
 
 
-      NotificationCompat.Builder notificationB = new NotificationCompat.Builder(getBaseContext())
+      NotificationCompat.Builder notificationB = new NotificationCompat.Builder(this)
           .setSmallIcon(R.drawable.ic_service_icon)
-          .setWhen(System.currentTimeMillis());
-
+          .setWhen(System.currentTimeMillis())
+          .setPriority(priority);
 
       Intent notifyIntent = new Intent(this, ServersActivity.class);
 
@@ -453,43 +452,38 @@ public class IRCService extends Service {
 
       notificationB.setContentIntent(contentIntent);
       notificationB.setContentTitle(getText(R.string.app_name));
-      notificationB.setOngoing(true);
+      notificationB.setOngoing(false);
+      notificationB.setNumber(newMentions);
+
+
+      NotificationCompat.Builder publicBuilder = new NotificationCompat.Builder(this);
+      publicBuilder.setSmallIcon(R.drawable.ic_service_icon);
+      publicBuilder.setContentTitle(getText(R.string.app_name));
+
+
+      if(newMentions > 0) {
+        //publicBuilder.setContentText(getString(R.string.notification_mentions, newMentions));
+        publicBuilder.setContentText("New activity!!!!");
+        publicBuilder.setNumber(newMentions);
+
+      }
+      notificationB.setPublicVersion(publicBuilder.build());
       notificationB.setContentText(contentText);
       if( text != null ) {
         notificationB.setTicker(text);
       }
-
-      // We only want to vibrate if it's been $ARBITRARY_AMOUNT_OF_TIME
-      // since we last buzzed.
-
-      boolean be_loud = (lastYellTime + 2000 < System.currentTimeMillis());
-
-      // At this point we need to do some magic.
-      notification = notificationB.build();
-
-      if( be_loud ) {
-
-        if( vibrate ) {
-          notification.defaults |= Notification.DEFAULT_VIBRATE;
-        }
-
-        if( sound ) {
-          // buzz the user with an audible sound.
-          notification.sound = settings.getHighlightSoundLocation();
-
-        }
-        lastYellTime = System.currentTimeMillis();
+      if(light) {
+        notificationB.setLights(settings.getHighlightLEDColor(), NOTIFICATION_LED_ON_MS, NOTIFICATION_LED_OFF_MS);
+      }
+      if(sound) {
+        notificationB.setSound(settings.getHighlightSoundLocation());
+      }
+      if(vibrate) {
+        notificationB.setVibrate(new long[] {0, 200, 180, 160, 140, 120, 100});
       }
 
-      if( light ) {
-        notification.ledARGB = settings.getHighlightLEDColor();
-        notification.ledOnMS = NOTIFICATION_LED_ON_MS;
-        notification.ledOffMS = NOTIFICATION_LED_OFF_MS;
-        notification.flags |= Notification.FLAG_SHOW_LIGHTS;
-      }
 
-      notification.number = newMentions;
-
+      Notification notification = notificationB.build();
       notificationManager.notify(FOREGROUND_NOTIFICATION, notification);
     }
   }
@@ -522,7 +516,7 @@ public class IRCService extends Service {
       mentions.put(convId, conversation);
     }
     msg = MircColors.removeStyleAndColors(msg);
-    updateNotification(msg, null, vibrate, sound, light);
+    updateNotification(msg, null, Notification.PRIORITY_MAX, vibrate, sound, light);
   }
 
   /**
@@ -545,7 +539,7 @@ public class IRCService extends Service {
       newMentions = 0;
     }
 
-    updateNotification(null, null, false, false, false);
+    updateNotification(null, null, Notification.PRIORITY_MIN, false, false, false);
   }
 
   /**
@@ -555,7 +549,7 @@ public class IRCService extends Service {
    */
   public synchronized void notifyConnected(String title) {
     connectedServerTitles.add(title);
-    updateNotification(getString(R.string.notification_connected, title), null, false, false, false);
+    updateNotification(getString(R.string.notification_connected, title),  null, Notification.PRIORITY_HIGH, false, false, false);
   }
 
   /**
@@ -565,7 +559,7 @@ public class IRCService extends Service {
    */
   public synchronized void notifyDisconnected(String title) {
     connectedServerTitles.remove(title);
-    updateNotification(getString(R.string.notification_disconnected, title), null, false, false, false);
+    updateNotification(getString(R.string.notification_disconnected, title),  null,Notification.PRIORITY_DEFAULT, false, false, false);
   }
 
 
@@ -716,7 +710,7 @@ public class IRCService extends Service {
             message = new Message(getString(R.string.could_not_connect, server.getHost(), server.getPort()) + ":\n" + e.toString());
 
             if( settings.isReconnectEnabled() ) {
-              updateNotification("Reconnecting.", "Reconnection queued", false, false, false);
+              updateNotification("Reconnecting.", "Reconnection queued", Notification.PRIORITY_MIN, false, false, false);
               server.setStatus(Status.RECONNECTING);
               IRCService.this.sendBroadcast(Broadcast.createServerIntent(
                   Broadcast.SERVER_UPDATE, serverId));
