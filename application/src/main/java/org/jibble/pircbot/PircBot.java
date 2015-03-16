@@ -3207,9 +3207,9 @@ public abstract class PircBot implements ReplyConstants {
               }
             } else if( userMode == HALFOP_ADD ) {
               if( userObj.hasVoice() ) {
-                newUser = new User("@+", nick);
+                newUser = new User("%+", nick);
               } else {
-                newUser = new User("@", nick);
+                newUser = new User("%", nick);
               }
             } else if( userMode == HALFOP_REMOVE ) {
               if( userObj.hasVoice() ) {

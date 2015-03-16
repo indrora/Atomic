@@ -159,7 +159,7 @@
     <string name="user_action_reply">Responder</string>
     <string name="user_action_query">Consulta</string>
     <string name="user_action_op">Dar estado de Operador</string>
-    <string name="user_action_deop">Quitar estado de Operador </string>
+    <string name="user_action_deop">Quitar estado de Operador</string>
     <string name="user_action_voice">Dar voz</string>
     <string name="user_action_devoice">Quitar voz</string>
     <string name="user_action_kick">Echar</string>
