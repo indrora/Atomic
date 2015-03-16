@@ -259,4 +259,10 @@
     <string name="minutes_15">15 minut</string>
     <string name="minutes_20">20 minut</string>
     <string name="minutes_30">30 minut</string>
+    <string name="message_halfop">%1$s ustanawia %2$s połowa operatorem</string>
+    <string name="command_desc_halfop">Ustanów użytkownika operatorem</string>
+    <string name="user_action_halfop">HalfOp</string>
+    <string name="command_desc_dehalfop">Remove operator status from a user</string>
+    <string name="message_dehalfop">%1$s dehalfops %2$s</string>
+    <string name="user_action_dehalfop">DeHalfOp</string>
 </resources>

@@ -159,7 +159,7 @@
     <string name="user_action_reply">Responder</string>
     <string name="user_action_query">Consulta</string>
     <string name="user_action_op">Dar estado de Operador</string>
-    <string name="user_action_deop">Quitar estado de Operador</string>
+    <string name="user_action_deop">Quitar estado de Operador </string>
     <string name="user_action_voice">Dar voz</string>
     <string name="user_action_devoice">Quitar voz</string>
     <string name="user_action_kick">Echar</string>
@@ -259,4 +259,10 @@
     <string name="minutes_15">15 minutos</string>
     <string name="minutes_20">20 minutos</string>
     <string name="minutes_30">30 minutos</string>
+    <string name="message_halfop">%1$s a dado halfop a %2$s</string>
+    <string name="command_desc_halfop">Dar permisos de operador medio a un usuario</string>
+    <string name="user_action_halfop">Dar estado de medio-Operador</string>
+    <string name="command_desc_dehalfop">Quitarle el permiso de operador medio de un usuario</string>
+    <string name="message_dehalfop">%1$s ha quitado halfop de %2$s</string>
+    <string name="user_action_dehalfop">Quitar estado de Operador medio</string>
 </resources>

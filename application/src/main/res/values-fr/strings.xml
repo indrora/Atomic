@@ -259,4 +259,10 @@
     <string name="minutes_15">15 minutes</string>
     <string name="minutes_20">20 minutes</string>
     <string name="minutes_30">30 minutes</string>
+    <string name="message_halfop">%1$s donne le statut d\'demi-opérateur à %2$s</string>
+    <string name="command_desc_halfop">Donne le statut d\'demi-opérateur à un utilisateur</string>
+    <string name="user_action_halfop">HalfOp</string>
+    <string name="command_desc_dehalfop">Retire le statut d\'demi-opérateur d\'un utilisateur</string>
+    <string name="message_dehalfop">%1$s retire le statut d\'demi-opérateur de %2$s</string>
+    <string name="user_action_dehalfop">DeHalfOp</string>
 </resources>

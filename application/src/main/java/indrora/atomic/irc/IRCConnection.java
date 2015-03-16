@@ -602,6 +602,44 @@ public class IRCConnection extends PircBot {
   }
 
   /**
+   * On Halfop
+   */
+  @Override
+  protected void onHalfop(String target, String sourceNick, String sourceLogin, String sourceHostname, String recipient) {
+    Message message = new Message(service.getString(R.string.message_halfop, sourceNick, recipient));
+    message.setColor(Message.MessageColor.CHANNEL_EVENT);
+    message.setIcon(R.drawable.op);
+    server.getConversation(target).addMessage(message);
+
+    Intent intent = Broadcast.createConversationIntent(
+        Broadcast.CONVERSATION_MESSAGE,
+        server.getId(),
+        target
+    );
+    service.sendBroadcast(intent);
+  }
+
+
+  /**
+   * On DeHalfop
+   */
+  @Override
+  protected void onDeHalfop(String target, String sourceNick, String sourceLogin, String sourceHostname, String recipient) {
+    Message message = new Message(service.getString(R.string.message_dehalfop, sourceNick, recipient));
+    message.setColor(Message.MessageColor.CHANNEL_EVENT);
+    message.setIcon(R.drawable.op);
+    server.getConversation(target).addMessage(message);
+
+    Intent intent = Broadcast.createConversationIntent(
+        Broadcast.CONVERSATION_MESSAGE,
+        server.getId(),
+        target
+    );
+    service.sendBroadcast(intent);
+  }
+
+
+  /**
    * On Part
    */
   @Override

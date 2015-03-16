@@ -163,6 +163,10 @@
     <string name="command_desc_notice">Send a notice to an other user</string>
     <!-- Description for /op (gives operator privs to user) -->
     <string name="command_desc_op">Give a user operator status</string>
+    <!-- Description for /halfop (gives halfoperator privs to user) -->
+    <string name="command_desc_halfop">Give a user half operator status</string>
+    <!-- Description for /dehalfop (removes halfoperator privs from user) -->
+    <string name="command_desc_dehalfop">Remove  half operator status</string>
     <!-- Description for /part (Leaves the current channel) -->
     <string name="command_desc_part">Leave the current channel</string>
     <!-- Description for /query (Opens query window for user) -->
@@ -216,6 +220,10 @@
     <string name="message_self_rename">You are now known as %1$s</string>
     <!-- Status message: $1 has given operator status to $2 -->
     <string name="message_op">%1$s ops %2$s</string>
+    <!-- Status message: $1 has given half operator status to $2 -->
+    <string name="message_halfop">%1$s halfops %2$s</string>
+    <!-- Status message: $1 has removed half operator status from $2 -->
+    <string name="message_dehalfop">%1$s dehalfops %2$s</string>
     <!-- Status message: $1 left the channel -->
     <string name="message_part">%1$s parts</string>
     <!-- Status message: $1 disconnected with message $2 -->
@@ -271,6 +279,8 @@
     <string name="user_action_query">Query</string>
     <string name="user_action_op">Op</string>
     <string name="user_action_deop">DeOp</string>
+    <string name="user_action_halfop">HalfOp</string>
+    <string name="user_action_dehalfop">DeHalfOp</string>
     <string name="user_action_voice">Voice</string>
     <string name="user_action_devoice">DeVoice</string>
     <string name="user_action_kick">Kick</string>

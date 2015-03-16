@@ -52,6 +52,8 @@
         <item>@string/user_action_query</item>
         <item>@string/user_action_op</item>
         <item>@string/user_action_deop</item>
+        <item>@string/user_action_halfop</item>
+        <item>@string/user_action_dehalfop</item>
         <item>@string/user_action_voice</item>
         <item>@string/user_action_devoice</item>
         <item>@string/user_action_ban</item>
