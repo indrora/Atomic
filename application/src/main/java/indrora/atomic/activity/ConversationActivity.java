@@ -700,7 +700,7 @@ public class ConversationActivity extends Activity implements
           AlertDialog.Builder userlistBuilder = new AlertDialog.Builder(
               _tContext);
 
-          userlistBuilder.setTitle("Users");
+          userlistBuilder.setTitle("Users: " + nicks.length);
 
           OnClickListener NickSelectorListener = new OnClickListener() {
 
