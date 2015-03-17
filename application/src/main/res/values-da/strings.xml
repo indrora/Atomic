@@ -259,4 +259,10 @@
     <string name="minutes_15">15 minutes</string>
     <string name="minutes_20">20 minutes</string>
     <string name="minutes_30">30 minutes</string>
+    <string name="message_halfop">%1$s giver %2$s halv operatør status</string>
+    <string name="command_desc_halfop">Give en bruger halv operatør status</string>
+    <string name="user_action_halfop">Giv halv operatør status</string>
+    <string name="command_desc_dehalfop">Fjern halv operatør status fra en bruger</string>
+    <string name="message_dehalfop">%1$s fjerner halv operatør status fra %2$s</string>
+    <string name="user_action_dehalfop">Fjern halv operatør status</string>
 </resources>

@@ -29,6 +29,8 @@ import indrora.atomic.command.handler.DCCHandler;
 import indrora.atomic.command.handler.DeopHandler;
 import indrora.atomic.command.handler.DevoiceHandler;
 import indrora.atomic.command.handler.EchoHandler;
+import indrora.atomic.command.handler.HalfopHandler;
+import indrora.atomic.command.handler.DeHalfopHandler;
 import indrora.atomic.command.handler.HelpHandler;
 import indrora.atomic.command.handler.JoinHandler;
 import indrora.atomic.command.handler.KickHandler;
@@ -85,6 +87,8 @@ public class CommandParser {
     commands.put("op", new OpHandler());
     commands.put("voice", new VoiceHandler());
     commands.put("deop", new DeopHandler());
+    commands.put("dehalfop", new DeHalfopHandler());
+    commands.put("halfop", new HalfopHandler());
     commands.put("devoice", new DevoiceHandler());
     commands.put("kick", new KickHandler());
     commands.put("query", new QueryHandler());

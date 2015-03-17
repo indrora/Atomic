@@ -259,4 +259,10 @@
     <string name="minutes_15">15分</string>
     <string name="minutes_20">20分</string>
     <string name="minutes_30">30 分</string>
+    <string name="message_halfop">%1$s 操作 %2$s</string>
+    <string name="command_desc_halfop">ユーザー操作ステータスを設定します</string>
+    <string name="user_action_halfop">操作</string>
+    <string name="command_desc_dehalfop">Remove operator status from a user</string>
+    <string name="message_dehalfop">%1$s dehalfops %2$s</string>
+    <string name="user_action_dehalfop">DeHalfOp</string>
 </resources>

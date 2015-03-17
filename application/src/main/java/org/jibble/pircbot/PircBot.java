@@ -102,7 +102,8 @@ public abstract class PircBot implements ReplyConstants {
   private static final int OP_REMOVE = 2;
   private static final int VOICE_ADD = 3;
   private static final int VOICE_REMOVE = 4;
-
+  private static final int HALFOP_ADD = 5;
+  private static final int HALFOP_REMOVE = 6;
   /**
    * Constructs a PircBot with the default settings.  Your own constructors
    * in classes which extend the PircBot abstract class should be responsible
@@ -636,6 +637,29 @@ public abstract class PircBot implements ReplyConstants {
     this.setMode(channel, "-o " + nick);
   }
 
+  /**
+   * Adds halfop priviliges from a user on a channel.
+   * Successful use of this method may require the bot to have operator
+   * status itself.
+   *
+   * @param channel The channel we're halfoping the user on.
+   * @param nick    The nick of the user we are halfoping.
+   */
+  public final void halfOp(String channel, String nick) {
+    this.setMode(channel, "+h " + nick);
+  }
+
+  /**
+   * Removes halfop priviliges from a user on a channel.
+   * Successful use of this method may require the bot to have operator
+   * status itself.
+   *
+   * @param channel The channel we're dehalfoping the user on.
+   * @param nick    The nick of the user we are dehalfoping.
+   */
+  public final void deHalfOp(String channel, String nick) {
+    this.setMode(channel, "-h " + nick);
+  }
 
   /**
    * Grants voice privilidges to a user on a channel.
@@ -1642,6 +1666,15 @@ public abstract class PircBot implements ReplyConstants {
             onDeop(channel, sourceNick, sourceLogin, sourceHostname, params[p]);
           }
           p++;
+        } else if( atPos == 'h') {
+          if( pn == '+' ) {
+            this.updateUser(channel, HALFOP_ADD, params[p]);
+            onHalfop(channel, sourceNick, sourceLogin, sourceHostname, params[p]);
+          } else {
+            this.updateUser(channel, HALFOP_REMOVE, params[p]);
+            onDeHalfop(channel, sourceNick, sourceLogin, sourceHostname, params[p]);
+          }
+          p++;
         } else if( atPos == 'v' ) {
           if( pn == '+' ) {
             this.updateUser(channel, VOICE_ADD, params[p]);
@@ -1795,6 +1828,44 @@ public abstract class PircBot implements ReplyConstants {
    * @since PircBot 0.9.5
    */
   protected void onDeop(String channel, String sourceNick, String sourceLogin, String sourceHostname, String recipient) {
+  }
+
+  /**
+   * Called when a user (possibly us) gets halfoperator status added.
+   * <p/>
+   * This is a type of mode change and is also passed to the onMode
+   * method in the PircBot class.
+   * <p/>
+   * The implementation of this method in the PircBot abstract class
+   * performs no actions and may be overridden as required.
+   *
+   * @param channel        The channel in which the mode change took place.
+   * @param sourceNick     The nick of the user that performed the mode change.
+   * @param sourceLogin    The login of the user that performed the mode change.
+   * @param sourceHostname The hostname of the user that performed the mode change.
+   * @param recipient      The nick of the user that got 'halfoped'.
+   * @since PircBot 0.9.5
+   */
+  protected void onHalfop(String channel, String sourceNick, String sourceLogin, String sourceHostname, String recipient) {
+  }
+
+  /**
+   * Called when a user (possibly us) gets halfoperator status added.
+   * <p/>
+   * This is a type of mode change and is also passed to the onMode
+   * method in the PircBot class.
+   * <p/>
+   * The implementation of this method in the PircBot abstract class
+   * performs no actions and may be overridden as required.
+   *
+   * @param channel        The channel in which the mode change took place.
+   * @param sourceNick     The nick of the user that performed the mode change.
+   * @param sourceLogin    The login of the user that performed the mode change.
+   * @param sourceHostname The hostname of the user that performed the mode change.
+   * @param recipient      The nick of the user that got 'dehalfoped'.
+   * @since PircBot 0.9.5
+   */
+  protected void onDeHalfop(String channel, String sourceNick, String sourceLogin, String sourceHostname, String recipient) {
   }
 
 
@@ -3131,6 +3202,18 @@ public abstract class PircBot implements ReplyConstants {
             } else if( userMode == VOICE_REMOVE ) {
               if( userObj.isOp() ) {
                 newUser = new User("@", nick);
+              } else {
+                newUser = new User("", nick);
+              }
+            } else if( userMode == HALFOP_ADD ) {
+              if( userObj.hasVoice() ) {
+                newUser = new User("%+", nick);
+              } else {
+                newUser = new User("%", nick);
+              }
+            } else if( userMode == HALFOP_REMOVE ) {
+              if( userObj.hasVoice() ) {
+                newUser = new User("+", nick);
               } else {
                 newUser = new User("", nick);
               }

@@ -700,7 +700,7 @@ public class ConversationActivity extends Activity implements
           AlertDialog.Builder userlistBuilder = new AlertDialog.Builder(
               _tContext);
 
-          userlistBuilder.setTitle("Users");
+          userlistBuilder.setTitle("Users: " + nicks.length);
 
           OnClickListener NickSelectorListener = new OnClickListener() {
 
@@ -762,18 +762,25 @@ public class ConversationActivity extends Activity implements
                       connection.deOp(conversation, nicknameWithoutPrefix);
                       break;
                     case 4:
-                      connection.voice(conversation, nicknameWithoutPrefix);
+                      connection.halfOp(conversation, nicknameWithoutPrefix);
                       break;
                     case 5:
-                      connection.deVoice(conversation, nicknameWithoutPrefix);
+                      connection.deHalfOp(conversation, nicknameWithoutPrefix);
                       break;
                     case 6:
-                      connection.kick(conversation, nicknameWithoutPrefix);
+                      connection.voice(conversation, nicknameWithoutPrefix);
                       break;
                     case 7:
+                      connection.deVoice(conversation, nicknameWithoutPrefix);
+                      break;
+                    case 8:
                       connection.ban(conversation, nicknameWithoutPrefix
                           + "!*@*");
                       break;
+                    case 9:
+                      connection.kick(conversation, nicknameWithoutPrefix);
+                      break;
+
                   }
 
                   /* ********************* */
