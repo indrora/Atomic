@@ -354,7 +354,8 @@ public class ConversationActivity extends Activity implements
         if( event.getAction() == MotionEvent.ACTION_UP && tappedX ) {
           cv.doNickCompletion(tt);
         } else {
-          (v).performClick();
+          // Blarrarharhguhaguhaguhaeguahguh STFU linter.
+          // :3
         }
         return false;
       }
