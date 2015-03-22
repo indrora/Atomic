@@ -13,3 +13,5 @@ allprojects {
         jcenter()
     }
 }
+
+apply plugin: 'idea'

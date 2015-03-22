@@ -1,10 +1,14 @@
 # Git Ignore for Yaaic
 
+# Vim swapfiles.
+**.swp
+
 # Compiled and generated files
 **/bin/
 **/gen/
 **/R.java
 **/build/**
+**/out/**
 
 # Ignore the key file.
 
@@ -36,6 +40,15 @@ local.properties
 .gradle/
 .gradle/**
 
+
+# IDEA Project files
 .idea/
 *.iml
+*.ips
+*.ipr
+*.iml
+*.ipw
+*.iws
 
+# IDEA IntelliJ leftovers
+/out/

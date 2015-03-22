@@ -50,6 +50,13 @@ Building Atomic
 
 Atomic is built on Gradle. You should be fine.
 
+Working on Atomic
+=================
+
+Build the intelliJ IDEA files via Gradle:
+
+    ./gradlew cleanIdea idea
+
 Fork Details
 ============
 
