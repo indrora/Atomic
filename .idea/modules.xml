@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Atomic.iml" filepath="$PROJECT_DIR$/Atomic.iml" />
       <module fileurl="file://$PROJECT_DIR$/application/application.iml" filepath="$PROJECT_DIR$/application/application.iml" />
+      <module fileurl="file://$PROJECT_DIR$/atomic.iml" filepath="$PROJECT_DIR$/atomic.iml" />
       <module fileurl="file://$PROJECT_DIR$/colorPickerView/colorPickerView.iml" filepath="$PROJECT_DIR$/colorPickerView/colorPickerView.iml" />
       <module fileurl="file://$PROJECT_DIR$/memorizingTrustManager/memorizingTrustManager.iml" filepath="$PROJECT_DIR$/memorizingTrustManager/memorizingTrustManager.iml" />
       <module fileurl="file://$PROJECT_DIR$/viewPagerIndicator/viewPagerIndicator.iml" filepath="$PROJECT_DIR$/viewPagerIndicator/viewPagerIndicator.iml" />
