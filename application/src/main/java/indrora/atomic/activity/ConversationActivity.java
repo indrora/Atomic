@@ -728,7 +728,7 @@ public class ConversationActivity extends Activity implements
                       final String replyText = nicknameWithoutPrefix + ": ";
                       /*
                        * handler.post(new Runnable() {
-                       * 
+                       *
                        * @Override public void run() {
                        */
                       EditText input = (EditText)findViewById(R.id.input);
@@ -996,10 +996,10 @@ public class ConversationActivity extends Activity implements
       // input.setEnabled(false);
 
       /*
-       * 
+       *
        * If we are disconnected, we should have three times where we don't care
        * to pop up the dialog:
-       * 
+       *
        * * Total network loss has occurred and we're working on reconnecting a
        * server (it happens!) * The network is transient and we're waiting on
        * the network to become not-transient. * The server is in the
@@ -1142,7 +1142,7 @@ public class ConversationActivity extends Activity implements
     Conversation conversation = pagerAdapter.getItem(pager.getCurrentItem());
 
     if( conversation != null ) {
-      if( !text.trim().startsWith("/") ) {
+      if( !text.startsWith("/") || text.startsWith("//")) {
         if( conversation.getType() != Conversation.TYPE_SERVER ) {
           String nickname = binder.getService().getConnection(serverId)
               .getNick();
