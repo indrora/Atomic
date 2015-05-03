@@ -8,13 +8,19 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 
 public class ColorSchemeManager implements OnSharedPreferenceChangeListener {
 
-  Context _ctx;
+  MessageRenderParams _cParams;
   Settings _settings;
   ColorScheme _currentColorScheme;
 
   public ColorSchemeManager() {
     _settings = App.getSettings();
-    _currentColorScheme = new ColorScheme(_settings.getColorScheme(), _settings.getUseDarkColors());
+    _cParams = _settings.getRenderParams();
+    reloadScheme();
+  }
+
+  private void reloadScheme() {
+    _currentColorScheme = new ColorScheme(_cParams.colorScheme, _cParams.useDarkScheme);
+
   }
 
   public ColorScheme getCurrentScheme() {
@@ -23,10 +29,10 @@ public class ColorSchemeManager implements OnSharedPreferenceChangeListener {
 
   @Override
   public void onSharedPreferenceChanged(SharedPreferences arg0, String arg1) {
-    if( _settings.getColorScheme() != _currentColorScheme.getName() ) {
-      _currentColorScheme.loadScheme(_settings.getColorScheme(), _settings.getUseDarkColors());
+    if(!_cParams.equals(_settings.getRenderParams())) {
+      _cParams = _settings.getRenderParams();
+      reloadScheme();
     }
-
   }
 
 }

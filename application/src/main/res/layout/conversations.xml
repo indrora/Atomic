@@ -42,7 +42,6 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-
         android:padding="5dp">
 
         <EditText
@@ -51,16 +50,9 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:imeOptions="actionSend"
-            android:inputType="textImeMultiLine"
+            android:inputType="textShortMessage"
             android:singleLine="true"
             android:textCursorDrawable="@null"
             android:textIsSelectable="true" />
-
-        <Button
-            android:id="@+id/speech"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@android:drawable/ic_btn_speak_now"
-            android:visibility="gone" />
     </LinearLayout>
 </LinearLayout>

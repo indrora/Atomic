@@ -92,6 +92,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnKeyListener;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -325,7 +326,7 @@ public class ConversationActivity extends Activity implements
     }
 
     input.setInputType(input.getInputType() | setInputTypeFlags);
-
+    this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     // Add handling for tab-completing from the input box.
 
     int tabCompleteDrawableResource = (settings.getUseDarkColors() ? R.drawable.ic_tabcomplete_light
@@ -479,20 +480,6 @@ public class ConversationActivity extends Activity implements
 
     super.onResume();
 
-    // Check if speech recognition is enabled and available
-    if( new Settings(this).isVoiceRecognitionEnabled() ) {
-      PackageManager pm = getPackageManager();
-      Button speechButton = (Button)findViewById(R.id.speech);
-      List<ResolveInfo> activities = pm.queryIntentActivities(new Intent(
-          RecognizerIntent.ACTION_RECOGNIZE_SPEECH), 0);
-
-      if( activities.size() != 0 ) {
-        ((Button)findViewById(R.id.speech))
-            .setOnClickListener(new SpeechClickListener(this));
-        speechButton.setVisibility(View.VISIBLE);
-      }
-    }
-
     // Start service
     Intent intent = new Intent(this, IRCService.class);
     intent.setAction(IRCService.ACTION_FOREGROUND);
@@ -563,8 +550,6 @@ public class ConversationActivity extends Activity implements
 
     setupColors();
     setupIndicator();
-
-    openSoftKeyboard(findViewById(R.id.input));
 
     server.setIsForeground(true);
 
