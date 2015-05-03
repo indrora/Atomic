@@ -327,6 +327,14 @@ public class ConversationActivity extends Activity implements
 
     input.setInputType(input.getInputType() | setInputTypeFlags);
     this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+    input.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+      @Override
+      public void onFocusChange(View v, boolean hasFocus) {
+        if(hasFocus) {
+          openSoftKeyboard(v);
+        }
+      }
+    });
     // Add handling for tab-completing from the input box.
 
     int tabCompleteDrawableResource = (settings.getUseDarkColors() ? R.drawable.ic_tabcomplete_light
