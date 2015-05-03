@@ -20,6 +20,7 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
 */
 package indrora.atomic.adapter;
 
+import indrora.atomic.App;
 import indrora.atomic.indicator.ConversationStateProvider;
 import indrora.atomic.listener.MessageClickListener;
 import indrora.atomic.model.Conversation;
@@ -45,10 +46,8 @@ import com.viewpagerindicator.TitlePageIndicator;
  * @author Sebastian Kaspari <sebastian@yaaic.org>
  */
 public class ConversationPagerAdapter extends PagerAdapter implements ConversationStateProvider {
+
   public static final int COLOR_NONE = 0x0;
-  public static final int COLOR_DEFAULT = 0xFFDDDDDD;
-  public static final int COLOR_MESSAGE = 0xFF31B6E7;
-  public static final int COLOR_HIGHLIGHT = 0xFFFFBB00;
 
   private final Server server;
   private LinkedList<ConversationInfo> conversations;
@@ -297,13 +296,13 @@ public class ConversationPagerAdapter extends PagerAdapter implements Conversati
 
     switch ( conversation.getStatus() ) {
       case Conversation.STATUS_HIGHLIGHT:
-        return COLOR_HIGHLIGHT;
+        return App.getColorScheme().getHighlight();
 
       case Conversation.STATUS_MESSAGE:
-        return COLOR_MESSAGE;
+        return App.getColorScheme().getChannelEvent();
 
       default:
-        return COLOR_DEFAULT;
+        return App.getColorScheme().getForeground();
     }
   }
 
@@ -314,19 +313,12 @@ public class ConversationPagerAdapter extends PagerAdapter implements Conversati
   public int getColorForLowerThan(int position) {
     int color = COLOR_NONE;
 
-    for( int i = 0; i < position; i++ ) {
-      int currentColor = getColorAt(i);
-
-      if( currentColor == COLOR_HIGHLIGHT ) {
-        return COLOR_HIGHLIGHT;
-      }
-
-      if( currentColor == COLOR_MESSAGE ) {
-        color = COLOR_MESSAGE;
-      }
+    if(position-1>0) {
+      return getColorAt(position-1);
     }
-
-    return color;
+    else {
+      return COLOR_NONE;
+    }
   }
 
   /**
@@ -335,20 +327,12 @@ public class ConversationPagerAdapter extends PagerAdapter implements Conversati
   @Override
   public int getColorForGreaterThan(int position) {
     int size = conversations.size();
-    int color = COLOR_NONE;
-
-    for( int i = position + 1; i < size; i++ ) {
-      int currentColor = getColorAt(i);
-
-      if( currentColor == COLOR_HIGHLIGHT ) {
-        return COLOR_HIGHLIGHT;
-      }
-
-      if( currentColor == COLOR_MESSAGE ) {
-        color = COLOR_MESSAGE;
-      }
+    if(position+1 < size) {
+      return getColorAt(position+1);
+    }
+    else {
+      return COLOR_NONE;
     }
 
-    return color;
   }
 }
