@@ -24,7 +24,7 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
     package="indrora.atomic"
     android:installLocation="auto"
     android:versionCode="20"
-    android:versionName="2.0-DEV">
+    android:versionName="2.0">
 
     <uses-sdk
         android:minSdkVersion="14"
