@@ -908,7 +908,6 @@ public abstract class PircBot implements ReplyConstants {
 
   private static String CAP_ACK_REGEX = ":(.+) CAP (.+) (LS|ACK|NAK) :(.+)";
 
-
   /**
    * This method handles events when any line of text arrives from the server,
    * then calling the appropriate method in the PircBot.  This method is

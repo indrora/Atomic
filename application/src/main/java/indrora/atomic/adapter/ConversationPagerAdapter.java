@@ -177,7 +177,7 @@ public class ConversationPagerAdapter extends PagerAdapter implements Conversati
   /**
    * Get an item by the channel's name
    *
-   * @param channel
+   * @param name
    * @return The item
    */
   public int getPositionByName(String name) {

@@ -32,7 +32,9 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
     <ListView
         android:id="@+id/channels"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+
+        />
 
     <LinearLayout
         android:orientation="horizontal"
