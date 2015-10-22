@@ -920,7 +920,6 @@ public abstract class PircBot implements ReplyConstants {
    * @throws IOException
    */
   protected void handleLine(String line) throws NickAlreadyInUseException, IOException {
-    Log.d("pIRCbot", ">>"+line);
     // Check for server pings.
     if( line.startsWith("PING ") ) {
       // Respond to the ping and return immediately.
