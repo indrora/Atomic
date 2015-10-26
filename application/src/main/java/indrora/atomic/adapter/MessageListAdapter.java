@@ -55,7 +55,7 @@ public class MessageListAdapter extends BaseAdapter {
   /**
    * Create a new MessageAdapter
    *
-   * @param channel
+   * @param conversation
    * @param context
    */
   public MessageListAdapter(Conversation conversation, Context context) {
@@ -66,12 +66,14 @@ public class MessageListAdapter extends BaseAdapter {
     LinkedList<Message> messages = new LinkedList<Message>();
 
     // Optimization - cache field lookups
-    LinkedList<Message> mHistory = conversation.getHistory();
+/*    LinkedList<Message> mHistory = conversation.getHistory();
     int mSize = mHistory.size();
 
     for( int i = 0; i < mSize; i++ ) {
       messages.add(mHistory.get(i));
-    }
+    } */
+
+    messages.addAll(conversation.getHistory());
 
 
     // XXX: We don't want to clear the buffer, we want to add only
@@ -135,8 +137,8 @@ public class MessageListAdapter extends BaseAdapter {
    * @return
    */
   @Override
-  public CharSequence getItem(int position) {
-    return messages.get(position).render();
+  public Message getItem(int position) {
+    return messages.get(position);
   }
 
   /**
@@ -164,27 +166,16 @@ public class MessageListAdapter extends BaseAdapter {
     TextView view = (TextView)convertView;
     if( view == null ) {
       view = new TextView(parent.getContext());
-
       view.setAutoLinkMask(Linkify.ALL);
       view.setLinksClickable(true);
-      view.setLinkTextColor(_colorScheme.getUrl());
       view.setTypeface(Typeface.MONOSPACE);
-      view.setTextColor(_colorScheme.getForeground());
     }
 
-    view.setText(getItem(position));
+    view = getItem(position).render(view);
     view.setTextSize(_settings.getFontSize());
-
-    if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB ) {
-      setupViewForHoneycombAndLater(view);
-    }
+    view.setTextIsSelectable(true);
 
     return view;
-  }
-
-  @TargetApi(11)
-  private void setupViewForHoneycombAndLater(TextView canvas) {
-    canvas.setTextIsSelectable(true);
   }
 
   /**

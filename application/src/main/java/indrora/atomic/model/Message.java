@@ -306,18 +306,13 @@ public class Message {
    *
    * @return
    */
-  public SpannableString render() {
+  public TextView render(TextView convertView) {
 
+    // check if we just want to return ourselves already.
 
-    // An optimization starts here:
-    // RenderParams defines a "render snapshot".
-    // If RenderParams changes, we should invalidate the cache and set our new rendering parameters.
-
-    if( _cache != null ) {
-      if( settings.getRenderParams().equals(currentParams) ) {
-        return _cache;
-      }
-
+    Message t = (Message)convertView.getTag();
+    if(this.equals(t) && settings.getRenderParams().equals(t.currentParams)) {
+      return convertView;
     }
 
     _scheme = App.getColorScheme();
@@ -367,25 +362,27 @@ public class Message {
     if( hasIcon() ) {
       // We want to handle having an icon and not wanting to show icons.
       // this makes things a little nicer.
-      prefixSS = new SpannableString("*");
+      prefixSS = new SpannableString("•");
       // If we really want to show icons...
       if( settings.showIcons() ) {
-        // the Paint object here lets us get the width of a monospaced space.
-        Paint p = new Paint();
-        p.setTypeface(Typeface.MONOSPACE);
-        float spaceWidth = p.measureText("  ");
-        // The drawable here is our icon. Internally, the icon is seriously just a reference into the
-        // resources block
 
         Drawable drawable = App.getSResources().getDrawable(icon);
 
         float density = App.getSResources().getDisplayMetrics().density;
         // scale = wanted / actual
-        float scale = spaceWidth / (float)(drawable.getMinimumWidth());
         // This call is < x,y, width,height>
         // SpaceWidth is going to be in raw pixels, so we need to multiply it by density.
         // Height is going to be the drawable intrinsic height * scale * density
-        drawable.setBounds(0, 0, (int)(spaceWidth * density), (int)(drawable.getIntrinsicHeight() * scale * density));
+        // We need y to be 1/2 the height of the line, minus one half the height of the scaled drawable.
+
+        Paint p = new Paint();
+        p.setTypeface(Typeface.MONOSPACE);
+        p.setTextSize(settings.getFontSize()*density);
+        int width = (int)(p.measureText(" "));
+
+        int fontheight = settings.getFontSize();
+
+        drawable.setBounds(0, (int)(-0.5*fontheight), (int)(width), (int)(width));
         // And now we do the magic.
         prefixSS.setSpan(new ImageSpan(drawable, ImageSpan.ALIGN_BASELINE), 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
@@ -427,9 +424,15 @@ public class Message {
     // but if we set _cache (which is owned by us) to what we will now return,
     // when we come back, we can return our cached version
 
-    _cache = new SpannableString(TextUtils.concat(timeSS, prefixSS, nickSS, " ", messageSS));
+    //_cache = new SpannableString(TextUtils.concat(timeSS, prefixSS, nickSS, " ", messageSS));
+
+    convertView.setTextColor(_scheme.getForeground());
+    convertView.setLinkTextColor(_scheme.getUrl());
+    convertView.setText(new SpannableString(TextUtils.concat(timeSS, prefixSS, nickSS, " ", messageSS)));
+    convertView.setTag(this);
+
     currentParams = settings.getRenderParams();
-    return _cache;
+    return convertView;
 
   }
 
@@ -480,5 +483,38 @@ public class Message {
     format += "]";
 
     return (String)(new java.text.SimpleDateFormat(format, Locale.US)).format(date);
+  }
+
+  @Override
+  public boolean equals(Object o) {
+
+    Message m = (Message)o;
+
+    // If it's null, it's not us.
+    if(m == null) return false;
+
+    // if its icon is different, it's not us.
+    if(this.hasIcon() != m.hasIcon()) return false;
+    if(m.icon != this.icon) return false;
+
+    // if the text doesn't match, it's not us.
+    if(!this.text.equals(m.text)) return false;
+
+    // if the sender isn't the same, it's not us.
+    if(this.hasSender() != m.hasSender()) return false;
+    if( this.sender != null && !this.sender.equals(m.sender) ) return false;
+
+    // if the timestamp isn't the same, it's not us.
+    if(this.timestamp != m.timestamp) return false;
+
+    // if the type isn't the same, it's not us.
+    if(this.type != m.type) return false;
+
+    // if the message color isn't the same, it's not us.
+    if(this.color != m.color) return false;
+
+    // We're here, and that's fine.
+    return true;
+
   }
 }
