@@ -18,10 +18,16 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:scrollbarStyle="outsideInset">
+    android:orientation="vertical">
+<ScrollView
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:scrollbarStyle="outsideInset"
+    android:layout_weight="1"
+    android:padding="10dp">
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -35,75 +41,137 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
             android:layout_marginBottom="3dip"
             android:text="@string/server" />
 
-        <TextView
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/server_title" />
+
+            <EditText
+                android:id="@+id/title"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/server_title"
+                android:inputType="textCapWords|textNoSuggestions"
+                android:singleLine="true" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="fill_parent"
+            android:orientation="horizontal"
             android:layout_height="wrap_content"
-            android:text="@string/server_title" />
+            android:weightSum="4">
+            <LinearLayout android:layout_width="fill_parent"
+                android:orientation="vertical"
+                android:layout_height="wrap_content"
+                android:layout_weight="3">
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/server_host" />
 
-        <EditText
-            android:id="@+id/title"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/server_title"
-            android:inputType="textCapWords|textNoSuggestions"
-            android:singleLine="true" />
+                <EditText
+                    android:id="@+id/host"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/server_host"
+                    android:inputType="textNoSuggestions"
+                    android:nextFocusForward="@+id/port"
+                    android:singleLine="true" />
+            </LinearLayout>
 
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/server_host" />
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_weight="1">
 
-        <EditText
-            android:id="@+id/host"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/server_host"
-            android:inputType="textNoSuggestions"
-            android:singleLine="true" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/server_port" />
 
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/server_port" />
+                <EditText
+                    android:id="@+id/port"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/server_port"
+                    android:inputType="number"
+                    android:maxLength="5"
+                    android:minEms="6"
+                    android:singleLine="true"
+                    android:nextFocusForward="@+id/password"
+                    android:text="6667" />
+            </LinearLayout>
 
-        <EditText
-            android:id="@+id/port"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/server_port"
-            android:inputType="number"
-            android:maxLength="5"
-            android:minEms="6"
-            android:singleLine="true"
-            android:text="6667" />
+        </LinearLayout>
 
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/server_password" />
 
-        <EditText
-            android:id="@+id/password"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:contentDescription="@string/server_password"
-            android:inputType="textPassword"
-            android:maxEms="10"
-            android:minEms="10"
-            android:singleLine="true" />
+            android:weightSum="10">
 
-        <CheckBox
-            android:id="@+id/useSSL"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/server_useSSL"
-            android:text="@string/server_useSSL" />
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="4">
 
-        <CheckBox
-            android:id="@+id/autoconnect"
-            android:layout_width="fill_parent"
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/server_password" />
+
+                <EditText
+                    android:id="@+id/password"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/server_password"
+                    android:inputType="textPassword"
+                    android:maxEms="10"
+                    android:minEms="10"
+                    android:singleLine="true" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/authentication"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/authentication"
+                android:layout_weight="6"
+                android:layout_gravity="center_vertical" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/server_autoconnect" />
+            android:weightSum="3">
+
+            <CheckBox
+                android:id="@+id/useSSL"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/server_useSSL"
+                android:text="@string/server_useSSL"
+                android:layout_weight="2" />
+
+            <CheckBox
+                android:id="@+id/autoconnect"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/server_autoconnect"
+                android:layout_weight="1" />
+        </LinearLayout>
         <!-- ############################################################################ -->
 
         <TextView
@@ -113,52 +181,83 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
             android:layout_marginBottom="3dip"
             android:text="@string/user" />
 
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/nickname" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:weightSum="10">
 
-        <EditText
-            android:id="@+id/nickname"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/nickname"
-            android:inputType="textNoSuggestions"
-            android:singleLine="true" />
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="3">
 
-        <Button
-            android:id="@+id/aliases"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/aliases" />
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/nickname" />
 
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/username" />
+                <EditText
+                    android:id="@+id/nickname"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/nickname"
+                    android:inputType="textNoSuggestions"
+                    android:singleLine="true"
+                    android:editable="false"
+                    android:elegantTextHeight="false" />
+            </LinearLayout>
 
-        <EditText
-            android:id="@+id/username"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/username"
-            android:inputType="textNoSuggestions"
-            android:singleLine="true"
-            android:text="yaaic" />
+            <Button
+                android:id="@+id/aliases"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/aliases"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="7" />
+        </LinearLayout>
 
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/realname" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <EditText
-            android:id="@+id/realname"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/realname"
-            android:inputType="textPersonName"
-            android:singleLine="true"
-            android:text="" />
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/username" />
+
+            <EditText
+                android:id="@+id/username"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/username"
+                android:inputType="textNoSuggestions"
+                android:singleLine="true"
+                android:text="yaaic" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/realname" />
+
+            <EditText
+                android:id="@+id/realname"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/realname"
+                android:inputType="textPersonName"
+                android:singleLine="true"
+                android:text="" />
+        </LinearLayout>
+
         <!-- ############################################################################ -->
 
         <TextView
@@ -168,23 +267,26 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
             android:layout_marginBottom="3dip"
             android:text="@string/on_connect" />
 
-        <Button
-            android:id="@+id/authentication"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/authentication" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/channels"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/channels" />
+            <Button
+                android:id="@+id/channels"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/channels"
+                android:layout_weight="1" />
 
-        <Button
-            android:id="@+id/commands"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/commands" />
+            <Button
+                android:id="@+id/commands"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/commands"
+                android:layout_weight="1" />
+        </LinearLayout>
+
         <!-- ############################################################################ -->
 
         <TextView
@@ -206,26 +308,37 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
             android:prompt="@string/select_charset" />
         <!-- ############################################################################ -->
 
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingTop="10dp">
-
-            <Button
-                android:id="@+id/add"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/server_save" />
-
-            <Button
-                android:id="@+id/cancel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:text="@string/action_cancel" />
-        </LinearLayout>
     </LinearLayout>
 
 </ScrollView>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="1dp"
+        android:layout_weight="0">
+
+        <Button
+            android:id="@+id/cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:text="@string/action_cancel" />
+
+        <Space
+            android:layout_width="20px"
+            android:layout_height="20px"
+            android:layout_weight="3" />
+
+        <Button
+            android:id="@+id/add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/server_save"
+            style="@style/Widget.AppCompat.Button.Borderless" />
+
+    </LinearLayout>
+</LinearLayout>
