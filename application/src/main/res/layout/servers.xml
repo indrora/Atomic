@@ -23,6 +23,11 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
+    <android.support.v7.widget.Toolbar android:id="@+id/toolbar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        />
+
     <ListView
         android:id="@android:id/list"
         android:layout_width="fill_parent"

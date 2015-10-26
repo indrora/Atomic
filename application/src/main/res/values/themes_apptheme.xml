@@ -3,13 +3,14 @@
 <!-- Generated with http://android-holo-colors.com -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="AppTheme" parent="android:Theme.Holo" />
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar" />
 
-    <style name="AppThemeHLight" parent="android:Theme.Holo.Light" />
+    <style name="AppThemeHLight" parent="Theme.AppCompat.Light.NoActionBar" />
 
-    <style name="AppDialogTheme" parent="android:Theme.Holo.Dialog" />
+    <style name="AppDialogTheme" parent="Theme.AppCompat.Dialog" />
 
     <style name="AppThemeDark" parent="AppTheme">
+        <item name="android:windowActionBar">false</item>
         <item name="AT_AddConversation">@drawable/ic_action_add_conversation_dark</item>
         <item name="AT_CloseConversation">@drawable/ic_action_close_conversation_dark</item>
         <item name="AT_ConversationList">@drawable/ic_action_conversations_dark</item>
@@ -17,6 +18,7 @@
     </style>
 
     <style name="AppThemeLight" parent="AppThemeHLight">
+        <item name="android:windowActionBar">false</item>
         <item name="AT_AddConversation">@drawable/ic_action_add_conversation_light</item>
         <item name="AT_CloseConversation">@drawable/ic_action_close_conversation_light</item>
         <item name="AT_ConversationList">@drawable/ic_action_conversations_light</item>

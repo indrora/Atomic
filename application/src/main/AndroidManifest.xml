@@ -53,6 +53,7 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
         </activity>
         <activity
             android:name="indrora.atomic.activity.AddServerActivity"
+            android:theme="@style/Theme.AppCompat.DialogWhenLarge"
             android:label="@string/add_server_label">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -72,14 +73,16 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
         <activity
             android:name="indrora.atomic.activity.AuthenticationActivity"
             android:label="@string/authentication"
-            android:theme="@android:style/Theme.Holo.Dialog" />
+            android:theme="@style/Theme.AppCompat.Light.DialogWhenLarge" />
         <activity
             android:name="indrora.atomic.activity.AboutActivity"
+            android:theme="@style/Theme.AppCompat.Light.DialogWhenLarge"
             android:parentActivityName="indrora.atomic.activity.ServersActivity"
             android:label="@string/about_label" />
         <activity
             android:name="indrora.atomic.activity.SettingsActivity"
             android:parentActivityName="indrora.atomic.activity.ServersActivity"
+            android:theme="@style/Theme.AppCompat.Light"
             android:label="@string/settings_label">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -117,11 +120,14 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
 
         </activity>
         <!-- Memorizing Trust manager -->
-        <activity android:name="de.duenndns.ssl.MemorizingActivity" />
+        <activity android:name="de.duenndns.ssl.MemorizingActivity"
+            tools:replace="android:theme"
+            android:theme="@style/Theme.AppCompat.DialogWhenLarge"
+            />
         <activity
             android:name="indrora.atomic.FirstRunActivity"
             android:theme="@android:style/Theme.Black.NoTitleBar"
-            android:label="@string/title_activity_first_run"></activity>
+            android:label="@string/title_activity_first_run" />
     </application>
 
 </manifest>
