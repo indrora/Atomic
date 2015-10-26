@@ -437,6 +437,8 @@ public class IRCService extends Service {
         } else {
           if( !connectedServerTitles.isEmpty() ) {
             StringBuilder sb = new StringBuilder();
+            notificationB.setPriority(Notification.PRIORITY_MIN);
+
             for( String title : connectedServerTitles ) {
               sb.append(title + ", ");
             }
@@ -444,6 +446,7 @@ public class IRCService extends Service {
                 sb.substring(0, sb.length() - 2));
           } else {
             contentText = getString(R.string.notification_not_connected);
+
           }
         }
       }
@@ -462,8 +465,7 @@ public class IRCService extends Service {
 
 
       if(newMentions > 0) {
-        //publicBuilder.setContentText(getString(R.string.notification_mentions, newMentions));
-        publicBuilder.setContentText("New activity!!!!");
+        publicBuilder.setContentText(getString(R.string.notification_mentions, newMentions));
         publicBuilder.setNumber(newMentions);
 
       }
