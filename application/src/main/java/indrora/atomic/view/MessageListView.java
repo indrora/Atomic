@@ -50,6 +50,9 @@ public class MessageListView extends ListView {
 
     setOnItemClickListener(MessageClickListener.getInstance());
 
+
+    setStackFromBottom(true);
+
     setDivider(null);
 
     setFastScrollEnabled(true);
