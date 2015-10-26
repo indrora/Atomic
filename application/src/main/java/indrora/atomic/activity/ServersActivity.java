@@ -20,6 +20,7 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
  */
 package indrora.atomic.activity;
 
+import indrora.atomic.App;
 import indrora.atomic.Atomic;
 import indrora.atomic.FirstRunActivity;
 import indrora.atomic.adapter.ServerListAdapter;
@@ -38,7 +39,7 @@ import java.util.ArrayList;
 
 import indrora.atomic.R;
 
-import android.app.Activity;
+import android.support.v7.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.Service;
@@ -52,12 +53,14 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v7.app.AppCompatActivity;
 import android.text.format.Time;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -70,7 +73,7 @@ import android.widget.Toast;
  *
  * @author Sebastian Kaspari <sebastian@yaaic.org>
  */
-public class ServersActivity extends Activity implements ServiceConnection, ServerListener, OnItemClickListener, OnItemLongClickListener {
+public class ServersActivity extends AppCompatActivity implements ServiceConnection, ServerListener, OnItemClickListener, OnItemLongClickListener {
   private IRCBinder binder;
   private ServerReceiver receiver;
   private ServerListAdapter adapter;
@@ -100,6 +103,8 @@ public class ServersActivity extends Activity implements ServiceConnection, Serv
 
     instanceCount++;
     setContentView(R.layout.servers);
+
+    setSupportActionBar((android.support.v7.widget.Toolbar)findViewById(R.id.toolbar));
 
     adapter = new ServerListAdapter();
 
@@ -365,7 +370,7 @@ public class ServersActivity extends Activity implements ServiceConnection, Serv
    * On menu item selected
    */
   @Override
-  public boolean onMenuItemSelected(int featureId, MenuItem item) {
+  public boolean onOptionsItemSelected( MenuItem item) {
     switch ( item.getItemId() ) {
       case R.id.add:
         startActivityForResult(new Intent(this, AddServerActivity.class), 0);

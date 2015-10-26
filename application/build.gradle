@@ -4,8 +4,8 @@ android {
     lintOptions {
         abortOnError false
     }
-    compileSdkVersion 22
-    buildToolsVersion "22.0.0"
+    compileSdkVersion 23
+    buildToolsVersion "23.0.1"
 
     defaultConfig {
         applicationId "net.zaibatsutel.atomic"
@@ -37,4 +37,5 @@ dependencies {
     compile project(':memorizingTrustManager')
     compile project(':colorPickerView')
     compile 'com.android.support:support-v4:22.0.0'
+    compile 'com.android.support:appcompat-v7:23.1.0'
 }

@@ -20,44 +20,10 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
  */
 package indrora.atomic.activity;
 
-import indrora.atomic.App;
-import indrora.atomic.Atomic;
-import indrora.atomic.R;
-import indrora.atomic.adapter.ConversationPagerAdapter;
-import indrora.atomic.adapter.MessageListAdapter;
-import indrora.atomic.command.CommandParser;
-import indrora.atomic.indicator.ConversationIndicator;
-import indrora.atomic.indicator.ConversationTitlePageIndicator.IndicatorStyle;
-import indrora.atomic.irc.IRCBinder;
-import indrora.atomic.irc.IRCConnection;
-import indrora.atomic.irc.IRCService;
-import indrora.atomic.listener.ConversationListener;
-import indrora.atomic.listener.ServerListener;
-import indrora.atomic.listener.SpeechClickListener;
-import indrora.atomic.model.Broadcast;
-import indrora.atomic.model.ColorScheme;
-import indrora.atomic.model.Conversation;
-import indrora.atomic.model.Extra;
-import indrora.atomic.model.Message;
-import indrora.atomic.model.Query;
-import indrora.atomic.model.Scrollback;
-import indrora.atomic.model.Server;
-import indrora.atomic.model.ServerInfo;
-import indrora.atomic.model.Settings;
-import indrora.atomic.model.Status;
-import indrora.atomic.receiver.ConversationReceiver;
-import indrora.atomic.receiver.ServerReceiver;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Locale;
-
-import org.jibble.pircbot.NickConstants;
-
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
-import android.app.Activity;
+import android.support.v7.app.ActionBar;
+//import android.app.Activity;
+import android.support.v7.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.ComponentName;
@@ -67,8 +33,6 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
@@ -78,6 +42,7 @@ import android.os.IBinder;
 import android.speech.RecognizerIntent;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.text.SpannableString;
 import android.text.TextUtils;
@@ -95,17 +60,50 @@ import android.view.View.OnKeyListener;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import org.jibble.pircbot.NickConstants;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Locale;
+
+import indrora.atomic.App;
+import indrora.atomic.Atomic;
+import indrora.atomic.R;
+import indrora.atomic.adapter.ConversationPagerAdapter;
+import indrora.atomic.adapter.MessageListAdapter;
+import indrora.atomic.command.CommandParser;
+import indrora.atomic.indicator.ConversationIndicator;
+import indrora.atomic.indicator.ConversationTitlePageIndicator.IndicatorStyle;
+import indrora.atomic.irc.IRCBinder;
+import indrora.atomic.irc.IRCConnection;
+import indrora.atomic.irc.IRCService;
+import indrora.atomic.listener.ConversationListener;
+import indrora.atomic.listener.ServerListener;
+import indrora.atomic.model.Broadcast;
+import indrora.atomic.model.ColorScheme;
+import indrora.atomic.model.Conversation;
+import indrora.atomic.model.Extra;
+import indrora.atomic.model.Message;
+import indrora.atomic.model.Query;
+import indrora.atomic.model.Scrollback;
+import indrora.atomic.model.Server;
+import indrora.atomic.model.ServerInfo;
+import indrora.atomic.model.Settings;
+import indrora.atomic.model.Status;
+import indrora.atomic.receiver.ConversationReceiver;
+import indrora.atomic.receiver.ServerReceiver;
 
 /**
  * The server view with a scrollable list of all channels
  *
  * @author Sebastian Kaspari <sebastian@yaaic.org>
  */
-public class ConversationActivity extends Activity implements
+public class ConversationActivity extends AppCompatActivity implements
     ServiceConnection, ServerListener, ConversationListener,
     OnPageChangeListener {
   public static final int REQUEST_CODE_SPEECH = 99;
@@ -221,9 +219,12 @@ public class ConversationActivity extends Activity implements
 
     _scheme = App.getColorScheme();
 
+
     serverId = getIntent().getExtras().getInt("serverId");
     server = Atomic.getInstance().getServerById(serverId);
     settings = App.getSettings();
+
+
     if( settings.tintActionbar() ) {
       setTheme(settings.getUseDarkColors() ? indrora.atomic.R.style.AppThemeDark
           : indrora.atomic.R.style.AppThemeLight);
@@ -237,12 +238,19 @@ public class ConversationActivity extends Activity implements
       this.finish();
     }
 
-    ActionBar actionBar = getActionBar();
-    actionBar.setDisplayHomeAsUpEnabled(true);
-
     setTitle(server.getTitle());
 
     setContentView(R.layout.conversations);
+
+    Toolbar tb = (Toolbar)findViewById(R.id.toolbar);
+    tb.inflateMenu(R.menu.conversations);
+    if(settings.tintActionbar()) {
+      tb.setTitleTextColor(_scheme.getForeground());
+      tb.setSubtitleTextColor(_scheme.getForeground());
+      tb.setBackgroundColor(_scheme.getBackground());
+    }
+    this.setSupportActionBar(tb);
+
 
     boolean isLandscape = (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE);
 
@@ -358,9 +366,9 @@ public class ConversationActivity extends Activity implements
       public boolean onTouch(View v, MotionEvent event) {
         // This is where we handle some things.
         boolean tappedX = event.getX() > (tt.getWidth() - tt.getPaddingRight() - tabcompleteDrawable
-            .getIntrinsicWidth());
+                .getIntrinsicWidth());
 
-        if( event.getAction() == MotionEvent.ACTION_UP && tappedX ) {
+        if (event.getAction() == MotionEvent.ACTION_UP && tappedX) {
           cv.doNickCompletion(tt);
         } else {
           // Blarrarharhguhaguhaguhaeguahguh STFU linter.
@@ -370,15 +378,14 @@ public class ConversationActivity extends Activity implements
       }
     });
 
+
+
     setupColors();
     setupIndicator();
 
     // Create a new scrollback history
     scrollback = new Scrollback();
 
-    if( getIntent().getExtras().containsKey(EXTRA_TARGET) ) {
-      ShuffleToHighlight(getIntent());
-    }
   }
 
   @Override
@@ -438,7 +445,7 @@ public class ConversationActivity extends Activity implements
     if( settings.tintActionbar() ) {
       // the ActionBar can be tinted. This is really cool.
       // Get the ActionBar
-      ActionBar ab = getActionBar();
+      ActionBar ab = getSupportActionBar();
       // Make its background drawable a ColorDrawable
       ab.setBackgroundDrawable(new ColorDrawable(App.getColorScheme()
           .getBackground()));
@@ -453,7 +460,7 @@ public class ConversationActivity extends Activity implements
       // Now, set our spannable to be the ActionBar title.
       ab.setTitle(st);
     } else {
-      (getActionBar()).setTitle(server.getTitle());
+      (getSupportActionBar()).setTitle(server.getTitle());
     }
     EditText input = (EditText)findViewById(R.id.input);
     LinearLayout lll = (LinearLayout)(input.getParent());
@@ -565,6 +572,10 @@ public class ConversationActivity extends Activity implements
       Log.d("ConversationActivity",
           "onResume: " + (this.getIntent().getStringExtra(EXTRA_TARGET)));
     }
+    if( getIntent().getExtras().containsKey(EXTRA_TARGET) ) {
+      ShuffleToHighlight(getIntent());
+    }
+
 
   }
 
@@ -638,8 +649,8 @@ public class ConversationActivity extends Activity implements
   /**
    * On menu item selected
    */
-  @Override
-  public boolean onMenuItemSelected(int featureId, MenuItem item) {
+//  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
     switch ( item.getItemId() ) {
       case android.R.id.home:
         finish();
@@ -925,8 +936,11 @@ public class ConversationActivity extends Activity implements
    */
   @Override
   public synchronized void onNewConversation(String target) {
+
     createNewConversation(target);
+    /*
     pager.setCurrentItem(pagerAdapter.getPositionByName(target));
+    */
   }
 
   @Override
@@ -1081,10 +1095,14 @@ public class ConversationActivity extends Activity implements
     }
   }
 
-  private static final int MAX_MESSAGE_LENGTH = 200;
+  // This is a guess, based on the fact that you'll probably never get more than 100 characters
+  // in the preamble of a line.
+  private static final int MAX_MESSAGE_LENGTH = 450;
 
   /**
    * Send a message in this conversation
+   *
+   * This should actually be handled somewhere deeper.
    *
    * @param text The text of the message
    */
@@ -1337,7 +1355,7 @@ public class ConversationActivity extends Activity implements
   }
 
   private void hideSubtitle() {
-    ActionBar ab = getActionBar();
+    android.support.v7.app.ActionBar ab = getSupportActionBar();
     CharSequence t = ab.getTitle();
     ab.setDisplayShowTitleEnabled(false);
     ab.setSubtitle(null);
@@ -1346,7 +1364,7 @@ public class ConversationActivity extends Activity implements
   }
 
   private void showSubtitle() {
-    ActionBar ab = getActionBar();
+    ActionBar ab = getSupportActionBar();
     ab.setTitle(server.getTitle());
 
     Conversation c = pagerAdapter.getItem(pager.getCurrentItem());

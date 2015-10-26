@@ -91,7 +91,7 @@ public class AddServerActivity extends Activity implements OnClickListener {
     setContentView(R.layout.serveradd);
 
     ActionBar actionBar = getActionBar();
-    actionBar.setDisplayHomeAsUpEnabled(true);
+
 
     authentication = new Authentication();
     aliases = new ArrayList<String>();
@@ -502,7 +502,9 @@ public class AddServerActivity extends Activity implements OnClickListener {
     }
 
     // We currently only allow chars, numbers and some special chars for ident
-    Pattern identPattern = Pattern.compile("^[a-zA-Z0-9\\[\\]\\-_/]+$");
+    // We should accept @ as well so that users who like ZNC's client tags
+    // http://wiki.znc.in/FAQ#Why_do_I_get_an_.22Incorrect_Password.22_every_time_I_connect_even_though_my_pass_is_correct.3F
+    Pattern identPattern = Pattern.compile("^[a-zA-Z0-9\\[\\]\\-@_/]+$");
     if( !identPattern.matcher(username).matches() ) {
       throw new ValidationException(getResources().getString(R.string.validation_invalid_ident));
     }
