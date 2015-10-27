@@ -1,16 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="google_play_promo">Atomic is a fork of yaaic</string>
-    <string name="google_play_description">Atomic is a fork of the Yet Another Android IRC Client (yaaic).
-        
-Mostly, this is intended to fix and extend some of the things that made yaaic either hard to use or just plain irritating.
-
-Changes include:
-* A reworked visual style matching Holo standards
-* Added options in the configuration
-* Cheese Monkeys.
-
-yaaic: http://www.yaaic.org/
-GitHub: http://github.com/indrora/atomic
-</string>
+    <string name="google_play_promo">Chat like it\'s 1991</string>
+    <string name="google_play_description">AWESOME COOL DESCRIPTION LIKE HERE OR SOMETHING.</string>
 </resources>
