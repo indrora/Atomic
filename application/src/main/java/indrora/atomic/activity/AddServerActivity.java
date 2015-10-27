@@ -35,6 +35,8 @@ import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 import indrora.atomic.R;
+import indrora.atomic.view.AuthenticationView;
+import indrora.atomic.view.CommandListView;
 
 import android.app.ActionBar;
 import android.app.Activity;

@@ -71,13 +71,8 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
             android:launchMode="singleTop"
             android:parentActivityName="indrora.atomic.activity.ServersActivity" />
         <activity
-            android:name="indrora.atomic.activity.AuthenticationActivity"
-            android:label="@string/authentication"
-            android:theme="@style/Theme.AppCompat.Light.DialogWhenLarge" />
-        <activity
             android:name="indrora.atomic.activity.AboutActivity"
-            android:theme="@style/Theme.AppCompat.Light.DialogWhenLarge"
-            android:parentActivityName="indrora.atomic.activity.ServersActivity"
+            android:theme="@style/Theme.AppCompat.Light.Dialog"
             android:label="@string/about_label" />
         <activity
             android:name="indrora.atomic.activity.SettingsActivity"
@@ -102,9 +97,6 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
             android:theme="@style/AppDialogTheme" />
         <activity
             android:name="indrora.atomic.activity.AddChannelActivity"
-            android:theme="@style/AppDialogTheme" />
-        <activity
-            android:name="indrora.atomic.activity.AddCommandsActivity"
             android:theme="@style/AppDialogTheme" />
         <activity
             android:name="indrora.atomic.activity.MessageActivity"
