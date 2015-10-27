@@ -317,7 +317,9 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:paddingTop="1dp"
-        android:layout_weight="0">
+        android:layout_weight="0"
+        style="@style/Base.Widget.AppCompat.ButtonBar"
+        android:background="@color/accent_material_light">
 
         <Button
             android:id="@+id/cancel"
