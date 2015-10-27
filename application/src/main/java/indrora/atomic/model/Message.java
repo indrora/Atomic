@@ -441,9 +441,15 @@ public class Message {
    *
    * @return
    */
-  private boolean hasSender() {
+  public boolean hasSender() {
     return sender != null;
   }
+
+  /**
+   * Get the sender
+   * @return the sender name
+   */
+  public String getSender() { return sender; }
 
   /**
    * Does this message have a color assigned?
