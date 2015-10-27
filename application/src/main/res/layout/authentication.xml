@@ -40,25 +40,35 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
             android:layout_height="wrap_content"
             android:text="@string/auth_nickserv" />
 
-        <TextView
-            android:id="@+id/nickserv_label_password"
-            android:layout_width="fill_parent"
+        <LinearLayout android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/auth_nickserv_password"
-            android:enabled="false" />
+            android:orientation="vertical"
+            android:id="@+id/nickservHolder">
+            <TextView
+                android:id="@+id/nickserv_label_password"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/auth_nickserv_password"
+                android:enabled="false" />
 
-        <EditText
-            android:id="@+id/nickserv_password"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:enabled="false"
-            android:password="true" />
-
+            <EditText
+                android:id="@+id/nickserv_password"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:inputType="textPassword" />
+        </LinearLayout>
         <CheckBox
             android:id="@+id/sasl_checkbox"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/auth_sasl" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/saslHolder">
 
         <TextView
             android:id="@+id/sasl_label_username"
@@ -71,6 +81,7 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
             android:id="@+id/sasl_username"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
             android:enabled="false" />
 
         <TextView
@@ -85,26 +96,7 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:enabled="false"
-            android:password="true" />
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/ok"
-                android:text="@string/action_ok"
-                android:minWidth="90dp" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/cancel"
-                android:text="@string/action_cancel"
-                android:minWidth="90dp" />
+            android:inputType="textPassword"/>
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

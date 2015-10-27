@@ -32,7 +32,8 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
     <ListView
         android:id="@+id/commands"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
 
     <LinearLayout
         android:orientation="horizontal"
@@ -54,25 +55,5 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
             android:layout_height="wrap_content"
             android:text="@string/action_add"
             android:minWidth="75dp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/ok"
-            android:text="@string/action_ok"
-            android:minWidth="90dp" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/cancel"
-            android:text="@string/action_cancel"
-            android:minWidth="90dp" />
     </LinearLayout>
 </LinearLayout>

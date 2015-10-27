@@ -38,10 +38,11 @@ import indrora.atomic.R;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -245,13 +246,44 @@ public class AddServerActivity extends Activity implements OnClickListener {
       case REQUEST_CODE_COMMANDS:
         commands = data.getExtras().getStringArrayList(Extra.COMMANDS);
         break;
-
-      case REQUEST_CODE_AUTHENTICATION:
-        authentication.setSaslUsername(data.getExtras().getString(Extra.SASL_USER));
-        authentication.setSaslPassword(data.getExtras().getString(Extra.SASL_PASSWORD));
-        authentication.setNickservPassword(data.getExtras().getString(Extra.NICKSERV_PASSWORD));
-        break;
     }
+  }
+
+  private void showAuthDialog() {
+    AlertDialog.Builder b = new AlertDialog.Builder(this);
+
+    final AuthenticationView v = new AuthenticationView(this, authentication);
+    b.setView(v);
+    b.setCancelable(true);
+    b.setTitle(R.string.authentication);
+    b.setPositiveButton(R.string.action_ok, new DialogInterface.OnClickListener() {
+      @Override
+      public void onClick(DialogInterface dialogInterface, int i) {
+        // woo
+        authentication.setNickservPassword(v.getNickservPassword());
+        authentication.setSaslUsername(v.getSaslUsername());
+        authentication.setSaslPassword(v.getSaslPassword());
+      }
+    });
+    b.setNegativeButton(R.string.action_cancel, null);
+
+    b.show();
+
+  }
+
+  private void showCommmandList() {
+    AlertDialog.Builder b = new AlertDialog.Builder(this);
+    final CommandListView cv = new CommandListView(this, commands);
+    b.setView(cv);
+    b.setTitle(R.string.commands);
+    b.setPositiveButton(R.string.action_ok, new DialogInterface.OnClickListener() {
+      @Override
+      public void onClick(DialogInterface dialogInterface, int i) {
+        commands = cv.getCommands();
+      }
+    });
+    b.setNegativeButton(R.string.action_cancel, null);
+    b.show();
   }
 
   /**
@@ -267,11 +299,7 @@ public class AddServerActivity extends Activity implements OnClickListener {
         break;
 
       case R.id.authentication:
-        Intent authIntent = new Intent(this, AuthenticationActivity.class);
-        authIntent.putExtra(Extra.NICKSERV_PASSWORD, authentication.getNickservPassword());
-        authIntent.putExtra(Extra.SASL_USER, authentication.getSaslUsername());
-        authIntent.putExtra(Extra.SASL_PASSWORD, authentication.getSaslPassword());
-        startActivityForResult(authIntent, REQUEST_CODE_AUTHENTICATION);
+        showAuthDialog();
         break;
 
       case R.id.channels:
@@ -281,9 +309,7 @@ public class AddServerActivity extends Activity implements OnClickListener {
         break;
 
       case R.id.commands:
-        Intent commandsIntent = new Intent(this, AddCommandsActivity.class);
-        commandsIntent.putExtra(Extra.COMMANDS, commands);
-        startActivityForResult(commandsIntent, REQUEST_CODE_COMMANDS);
+        showCommmandList();
         break;
 
       case R.id.add:
