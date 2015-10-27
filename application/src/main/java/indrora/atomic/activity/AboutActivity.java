@@ -50,7 +50,6 @@ public class AboutActivity extends Activity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.about);
 
-    getActionBar().setDisplayHomeAsUpEnabled(true);
 
     try {
 
