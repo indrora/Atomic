@@ -47,7 +47,7 @@ import com.viewpagerindicator.TitlePageIndicator;
  */
 public class ConversationPagerAdapter extends PagerAdapter implements ConversationStateProvider {
 
-  public static final int COLOR_NONE = 0x0;
+  public static final int COLOR_NONE = -1;
 
   private final Server server;
   private LinkedList<ConversationInfo> conversations;
@@ -300,9 +300,10 @@ public class ConversationPagerAdapter extends PagerAdapter implements Conversati
 
       case Conversation.STATUS_MESSAGE:
         return App.getColorScheme().getChannelEvent();
-
+      case Conversation.STATUS_MISC:
+        return App.getColorScheme().getChannelEvent();
       default:
-        return App.getColorScheme().getForeground();
+        return COLOR_NONE;
     }
   }
 
