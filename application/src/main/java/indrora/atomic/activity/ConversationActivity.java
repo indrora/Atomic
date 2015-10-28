@@ -210,6 +210,7 @@ public class ConversationActivity extends AppCompatActivity implements
   };
 
   Settings settings;
+  Toolbar _mainToolbar;
 
   /**
    * On create
@@ -242,14 +243,14 @@ public class ConversationActivity extends AppCompatActivity implements
 
     setContentView(R.layout.conversations);
 
-    Toolbar tb = (Toolbar)findViewById(R.id.toolbar);
-    tb.inflateMenu(R.menu.conversations);
+    _mainToolbar = (Toolbar)findViewById(R.id.toolbar);
+    _mainToolbar.inflateMenu(R.menu.conversations);
     if(settings.tintActionbar()) {
-      tb.setTitleTextColor(_scheme.getForeground());
-      tb.setSubtitleTextColor(_scheme.getForeground());
-      tb.setBackgroundColor(_scheme.getBackground());
+      _mainToolbar.setTitleTextColor(_scheme.getForeground());
+      _mainToolbar.setSubtitleTextColor(_scheme.getForeground());
+      _mainToolbar.setBackgroundColor(_scheme.getBackground());
     }
-    this.setSupportActionBar(tb);
+    this.setSupportActionBar(_mainToolbar);
 
 
     boolean isLandscape = (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE);
@@ -449,6 +450,9 @@ public class ConversationActivity extends AppCompatActivity implements
       // Make its background drawable a ColorDrawable
       ab.setBackgroundDrawable(new ColorDrawable(App.getColorScheme()
           .getBackground()));
+
+      _mainToolbar.setBackgroundColor(App.getColorScheme().getBackground());
+
       // Create a SpannableString from the current server.
       SpannableString st = new SpannableString(server.getTitle());
       // Make its forground color (through a ForgroundColorSpan) to be the
@@ -458,7 +462,7 @@ public class ConversationActivity extends AppCompatActivity implements
       st.setSpan(new ForegroundColorSpan(App.getColorScheme().getForeground()),
           0, st.length(), SpannableString.SPAN_INCLUSIVE_INCLUSIVE);
       // Now, set our spannable to be the ActionBar title.
-      ab.setTitle(st);
+      _mainToolbar.setTitle(st);
     } else {
       (getSupportActionBar()).setTitle(server.getTitle());
     }
