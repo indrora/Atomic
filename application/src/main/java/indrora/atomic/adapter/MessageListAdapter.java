@@ -171,6 +171,7 @@ public class MessageListAdapter extends BaseAdapter {
       view.setTypeface(Typeface.MONOSPACE);
     }
 
+    view.setTextIsSelectable(false);
     view = getItem(position).render(view);
     view.setTextSize(_settings.getFontSize());
     view.setTextIsSelectable(true);
