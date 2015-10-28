@@ -118,7 +118,7 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
             />
         <activity
             android:name="indrora.atomic.FirstRunActivity"
-            android:theme="@android:style/Theme.Black.NoTitleBar"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
             android:label="@string/title_activity_first_run" />
     </application>
 
