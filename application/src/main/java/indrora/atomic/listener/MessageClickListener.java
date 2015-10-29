@@ -23,6 +23,7 @@ package indrora.atomic.listener;
 import indrora.atomic.activity.MessageActivity;
 import indrora.atomic.adapter.MessageListAdapter;
 import indrora.atomic.model.Extra;
+import indrora.atomic.model.Message;
 
 import android.content.Intent;
 import android.view.View;
@@ -34,7 +35,7 @@ import android.widget.AdapterView.OnItemClickListener;
  *
  * @author Sebastian Kaspari <sebastian@yaaic.org>
  */
-public class MessageClickListener implements OnItemClickListener {
+public class MessageClickListener implements OnItemClickListener,AdapterView.OnItemLongClickListener {
   private static MessageClickListener instance;
 
   /**
@@ -56,15 +57,30 @@ public class MessageClickListener implements OnItemClickListener {
     return instance;
   }
 
+  private void doThing(AdapterView<?> group, int position) {
+    android.util.Log.d("MessageClickListener", "clicking on item => "+position);
+    MessageListAdapter adapter = (MessageListAdapter)group.getAdapter();
+    Message m = adapter.getItem(position);
+    Intent intent = new Intent(group.getContext(), MessageActivity.class);
+    // this is going to be a parcelable.
+    // Woo parcelables.
+    intent.putExtra(Extra.MESSAGE, m);
+
+    group.getContext().startActivity(intent);
+  }
+
   /**
    * On message item clicked
    */
   @Override
   public void onItemClick(AdapterView<?> group, View view, int position, long id) {
-    MessageListAdapter adapter = (MessageListAdapter)group.getAdapter();
+    doThing(group, position);
+  }
 
-    Intent intent = new Intent(group.getContext(), MessageActivity.class);
-    intent.putExtra(Extra.MESSAGE, adapter.getItem(position).toString());
-    group.getContext().startActivity(intent);
+  @Override
+  public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+    doThing(adapterView, i);
+
+    return true;
   }
 }

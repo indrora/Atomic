@@ -48,7 +48,6 @@ public class MessageListAdapter extends BaseAdapter {
   private final LinkedList<Message> messages;
   private int historySize;
 
-  private ColorScheme _colorScheme;
   private Settings _settings;
 
 
@@ -60,7 +59,6 @@ public class MessageListAdapter extends BaseAdapter {
    */
   public MessageListAdapter(Conversation conversation, Context context) {
 
-    _colorScheme = App.getColorScheme();
     _settings = App.getSettings();
 
     LinkedList<Message> messages = new LinkedList<Message>();
@@ -171,10 +169,9 @@ public class MessageListAdapter extends BaseAdapter {
       view.setTypeface(Typeface.MONOSPACE);
     }
 
-    view.setTextIsSelectable(false);
     view = getItem(position).render(view);
     view.setTextSize(_settings.getFontSize());
-    view.setTextIsSelectable(true);
+
 
     return view;
   }

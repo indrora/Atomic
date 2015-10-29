@@ -36,7 +36,7 @@ import android.widget.ListView;
  */
 public class MessageListView extends ListView {
 
-  ColorScheme _scheme;
+
 
   /**
    * Create a new MessageListView
@@ -46,9 +46,9 @@ public class MessageListView extends ListView {
   public MessageListView(Context context) {
     super(context);
 
-    _scheme = App.getColorScheme();
+    ColorScheme _scheme = App.getColorScheme();
 
-    setOnItemClickListener(MessageClickListener.getInstance());
+    setOnItemLongClickListener(MessageClickListener.getInstance());
 
 
     setStackFromBottom(true);

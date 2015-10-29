@@ -25,7 +25,6 @@ import indrora.atomic.R;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.preference.PreferenceManager;
@@ -94,7 +93,7 @@ public class Settings {
    *
    * @return
    */
-  public boolean showColors() {
+  public boolean showMessageColors() {
     return preferences
         .getBoolean(resources.getString(R.string.key_show_colors), Boolean
             .parseBoolean(resources.getString(R.string.default_show_colors)));
@@ -434,11 +433,14 @@ public class Settings {
     MessageRenderParams params = new MessageRenderParams();
     params.colorScheme = this.getColorScheme();
     params.icons = this.showIcons();
-    params.messageColors = this.showMircColors();
+    params.mircColors = this.showMircColors();
+    params.messageColors = this.showMessageColors();
     params.smileys = this.showGraphicalSmilies();
     params.nickColors = this.showColorsNick();
     params.timestamps = this.showTimestamp();
     params.useDarkScheme = this.getUseDarkColors();
+    params.timestamp24Hour = this.use24hFormat();
+    params.timestampSeconds = this.includeSeconds();
 
     return params;
   }

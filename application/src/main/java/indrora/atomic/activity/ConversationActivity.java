@@ -218,12 +218,12 @@ public class ConversationActivity extends AppCompatActivity implements
   @Override
   protected void onCreate(Bundle savedInstanceState) {
 
-    _scheme = App.getColorScheme();
 
 
     serverId = getIntent().getExtras().getInt("serverId");
     server = Atomic.getInstance().getServerById(serverId);
     settings = App.getSettings();
+    _scheme = new ColorScheme(settings.getColorScheme(), settings.getUseDarkColors());
 
 
     if( settings.tintActionbar() ) {
@@ -448,10 +448,9 @@ public class ConversationActivity extends AppCompatActivity implements
       // Get the ActionBar
       ActionBar ab = getSupportActionBar();
       // Make its background drawable a ColorDrawable
-      ab.setBackgroundDrawable(new ColorDrawable(App.getColorScheme()
-          .getBackground()));
+      ab.setBackgroundDrawable(new ColorDrawable(_scheme.getBackground()));
 
-      _mainToolbar.setBackgroundColor(App.getColorScheme().getBackground());
+      _mainToolbar.setBackgroundColor(_scheme.getBackground());
 
       // Create a SpannableString from the current server.
       SpannableString st = new SpannableString(server.getTitle());
@@ -459,7 +458,7 @@ public class ConversationActivity extends AppCompatActivity implements
       // foreground of the scheme.
       // This is because you can't guarantee that the ActionBar text color and
       // actionbar color aren't going to be the same.
-      st.setSpan(new ForegroundColorSpan(App.getColorScheme().getForeground()),
+      st.setSpan(new ForegroundColorSpan(_scheme.getForeground()),
           0, st.length(), SpannableString.SPAN_INCLUSIVE_INCLUSIVE);
       // Now, set our spannable to be the ActionBar title.
       _mainToolbar.setTitle(st);
@@ -831,7 +830,7 @@ public class ConversationActivity extends AppCompatActivity implements
               ss.setSpan(new ImageSpan(d), 0, 1,
                   SpannableString.SPAN_INCLUSIVE_EXCLUSIVE);
             }
-            ss.setSpan(new ForegroundColorSpan(Message.getSenderColor(nick)),
+            ss.setSpan(new ForegroundColorSpan(Message.getSenderColor(nick, _scheme)),
                 0, nick.length(), SpannableString.SPAN_INCLUSIVE_INCLUSIVE);
             coloredNicks.add(ss);
           }

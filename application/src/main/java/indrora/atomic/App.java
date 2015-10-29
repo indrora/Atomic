@@ -23,7 +23,6 @@ public class App extends Application {
 
   private static LatchingValue<Boolean> autoconnectComplete;
 
-  private static ColorSchemeManager _csMgr;
   private static Settings _s;
 
   private static Context _ctx;
@@ -32,9 +31,12 @@ public class App extends Application {
     return _ctx;
   }
 
+
+    private static ColorSchemeManager _csMgr;
   public static ColorScheme getColorScheme() {
-    return _csMgr.getCurrentScheme();
+    return new ColorScheme(_s.getColorScheme(), _s.getUseDarkColors());
   }
+
 
   public static Settings getSettings() {
     return _s;
@@ -70,9 +72,11 @@ public class App extends Application {
 
     _r = getResources();
 
+    /*
     _csMgr = new ColorSchemeManager();
 
     PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(_csMgr);
+*/
 
 
     if( _settings.getCurrentVersion() > _settings.getLastRunVersion() ) {

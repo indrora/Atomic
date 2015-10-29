@@ -28,21 +28,17 @@ import java.util.Date;
 import java.util.Locale;
 
 
-import android.annotation.TargetApi;
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
-import android.text.method.DateTimeKeyListener;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
-import android.text.util.Linkify;
-import android.util.Log;
 import android.widget.TextView;
 
 /**
@@ -50,7 +46,42 @@ import android.widget.TextView;
  *
  * @author Sebastian Kaspari <sebastian@yaaic.org>
  */
-public class Message {
+public class Message implements Parcelable {
+
+  protected Message(Parcel in) {
+    text = in.readString();
+    sender = in.readString();
+    timestamp = in.readLong();
+    type = in.readInt();
+    icon = in.readInt();
+  }
+
+  public static final Creator<Message> CREATOR = new Creator<Message>() {
+    @Override
+    public Message createFromParcel(Parcel in) {
+      return new Message(in);
+    }
+
+    @Override
+    public Message[] newArray(int size) {
+      return new Message[size];
+    }
+  };
+
+  @Override
+  public int describeContents() {
+    return 0;
+  }
+
+  @Override
+  public void writeToParcel(Parcel parcel, int i) {
+    parcel.writeString(text);
+    parcel.writeString(sender);
+    parcel.writeLong(timestamp);
+    parcel.writeInt(type);
+    parcel.writeInt(icon);
+  }
+
   public enum MessageColor {
     USER_EVENT,
     CHANNEL_EVENT,
@@ -63,9 +94,6 @@ public class Message {
   }
 
   private static Settings settings;
-
-
-  ColorScheme _scheme;
 
   /* normal message, this is the default */
   public static final int TYPE_MESSAGE = 0;
@@ -137,7 +165,6 @@ public class Message {
     if( settings == null ) {
       settings = App.getSettings();
     }
-    _scheme = App.getColorScheme();
 
   }
 
@@ -187,24 +214,24 @@ public class Message {
     this.color = color;
   }
 
-  private int translateColor(MessageColor c) {
+  private static int translateColor(ColorScheme scheme, MessageColor c) {
     switch ( c ) {
       case CHANNEL_EVENT:
-        return _scheme.getChannelEvent();
+        return scheme.getChannelEvent();
       case DEFAULT:
-        return _scheme.getForeground();
+        return scheme.getForeground();
       case ERROR:
-        return _scheme.getError();
+        return scheme.getError();
       case HIGHLIGHT:
-        return _scheme.getHighlight();
+        return scheme.getHighlight();
       case SERVER_EVENT:
-        return _scheme.getServerEvent();
+        return scheme.getServerEvent();
       case TOPIC:
-        return _scheme.getTopic();
+        return scheme.getTopic();
       case USER_EVENT:
-        return _scheme.getUserEvent();
+        return scheme.getUserEvent();
       default:
-        return _scheme.getForeground();
+        return scheme.getForeground();
     }
 
   }
@@ -219,8 +246,8 @@ public class Message {
   }
 
 
-  private int getSenderColor() {
-    return getSenderColor(this.sender);
+  private int getSenderColor(ColorScheme scheme) {
+    return getSenderColor(this.sender, scheme);
   }
 
   /**
@@ -228,14 +255,14 @@ public class Message {
    *
    * @return a color hexa
    */
-  public static int getSenderColor(String sender) {
+  public static int getSenderColor(String sender, ColorScheme scheme) {
     /* It might be worth to use some hash table here */
     if( sender == null ) {
-      return App.getColorScheme().getForeground();
+      return scheme.getForeground();
     }
 
     if( !App.getSettings().showColorsNick() ) {
-      return App.getColorScheme().getForeground();
+      return scheme.getForeground();
     }
 
     int color = 0;
@@ -253,12 +280,12 @@ public class Message {
     variant %= 20;
     // We don't want the color to be the background color.
 
-    final int bg = App.getColorScheme().getBackground();
+    final int bg = scheme.getBackground();
     int tmpColor;// = _scheme.getMircColor(color);
     do {
 
       float[] hsv = new float[3];
-      Color.colorToHSV(App.getColorScheme().getMircColor(color++), hsv);
+      Color.colorToHSV(scheme.getMircColor(color++), hsv);
       hsv[0] += variant;
 
       tmpColor = Color.HSVToColor(hsv);
@@ -301,21 +328,9 @@ public class Message {
     _parent = p;
   }
 
-  /**
-   * Render message as spannable string
-   *
-   * @return
-   */
-  public TextView render(TextView convertView) {
+  public static SpannableString render(Message msg, MessageRenderParams renderParams) {
 
-    // check if we just want to return ourselves already.
-
-    Message t = (Message)convertView.getTag();
-    if(this.equals(t) && settings.getRenderParams().equals(t.currentParams)) {
-      return convertView;
-    }
-
-    _scheme = App.getColorScheme();
+    ColorScheme renderedScheme = new ColorScheme(renderParams.colorScheme, renderParams.useDarkScheme);
 
     SpannableString nickSS;
     SpannableString timeSS;
@@ -323,23 +338,23 @@ public class Message {
     SpannableString prefixSS;
 
     // format the sender name
-    if( hasSender() ) {
+    if( msg.hasSender() ) {
       // The sender name spannable is just the name of the sender
-      nickSS = new SpannableString(sender);
+      nickSS = new SpannableString(msg.sender);
       // Defaultly, the foreground color is used.
-      int senderColor = _scheme.getForeground();
+      int senderColor = renderedScheme.getForeground();
 
 
-      if( settings.showColorsNick() ) {
+      if( renderParams.nickColors ) {
         // getSenderColor does a variant color from the color scheme options.
-        senderColor = getSenderColor();
+        senderColor = getSenderColor(msg.sender, renderedScheme); // msg.getSenderColor();
       }
 
 
       // We should now set the spannable's color.
       nickSS.setSpan(new ForegroundColorSpan(senderColor), 0, nickSS.length(), SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
       // and wrap it in our preferred <'s
-      if( type == TYPE_MESSAGE ) {
+      if( msg.type == TYPE_MESSAGE ) {
         nickSS = new SpannableString(TextUtils.concat("<", nickSS, ">"));
       }
     } else {
@@ -349,7 +364,7 @@ public class Message {
 
     // Timestamps are handled in much the same way as the Sender, however they're much simpler.
     if( settings.showTimestamp() ) {
-      timeSS = new SpannableString(renderTimeStamp(settings.use24hFormat(), settings.includeSeconds()));
+      timeSS = new SpannableString(msg.renderTimeStamp(renderParams.timestamp24Hour, renderParams.timestampSeconds));
     } else {
       timeSS = new SpannableString("");
     }
@@ -359,14 +374,14 @@ public class Message {
     // drawables.
     prefixSS = new SpannableString(" ");
     // If there is an icon,
-    if( hasIcon() ) {
+    if( msg.hasIcon() ) {
       // We want to handle having an icon and not wanting to show icons.
       // this makes things a little nicer.
       prefixSS = new SpannableString("•");
       // If we really want to show icons...
-      if( settings.showIcons() ) {
+      if( renderParams.icons ) {
 
-        Drawable drawable = App.getSResources().getDrawable(icon);
+        Drawable drawable = App.getSResources().getDrawable(msg.icon);
 
         float density = App.getSResources().getDisplayMetrics().density;
         // scale = wanted / actual
@@ -399,36 +414,55 @@ public class Message {
     //   => strip mIRC color tags from the text block
     //   => highlight color?
     //      => blarg the spannable.
-    messageSS = new SpannableString(text);
+    messageSS = new SpannableString(msg.text);
 
-    if( settings.showMircColors() ) {
-      if( hasColor() && settings.showColors() ) {
-        messageSS.setSpan(new ForegroundColorSpan(translateColor(color)), 0,
-            messageSS.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+    if( renderParams.mircColors ) {
+      if( msg.hasColor() && renderParams.messageColors ) {
+        messageSS.setSpan(new ForegroundColorSpan(translateColor(renderedScheme, msg.color)), 0,
+                messageSS.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
       }
-      messageSS = MircColors.toSpannable(messageSS);
+      messageSS = MircColors.toSpannable(messageSS, renderedScheme);
     } else {
-      messageSS = new SpannableString(MircColors.removeStyleAndColors(text));
-      if( hasColor() && settings.showColors() ) {
-        messageSS.setSpan(new ForegroundColorSpan(translateColor(color)), 0,
-            messageSS.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+      messageSS = new SpannableString(MircColors.removeStyleAndColors(msg.text));
+      if( msg.hasColor() && renderParams.messageColors ) {
+        messageSS.setSpan(new ForegroundColorSpan(translateColor(renderedScheme, msg.color)), 0,
+                messageSS.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
       }
     }
     // Smash smileys into this, but only if we're not a server message..
-    if( settings.showGraphicalSmilies() && this.type != TYPE_SERVER ) {
+    if( renderParams.smileys && msg.type != TYPE_SERVER ) {
       messageSS = Smilies.toSpannable(messageSS, App.getAppContext());
     }
 
-    // An optimization is finished here:
-    // If we don't cache what we print, we begin to have an O(2N) problem at best,
-    // but if we set _cache (which is owned by us) to what we will now return,
-    // when we come back, we can return our cached version
+    return new SpannableString(TextUtils.concat(timeSS, prefixSS, nickSS, " ", messageSS));
+
+  }
+
+  /**
+   * Render message as spannable string
+   *
+   * @return
+   */
+  public TextView render(TextView convertView) {
+
+    // check if we just want to return ourselves already.
+
+    if(!settings.getRenderParams().equals(currentParams)) {
+      currentParams = settings.getRenderParams();
+    }
+
+    Message t = (Message)convertView.getTag();
+    if(this.equals(t) && settings.getRenderParams().equals(t.currentParams)) {
+      return convertView;
+    }
+
+    ColorScheme currentScheme = new ColorScheme(currentParams.colorScheme, currentParams.useDarkScheme);
 
     //_cache = new SpannableString(TextUtils.concat(timeSS, prefixSS, nickSS, " ", messageSS));
 
-    convertView.setTextColor(_scheme.getForeground());
-    convertView.setLinkTextColor(_scheme.getUrl());
-    convertView.setText(new SpannableString(TextUtils.concat(timeSS, prefixSS, nickSS, " ", messageSS)));
+    convertView.setTextColor(currentScheme.getForeground());
+    convertView.setLinkTextColor(currentScheme.getUrl());
+    convertView.setText(Message.render(this, currentParams));
     convertView.setTag(this);
 
     currentParams = settings.getRenderParams();

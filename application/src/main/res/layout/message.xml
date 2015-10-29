@@ -19,6 +19,7 @@ You should have received a copy of the GNU General Public License
 along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
@@ -31,10 +32,9 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
         android:autoLink="all"
         android:linksClickable="true"
         android:text="&lt;pocmo&gt; Hello world!" />
-
-    <LinearLayout
-        android:id="@+id/tools"
-        android:orientation="vertical"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"></LinearLayout>
+        android:layout_height="wrap_content"
+        />
 </LinearLayout>

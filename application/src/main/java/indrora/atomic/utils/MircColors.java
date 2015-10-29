@@ -51,8 +51,6 @@ public abstract class MircColors {
   private static final Pattern colorPattern = Pattern.compile("\\x03(\\d{1,2})(?:,(\\d{1,2}))?([^\\x03\\x0F]*)(\\x03|\\x0F)?");
   private static final Pattern cleanupPattern = Pattern.compile("(?:\\x02|\\x1F|\\x1D|\\x0F|\\x16|\\x03(?:(?:\\d{1,2})(?:,\\d{1,2})?)?)");
 
-  private static ColorScheme _cScheme;
-
 
   /**
    * Converts a string with mIRC style and color codes to a SpannableString with
@@ -61,8 +59,7 @@ public abstract class MircColors {
    * @param text A string with mIRC color codes.
    * @return A SpannableString with all the styles applied.
    */
-  public static SpannableString toSpannable(SpannableString text) {
-    _cScheme = App.getColorScheme();
+  public static SpannableString toSpannable(SpannableString text, ColorScheme scheme) {
 
     SpannableStringBuilder ssb = new SpannableStringBuilder(text);
     replaceControlCodes(boldPattern.matcher(ssb), ssb, new StyleSpan(Typeface.BOLD));
@@ -74,10 +71,10 @@ public abstract class MircColors {
      * We apply the background color first and then apply the foreground color
      * to all the parts where BackgroundColorSpans are found.
      */
-    replaceControlCodes(inversePattern.matcher(ssb), ssb, new BackgroundColorSpan(_cScheme.getBackground()));
+    replaceControlCodes(inversePattern.matcher(ssb), ssb, new BackgroundColorSpan(scheme.getBackground()));
     BackgroundColorSpan[] inverseSpans = ssb.getSpans(0, ssb.length(), BackgroundColorSpan.class);
     for( int i = 0; i < inverseSpans.length; i++ ) {
-      ssb.setSpan(new ForegroundColorSpan(_cScheme.getForeground() /*colors[1] | 0xFF000000*/), ssb.getSpanStart(inverseSpans[i]), ssb.getSpanEnd(inverseSpans[i]), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+      ssb.setSpan(new ForegroundColorSpan(scheme.getForeground() /*colors[1] | 0xFF000000*/), ssb.getSpanStart(inverseSpans[i]), ssb.getSpanEnd(inverseSpans[i]), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 
     Matcher m = colorPattern.matcher(ssb);
@@ -90,13 +87,13 @@ public abstract class MircColors {
       int codelength = m.group(1).length() + 1;
 
       if( color <= 15 && color >= 0 ) {
-        ssb.setSpan(new ForegroundColorSpan(_cScheme.getMircColor(color)), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ssb.setSpan(new ForegroundColorSpan(scheme.getMircColor(color)), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
       }
 
       if( m.group(2) != null ) {
         color = Integer.parseInt(m.group(2));
         if( color <= 15 && color >= 0 ) {
-          ssb.setSpan(new BackgroundColorSpan(_cScheme.getMircColor(color)), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+          ssb.setSpan(new BackgroundColorSpan(scheme.getMircColor(color)), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
         codelength = codelength + m.group(2).length() + 1;
       }
@@ -116,8 +113,8 @@ public abstract class MircColors {
    * @param text A string with mIRC color codes.
    * @return A SpannableString with all the styles applied.
    */
-  public static SpannableString toSpannable(String text) {
-    return toSpannable(new SpannableString(text));
+  public static SpannableString toSpannable(String text, ColorScheme scheme) {
+    return toSpannable(new SpannableString(text), scheme);
   }
 
 
