@@ -13,7 +13,7 @@ public final class MessageRenderParams {
   public boolean equals(Object o) {
     if( o instanceof MessageRenderParams ) {
       MessageRenderParams t = (MessageRenderParams)o;
-      return this.colorScheme ==  t.colorScheme &&
+      return this.colorScheme.equals(t.colorScheme) &&
           this.timestamps ==      t.timestamps &&
           this.icons ==           t.icons &&
           this.messageColors ==   t.messageColors &&
