@@ -34,6 +34,10 @@ public interface ConversationStateProvider {
    */
   public int getColorForLowerThan(int position);
 
+  public Boolean isLowerSpecial(int position);
+
+  public Boolean isGreaterSpecial(int position);
+
   /**
    * Get the state color for the given position.
    *

@@ -18,7 +18,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package indrora.atomic.view;
+package indrora.atomic.dialog;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -48,18 +48,21 @@ import indrora.atomic.R;
  */
 public class CommandListView extends LinearLayout implements OnClickListener, OnItemClickListener {
   private EditText commandInput;
+  private ArrayList<String> commands;
   private ArrayAdapter<String> adapter;
 
 
   public CommandListView(Context context, ArrayList<String> commands) {
     super(context);
 
+    this.commands = (ArrayList<String>)commands.clone();
+
     LayoutInflater.from(context).inflate(R.layout.commandadd, this, true);
 
 
     commandInput = (EditText)findViewById(R.id.command);
 
-    adapter = new ArrayAdapter<String>(context, R.layout.commanditem, commands);
+    adapter = new ArrayAdapter<String>(context, R.layout.commanditem, this.commands);
 
     ListView list = (ListView)findViewById(R.id.commands);
     list.setAdapter(adapter);
@@ -91,7 +94,8 @@ public class CommandListView extends LinearLayout implements OnClickListener, On
       command = "/" + command;
     }
 
-    adapter.add(command);
+    commands.add(command);
+    adapter.notifyDataSetChanged();
     // This is a silly trick to force the cursor to the end of the line.
     commandInput.setText("/");
     commandInput.setSelection(commandInput.getText().length());
@@ -112,11 +116,7 @@ public class CommandListView extends LinearLayout implements OnClickListener, On
   }
 
   public ArrayList<String> getCommands() {
-    ArrayList<String> cmds = new ArrayList<>();
-    for (int i = 0; i < adapter.getCount(); i++) {
-      cmds.add(adapter.getItem(i));
-    }
-    return cmds;
+    return commands;
   }
 
   /**
@@ -135,7 +135,8 @@ public class CommandListView extends LinearLayout implements OnClickListener, On
     builder.setPositiveButton(R.string.action_remove, new DialogInterface.OnClickListener() {
       @Override
       public void onClick(DialogInterface dialogInterface, int i) {
-        adapter.remove(command);
+        commands.remove(command);
+        adapter.notifyDataSetChanged();
       }
     });
     builder.setMessage(command);

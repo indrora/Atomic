@@ -18,7 +18,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package indrora.atomic.view;
+package indrora.atomic.dialog;
 
 import indrora.atomic.model.Authentication;
 import indrora.atomic.model.Extra;

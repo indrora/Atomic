@@ -22,6 +22,8 @@ package indrora.atomic.activity;
 
 import indrora.atomic.Atomic;
 import indrora.atomic.db.Database;
+import indrora.atomic.dialog.AddAliasView;
+import indrora.atomic.dialog.AddChannelView;
 import indrora.atomic.exception.ValidationException;
 import indrora.atomic.model.Authentication;
 import indrora.atomic.model.Extra;
@@ -35,8 +37,8 @@ import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 import indrora.atomic.R;
-import indrora.atomic.view.AuthenticationView;
-import indrora.atomic.view.CommandListView;
+import indrora.atomic.dialog.AuthenticationView;
+import indrora.atomic.dialog.CommandListView;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -228,7 +230,7 @@ public class AddServerActivity extends Activity implements OnClickListener {
 
   /**
    * On activity result
-   */
+
   @Override
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     if( resultCode != RESULT_OK ) {
@@ -249,7 +251,7 @@ public class AddServerActivity extends Activity implements OnClickListener {
         commands = data.getExtras().getStringArrayList(Extra.COMMANDS);
         break;
     }
-  }
+  }*/
 
   private void showAuthDialog() {
     AlertDialog.Builder b = new AlertDialog.Builder(this);
@@ -288,6 +290,41 @@ public class AddServerActivity extends Activity implements OnClickListener {
     b.show();
   }
 
+  private void showAliasList() {
+    AlertDialog.Builder b = new AlertDialog.Builder(this);
+    final AddAliasView av = new AddAliasView(this, aliases);
+    b.setView(av);
+    b.setTitle(R.string.aliases);
+    b.setPositiveButton(R.string.action_ok, new DialogInterface.OnClickListener() {
+      @Override
+      public void onClick(DialogInterface dialogInterface, int i) {
+        aliases = av.getAliases();
+      }
+    });
+    b.setNegativeButton(R.string.action_cancel, null);
+    b.show();
+  }
+
+  private void showChannelList() {
+    AlertDialog.Builder b = new AlertDialog.Builder(this);
+    final AddChannelView channelview = new AddChannelView(this, channels);
+    b.setView(channelview);
+    b.setTitle(R.string.channels);
+    b.setPositiveButton(R.string.action_ok, new DialogInterface.OnClickListener() {
+      @Override
+      public void onClick(DialogInterface dialogInterface, int i) {
+        channels = channelview.getChannels();
+      }
+    });
+    b.setNegativeButton(R.string.action_cancel, new DialogInterface.OnClickListener() {
+      @Override
+      public void onClick(DialogInterface dialogInterface, int i) {
+        return;
+      }
+    });
+    b.show();
+  }
+
   /**
    * On click add server or cancel activity
    */
@@ -295,9 +332,7 @@ public class AddServerActivity extends Activity implements OnClickListener {
   public void onClick(View v) {
     switch ( v.getId() ) {
       case R.id.aliases:
-        Intent aliasIntent = new Intent(this, AddAliasActivity.class);
-        aliasIntent.putExtra(Extra.ALIASES, aliases);
-        startActivityForResult(aliasIntent, REQUEST_CODE_ALIASES);
+        showAliasList();
         break;
 
       case R.id.authentication:
@@ -305,9 +340,7 @@ public class AddServerActivity extends Activity implements OnClickListener {
         break;
 
       case R.id.channels:
-        Intent channelIntent = new Intent(this, AddChannelActivity.class);
-        channelIntent.putExtra(Extra.CHANNELS, channels);
-        startActivityForResult(channelIntent, REQUEST_CODE_CHANNELS);
+        showChannelList();
         break;
 
       case R.id.commands:

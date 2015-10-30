@@ -268,7 +268,7 @@ public class ConversationIndicator extends FrameLayout implements OnPageChangeLi
       int color = stateProvider.getColorForLowerThan(page - 1);
       leftIndicatorView.setBackgroundColor(color);
       leftIndicatorView.setVisibility(
-          color == ConversationPagerAdapter.COLOR_NONE ? View.INVISIBLE : View.VISIBLE
+          stateProvider.isLowerSpecial(page) ? View.VISIBLE : View.INVISIBLE
       );
     } else {
       leftIndicatorView.setVisibility(View.INVISIBLE);
@@ -279,7 +279,7 @@ public class ConversationIndicator extends FrameLayout implements OnPageChangeLi
 
       rightIndicatorView.setBackgroundColor(color);
       rightIndicatorView.setVisibility(
-          color == ConversationPagerAdapter.COLOR_NONE ? View.INVISIBLE : View.VISIBLE
+          stateProvider.isGreaterSpecial(page) ? View.VISIBLE : View.INVISIBLE
       );
     } else {
       rightIndicatorView.setVisibility(View.INVISIBLE);

@@ -2,10 +2,10 @@
 <resources>
     <string name="app_name" translatable="false">Atomic</string>
     <string name="app_full_name" translatable="false">Atomic: A radioactive IRC client</string>
-    <string name="app_version" translatable="false">release "Hydrogen"</string>
+    <string name="app_version" translatable="false">release "Helium"</string>
     <string name="app_homepage" translatable="false">https://github.com/indora/atomic</string>
-    <string name="app_irc" translatable="false">irc://irc.epd-me.net/yaaic</string>
-    <string name="app_copyright" translatable="false">&#169; 2014 Morgan "Indrora" Gangwere,</string>
+    <string name="app_irc" translatable="false">irc://chat.freenode.net/atomic-irc</string>
+    <string name="app_copyright" translatable="false">&#169; 2014&#8211;2015 Morgan "Indrora" Gangwere,</string>
     
     <string name="licence_info" translatable="false">
     <![CDATA[
@@ -14,14 +14,9 @@
         <p>Atomic (nee Yaaic) is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</p>
 
         <p>Atomic (nee Yaaic) is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>
-     
-     
+
      	<p>Atomic makes use of the following libraries:</p>
-     	<p><a href="http://actionbarsherlock.com">ActionBarSherlock</a> (ActionBar support pre-ICS/Honeycomb)</p>
-     	
-     	
      	<p><a href="https://github.com/ge0rg/MemorizingTrustManager/wiki">MemorizingTrustManager</a> (providing a non-naive SSL certificate manager)</p>
-     	
      	<p><a href="http://viewpagerindicator.com">ViewPagerIndicator</a> (A wonderful library for the view page style indicator)</p>
 
      	]]>

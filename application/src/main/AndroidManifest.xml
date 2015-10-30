@@ -36,10 +36,10 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
 
     <application
         tools:replace="icon,label"
-        android:name="indrora.atomic.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="Atomic"
+        android:name=".App"
+        android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity
             android:name="indrora.atomic.activity.ServersActivity"
@@ -47,7 +47,6 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
             android:launchMode="standard">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -57,7 +56,6 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
             android:label="@string/add_server_label">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
@@ -88,16 +86,6 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
             android:name="indrora.atomic.activity.JoinActivity"
             android:label="@string/join_label"
             android:theme="@style/AppDialogTheme"></activity>
-        <activity
-            android:name="indrora.atomic.activity.UsersActivity"
-            android:label="@string/users"
-            android:theme="@style/AppDialogTheme" />
-        <activity
-            android:name="indrora.atomic.activity.AddAliasActivity"
-            android:theme="@style/AppDialogTheme" />
-        <activity
-            android:name="indrora.atomic.activity.AddChannelActivity"
-            android:theme="@style/AppDialogTheme" />
         <activity
             android:name="indrora.atomic.activity.MessageActivity"
             android:theme="@style/AppDialogTheme" />

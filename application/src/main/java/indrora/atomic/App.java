@@ -39,6 +39,9 @@ public class App extends Application {
 
 
   public static Settings getSettings() {
+    if(_s == null) {
+      _s = new Settings(getAppContext());
+    }
     return _s;
   }
 

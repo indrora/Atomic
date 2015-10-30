@@ -22,8 +22,8 @@ along with Yaaic.  If not, see <http://www.gnu.org/licenses/>.
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-
-    android:padding="10dp">
+    android:padding="10dp"
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="fill_parent"

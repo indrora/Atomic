@@ -293,18 +293,34 @@ public class ConversationPagerAdapter extends PagerAdapter implements Conversati
   @Override
   public int getColorAt(int position) {
     Conversation conversation = getItem(position);
-
     switch ( conversation.getStatus() ) {
       case Conversation.STATUS_HIGHLIGHT:
         return App.getColorScheme().getHighlight();
-
       case Conversation.STATUS_MESSAGE:
-        return App.getColorScheme().getChannelEvent();
+        return App.getColorScheme().getUserEvent();
       case Conversation.STATUS_MISC:
         return App.getColorScheme().getChannelEvent();
       default:
-        return COLOR_NONE;
+        return App.getColorScheme().getForeground();
     }
+  }
+
+  @Override
+  public Boolean isGreaterSpecial(int position) {
+    for(int i = conversations.size()-1; i >position; i--) {
+      int status = getItem(i).getStatus();
+      if(status == Conversation.STATUS_HIGHLIGHT) return true;
+    }
+    return false;
+  }
+
+  @Override
+  public Boolean isLowerSpecial(int position) {
+    for( int i = 0; i < position; i++) {
+      int status = getItem(i).getStatus();
+      if(status == Conversation.STATUS_HIGHLIGHT) return true;
+    }
+    return false;
   }
 
   /**
@@ -314,12 +330,15 @@ public class ConversationPagerAdapter extends PagerAdapter implements Conversati
   public int getColorForLowerThan(int position) {
     int color = COLOR_NONE;
 
-    if(position-1>0) {
-      return getColorAt(position-1);
+    for(int i = 0; i < position ; i++) {
+      int status = getItem(i).getStatus();
+      if (status == Conversation.STATUS_HIGHLIGHT) {
+        return App.getColorScheme().getHighlight();
+      } else if (color == COLOR_NONE && getColorAt(i) != COLOR_NONE) {
+        color = getColorAt(i);
+      }
     }
-    else {
-      return COLOR_NONE;
-    }
+    return color;
   }
 
   /**
@@ -327,13 +346,17 @@ public class ConversationPagerAdapter extends PagerAdapter implements Conversati
    */
   @Override
   public int getColorForGreaterThan(int position) {
-    int size = conversations.size();
-    if(position+1 < size) {
-      return getColorAt(position+1);
+    int color = COLOR_NONE;
+
+    for(int i = conversations.size()-1; i > position; i--) {
+      int status = getItem(i).getStatus();
+      if (status == Conversation.STATUS_HIGHLIGHT) {
+        return App.getColorScheme().getHighlight();
+      } else if (color == COLOR_NONE && getColorAt(i) != COLOR_NONE) {
+        color = getColorAt(i);
+      }
     }
-    else {
-      return COLOR_NONE;
-    }
+    return COLOR_NONE;
 
   }
 }

@@ -223,7 +223,13 @@ public class ConversationActivity extends AppCompatActivity implements
     serverId = getIntent().getExtras().getInt("serverId");
     server = Atomic.getInstance().getServerById(serverId);
     settings = App.getSettings();
-    _scheme = new ColorScheme(settings.getColorScheme(), settings.getUseDarkColors());
+    if(settings == null) {
+      Log.wtf("OH GOD WHY", "ALL THE SETTINGS ARE GON OH GOD WHY");
+      finish(); }
+    _scheme = new ColorScheme(
+            settings.getColorScheme(),
+            settings.getUseDarkColors()
+    );
 
 
     if( settings.tintActionbar() ) {
