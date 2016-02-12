@@ -936,7 +936,7 @@ public abstract class PircBot implements ReplyConstants {
         // Request all CAPs back. (?)
         List<String> ok_caps = Arrays.asList(new String[] {
             "znc.in/server-time-iso",
-            "znc.in/self-message",
+//            "znc.in/self-message",  // XXX: Re-enable later when we're better than this.
             "sasl",
             "userhost-in-names",
             "multi-prefix"
