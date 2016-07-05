@@ -29,6 +29,7 @@ import indrora.atomic.model.MessageRenderParams;
 
 import android.app.Activity;
 import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -92,7 +93,9 @@ public class MessageActivity extends Activity implements Toolbar.OnMenuItemClick
     switch(item.getItemId()) {
       case R.id.message_copy:
         // copy the thing
-        ClipData.newPlainText("IRC Message", messageView.getText().toString());
+        ClipboardManager clipboard = (ClipboardManager)getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData cd = ClipData.newPlainText("IRC Message", messageView.getText().toString());
+        clipboard.setPrimaryClip(cd);
         break;
       case R.id.close:
         break;
